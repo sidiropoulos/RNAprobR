@@ -1,0 +1,49 @@
+# Finishing functions. 
+# norm_GR - GRanges with normalized values
+# RNAid - for which RNA molecule report
+# norm_method - which normalization method to be used (only 1 allowed)
+# norm_methods - which normalization method to be used (multiple allowed)
+# stat_method - which statistics calculation to use for printing asterisks
+# stat_cutoff - below what value of statistics (from stat_method) report significance. If not provided - minimal value from stat_method used
+# order_by - how displayed reads in plotReads function should be sorted. 1 - for sorting by termination location, 2 for sorting by reverse transcription start site
+
+# Plot for one RNA:
+plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff){
+	if(missing(norm_method)){norm_method <- names(mcols(norm_GR))[which(names(mcols(norm_GR)) %in% c("dtcr","slograt","swinsor"))[1]]}
+	
+	if(length(norm_method)!=1){stop("Specify 1 method")} #Run only if specified exactly one column to plot
+	
+	if(missing(stat_method)){stat_method <- switch(norm_method,dtcr="dtcr.p",slograt="slograt.p",swinsor="swinsor.sd", character(0))} #If stat_method not provided, try to guess it, if no guess - empty vector.
+	
+	oneRNA_GR <- norm_GR[seqnames(norm_GR)==RNAid, c(norm_method, stat_method)] #Subset GRanges - chosen transcript, chosen norm_method and stat_method
+	
+	plot(mcols(oneRNA_GR)[,1] ~ start(oneRNA_GR), xlab="Position", ylab=norm_method, main=RNAid, type="l") #Plot
+		
+	#If stat_method provided, add asterisks:
+	if(length(stat_method)==1){
+		if(missing(stat_cutoff)){stat_cutoff <- min(mcols(oneRNA_GR)[,2], na.rm=T)} #If stat_cutoff not provided, choose minimum
+		stat_values <- rep(NA, length(oneRNA_GR))
+		stat_values[mcols(oneRNA_GR)[,2] <= stat_cutoff] <- max(mcols(oneRNA_GR)[,1], na.rm=T)*1.01 #For plotting: plot asterisks 1% over the height of the max value
+		points(stat_values ~ start(oneRNA_GR), col="red", pch="*")
+	}
+}
+
+plotReads <- function(euc_GR, RNAid, cutoff=1, order_by=1){
+	oneRNA_GR <- euc_GR[seqnames(euc_GR)==RNAid] 
+	oneRNA_GR <- oneRNA_GR[width(oneRNA_GR) >= cutoff]
+	# seq <- seq.temp[order(seq.temp[,1], seq.temp[,3]),c(1,3)]
+	plot(0, xlim=c(start(range(oneRNA_GR)),end(range(oneRNA_GR))), ylim=c(1,sum(oneRNA_GR$EUC)), col=0, ylab="Fragments", xlab="Position", main=RNAid)
+	
+	fragments <- matrix(c(start(oneRNA_GR), end(oneRNA_GR), oneRNA_GR$EUC), ncol=3, byrow=F)
+	frags <- fragments[,1:2][rep(1:nrow(fragments), fragments[,3]),]
+	frags <- frags[order(frags[,order_by]),]
+	
+	segments(x0=frags[,1], x1=frags[,2], y0=1:nrow(frags))
+}
+
+RNA2df <- function(norm_GR, RNAid, norm_methods){
+	if(missing(norm_methods)){norm_methods <- names(mcols(norm_GR))}
+	oneRNA_GR <- norm_GR[seqnames(norm_GR) %in% RNAid, norm_methods]
+	GR2norm_df(oneRNA_GR)
+}
+
