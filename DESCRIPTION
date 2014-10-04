@@ -1,0 +1,12 @@
+Package: RNAstr
+Title: RNA structure analysis
+Version: 0.99.0
+Authors@R: c(person("Lukasz Jan", "Kielpinski", role=c("aut", "cre"),
+    email="kielpinski@bio.ku.dk"), person("Nikos", "Sidiropoulos", role="ctb",
+    email="nikos.sidiro@gmail.com"), person("Jeppe", "Vinther", role="ctb",
+    email="jvinther@bio.ku.dk"))
+Description: What the package does (one paragraph)
+Depends:
+    R (>= 3.1.1)
+License: MIT
+LazyData: true
