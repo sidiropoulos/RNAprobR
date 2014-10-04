@@ -6,7 +6,8 @@
 # depth_correction - "no" - counts are used as given, "all" - treated counts are multiplied by sum of control counts and divided by sum of treated counts (default), "RNA" as in "all" but per RNA basis
 # pseudocount - what pseudocount should be added to each nucleotide prior to calculating log2 ratio (default: 5)
 # add_to - normalized GRanges with already performed normalization of another kind. Results will be merged
-
+#' @export
+#' 
 slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1, depth_correction="all", pseudocount=5, add_to){
 require(GenomicRanges)
 ###Check conditions:

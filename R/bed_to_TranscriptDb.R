@@ -2,7 +2,7 @@
 # Description of options:
 # input_bed_path - path to BED file (12 column BED needed)
 # Value: TranscriptDb object
-
+#' @export
 BED2txDb <- function(input_bed_path){
 require(GenomicFeatures)
 

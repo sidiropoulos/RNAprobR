@@ -9,7 +9,8 @@
 # track_name - character specifying track name
 # track_description  - character specifying track description
 ##Function writes bedgraph file containing 2 tracks (one for each strand).
-
+#' @export
+#' 
 norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build, bedgraph_out_file="out_file",track_name="Track_name", track_description="Track_description"){
 require(GenomicFeatures)
 ###Check conditions:

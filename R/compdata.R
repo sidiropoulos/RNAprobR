@@ -3,7 +3,7 @@
 # Comp_GR - Comp_GR GRanges input (required; created by comp() function)
 # nt_offset - how many nucleotides before modification the reverse transcription terminates (default: 0)
 # add_to - normalized data frame with already performed normalization of another kind. Results will be merged
-
+#' @export
 
 compdata <- function(Comp_GR, nt_offset=1, add_to){
 require(GenomicRanges)

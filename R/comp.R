@@ -11,6 +11,8 @@
 # euc_GR - GRanges generated  by readsamples() function
 # cutoff - specifies cutoff length, only inserts of this length or longer will be used for processing (default: 0)
 # fasta_file - path to fasta file to which reads were mapped. Used to report nucleotide at each position (not required)
+#' @export
+
 
 comp <- function(euc_GR, cutoff=1, fasta_file){
 require(GenomicRanges)

@@ -6,7 +6,8 @@
 # stat_method - which statistics calculation to use for printing asterisks
 # stat_cutoff - below what value of statistics (from stat_method) report significance. If not provided - minimal value from stat_method used
 # order_by - how displayed reads in plotReads function should be sorted. 1 - for sorting by termination location, 2 for sorting by reverse transcription start site
-
+#' @export
+#' 
 # Plot for one RNA:
 plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff){
 	if(missing(norm_method)){norm_method <- names(mcols(norm_GR))[which(names(mcols(norm_GR)) %in% c("dtcr","slograt","swinsor"))[1]]}

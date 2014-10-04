@@ -4,7 +4,8 @@
 # merged_file - character with path to merged_temp file containing 4 column: 1) RNAid, 2) Start, 3) End, 4) Barcode sequence (required)
 # unique_barcode_file - character with path to unique_barcode file (required)
 # output_file - name of a file to be generated (if specified [recommended] function will write a file, if not - function will return a vector)
-
+#' @export
+#' 
 k2n_calc <- function(merged_file, unique_barcode_file, output_file){
 require(plyr)
 

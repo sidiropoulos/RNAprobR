@@ -6,7 +6,8 @@
 # nt_offset - how many nucleotides before modification the reverse transcription terminates (default: 0)
 # only_top - if TRUE then bottom quantile is fixed to 0 (default=F)
 # add_to - normalized GRanges with already performed normalization of another kind. Results will be merged
-
+#' @export
+#' 
 swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top=F, nt_offset=0, add_to){
 require(GenomicRanges)
 ###Check conditions:

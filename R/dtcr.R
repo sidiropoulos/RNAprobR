@@ -5,7 +5,8 @@
 # nt_offset - how many nucleotides before modification the reverse transcription terminates. E.g. for HRF-Seq nt_offset=1 (default: 1)
 # bring_to_zero - should in deltaTCR calculations negative deltaTCR's be brought to 0 as was done in HRF-Seq paper (default: T)
 # add_to - normalized GRanges with already performed normalization of another kind. Results will be merged
-
+#' @export
+#' 
 dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1, bring_to_zero=T, add_to){
 require(GenomicRanges)
 ###Check conditions:
