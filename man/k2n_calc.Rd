@@ -1,0 +1,100 @@
+\name{k2n_calc}
+\alias{k2n_calc}
+\title{
+Function to calculate number of Estimated Unique Counts (EUC's) corresponding to given number of observed unique barcodes.
+}
+\description{
+Function calculates EUC's for each number of observed barcodes accounting for differential ligation probability of different barcodes.
+Function k2n_calc() writes file with a vector in which an i-th element is an estimated unique count given observing i unique barcodes.
+}
+\usage{
+k2n_calc(merged_file, unique_barcode_file, output_file)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{merged_file}{
+path to merged_temp file containing 4 column: 1) RNAid, 2) Start, 3) End, 4) Barcode sequence (required)
+}
+  \item{unique_barcode_file}{
+character with path to unique_barcode file (required)
+}
+  \item{output_file}{
+name of a file to be generated (if specified [recommended] function will write a file, if not - function will return a vector)
+}
+}
+\details{
+%%  ~~ If necessary, more details than the description above ~~
+}
+\value{
+If output_file specified function writes a file, if not - returns a vector.
+}
+\references{
+Kielpinski, L.J., and Vinther, J. (2014). Massive parallel-sequencing-based hydroxyl radical probing of RNA accessibility. Nucleic Acids Res.
+}
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}
+\note{
+%%  ~~further notes~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+%% ~~objects to See Also as \code{\link{help}}, ~~~
+}
+\examples{
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function (merged_file, unique_barcode_file, output_file) 
+{
+    merged <- read.table(merged_file)
+    barcode_length <- max(nchar(as.character(merged[, 4])))
+    read_counts <- count(merged[1:3])
+    max_observed <- max(read.table(unique_barcode_file)[, 4])
+    barcodes_nt <- merged[do.call(paste, as.list(merged[, 1:3])) \%in\% 
+        do.call(paste, as.list(read_counts[(read_counts[, 4]) <= 
+            summary(read_counts[, 4])[5], 1:3])), 4]
+    nt_counts <- matrix(nrow = 4, ncol = barcode_length)
+    for (h in 1:ncol(nt_counts)) {
+        j <- 1
+        for (nt_local in c("A", "C", "G", "T")) {
+            nt_counts[j, h] <- sum(substr(as.character(barcodes_nt), 
+                h, h) == nt_local)
+            j <- j + 1
+        }
+    }
+    nt_freqs <- nt_counts/colSums(nt_counts)
+    nt_values <- list()
+    for (i in 1:ncol(nt_freqs)) {
+        nt_values[[i]] <- nt_freqs[, i]
+    }
+    all_posible_comb <- expand.grid(nt_values)
+    probs <- apply(all_posible_comb, 1, prod)
+    results <- c()
+    i <- 1
+    results[i] <- sum(1 - (1 - probs)^i)
+    while (results[i] <= max_observed) {
+        i <- i + 1
+        results[i] <- sum(1 - (1 - probs)^i)
+    }
+    k2n <- c()
+    for (i in 1:floor(max(results))) {
+        difference <- abs(results - i)
+        k2n[i] <- which(difference == min(difference))
+    }
+    if (!missing(output_file)) {
+        write(k2n, file = output_file)
+    }
+    else {
+        return(k2n)
+    }
+  }
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{ ~kwd1 }
+\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

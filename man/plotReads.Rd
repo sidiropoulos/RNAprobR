@@ -1,0 +1,71 @@
+\name{plotReads}
+\alias{plotReads}
+\title{
+Function plotting ranges from GRanges
+}
+\description{
+Function plots spans of cDNA inserts from GRanges created by readsamples() function. Similar to Figure 4A in reference 1.
+}
+\usage{
+plotReads(euc_GR, RNAid, cutoff = 1, order_by = 1)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{euc_GR}{
+GRanges generated  by readsamples() function
+}
+  \item{RNAid}{
+Transcript identifier - for which transcript plot should be generated.
+}
+  \item{cutoff}{
+specifies cutoff length, only inserts of this length or longer will be used for processing (default: 1)
+}
+  \item{order_by}{
+how displayed reads in plotReads function should be sorted. 1 - for sorting by termination location, 2 for sorting by reverse transcription start site
+}
+}
+\details{
+%%  ~~ If necessary, more details than the description above ~~
+}
+\value{
+Plotting function.
+}
+\references{
+Kielpinski, L.J., and Vinther, J. (2014). Massive parallel-sequencing-based hydroxyl radical probing of RNA accessibility. Nucleic Acids Res.}
+\author{
+Lukasz Jan Kielpinski
+}
+\note{
+%%  ~~further notes~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+%% ~~objects to See Also as \code{\link{help}}, ~~~
+}
+\examples{
+
+dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+plotReads(dummy_euc_GR, RNAid="DummyRNA")
+
+## The function is currently defined as
+function (euc_GR, RNAid, cutoff = 1, order_by = 1) 
+{
+    oneRNA_GR <- euc_GR[seqnames(euc_GR) == RNAid]
+    oneRNA_GR <- oneRNA_GR[width(oneRNA_GR) >= cutoff]
+    plot(0, xlim = c(start(range(oneRNA_GR)), end(range(oneRNA_GR))), 
+        ylim = c(1, sum(oneRNA_GR$EUC)), col = 0, ylab = "Fragments", 
+        xlab = "Position", main = RNAid)
+    fragments <- matrix(c(start(oneRNA_GR), end(oneRNA_GR), oneRNA_GR$EUC), 
+        ncol = 3, byrow = F)
+    frags <- fragments[, 1:2][rep(1:nrow(fragments), fragments[, 
+        3]), ]
+    frags <- frags[order(frags[, order_by]), ]
+    segments(x0 = frags[, 1], x1 = frags[, 2], y0 = 1:nrow(frags))
+  }
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{ ~kwd1 }
+\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
