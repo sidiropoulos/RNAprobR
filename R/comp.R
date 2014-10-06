@@ -90,7 +90,8 @@ start(euc_forPC) <- end(euc_forPC)
 PC_all <- coverage(euc_forPC, weight=euc_forPC$EUC)
 
 ###Run the single RNA processing for all the RNAs: 
-euc_by_RNA <- split(euc_GR_good, f=seqnames(euc_GR_good), drop=T)
+x <- BiocGenerics::as.vector(seqnames(euc_GR_good))
+euc_by_RNA <- split(euc_GR_good, f=x, drop=T)
 Comp_GR <- unlist(suppressWarnings(endoapply(euc_by_RNA, FUN=process_oneRNA_euc)))
 
 #If fasta_file good, add nucleotide identity:
