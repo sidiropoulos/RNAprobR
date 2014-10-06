@@ -1,28 +1,36 @@
-#' @title
 #' Import of tables prepared by Galaxy workflow to R environment
-#' @description
-#' Function readsamples() reads the output of read processing and mapping workflow which has to consist of 4 columns 1) RNAid, 2)Insert start, 3)Insert end, 4)Unique barcode count
-#' It combines separate files coming from the same treatment (usually control and treated) and calculates estimated unique counts (EUCs) by either 
-#' (a) keeping unique counts (euc="counts"), 
-#' (b) using formula from Fu GK et al. PNAS 2011 (binomial distribution calculation) (euc="Fu") or 
-#' (c) using method described in Kielpinski and Vinther, NAR 2014 (euc="HRF-Seq")
-#' If euc="Fu" then the count of all possible barcodes is required (m), e.g. if you use 7 nucleotide, fully degenerate random barcodes (NNNNNNN) then m=16384 (m=4**7)
-#' If euc="HRF-Seq" then the path to a precomputed k2n file is required (generate using EUC() function) (default: "counts")
-#' @usage readsamples(samples, euc = "counts", m = "", k2n_files = "")
+#' 
+#' Function readsamples() reads the output of read processing and mapping
+#' workflow which has to consist of 4 columns 1) RNAid, 2)Insert start,
+#' 3)Insert end, 4)Unique barcode count It combines separate files coming from
+#' the same treatment (usually control and treated) and calculates estimated
+#' unique counts (EUCs) by either (a) keeping unique counts (euc="counts"), (b)
+#' using formula from Fu GK et al. PNAS 2011 (binomial distribution
+#' calculation) (euc="Fu") or (c) using method described in Kielpinski and
+#' Vinther, NAR 2014 (euc="HRF-Seq") If euc="Fu" then the count of all possible
+#' barcodes is required (m), e.g. if you use 7 nucleotide, fully degenerate
+#' random barcodes (NNNNNNN) then m=16384 (m=4**7) If euc="HRF-Seq" then the
+#' path to a precomputed k2n file is required (generate using EUC() function)
+#' (default: "counts")
+#' 
+#' 
 #' @param samples vector with paths to unique_barcodes files to be combined
 #' @param euc method of calculating estimated unique counts (default: "counts")
 #' @param m random barcode complexity (required if and only if euc="Fu")
-#' @param k2n_files vector with paths to k2n files corresponding to files given in samples (required if and only if euc="HRF-Seq"; order important!). Recycled if necessary
-#' @return 
-#' EUC_GR GRanges containing information:
-#' 1) seqnames (sequence name; RNAid) 
-#' 2) Start, 
-#' 3) End, 
-#' 4) EUC
-#' @references Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting individual DNA molecules by the stochastic attachment of diverse labels. Proc Natl Acad Sci U S A 108, 9026-9031.
-#' Kielpinski, L.J., and Vinther, J. (2014). Massive parallel-sequencing-based hydroxyl radical probing of RNA accessibility. Nucleic Acids Res.
+#' @param k2n_files vector with paths to k2n files corresponding to files given
+#' in samples (required if and only if euc="HRF-Seq"; order important!).
+#' Recycled if necessary
+#' @return EUC_GR GRanges containing information: 1) seqnames (sequence name;
+#' RNAid) 2) Start, 3) End, 4) EUC
 #' @author Lukasz Jan Kielpinski
-#' @examples function (samples, euc = "counts", m = "", k2n_files = "") 
+#' @references Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting
+#' individual DNA molecules by the stochastic attachment of diverse labels.
+#' Proc Natl Acad Sci U S A 108, 9026-9031. Kielpinski, L.J., and Vinther, J.
+#' (2014). Massive parallel-sequencing-based hydroxyl radical probing of RNA
+#' accessibility. Nucleic Acids Res.
+#' @examples
+#' 
+#' function (samples, euc = "counts", m = "", k2n_files = "")
 #' {
 #'  if (euc == "Fu" & (is.na(as.integer(m)) | length(m) != 1)) {
 #'    print("Error: wrong m")
@@ -49,8 +57,8 @@
 #'  }
 #'  HRF_EUC <- function(rdf_list, k2n_values) {
 #'    for (input_count in 1:length(rdf_list)) {
-#'      rdf_list[[input_count]][, 4] <- k2n_values[[((input_count - 
-#'                                                      1)\%\%length(k2n_values) + 1)]][rdf_list[[input_count]][, 
+#'      rdf_list[[input_count]][, 4] <- k2n_values[[((input_count -
+#'                                                      1)\%\%length(k2n_values) + 1)]][rdf_list[[input_count]][,
 #'                                                                                                              4]]
 #'    }
 #'    rdf <- do.call("rbind", rdf_list)
@@ -58,21 +66,21 @@
 #'    return(rdf)
 #'  }
 #'  raw_data <- lapply(samples, read.table)
-#'  processed_data <- switch(which(euc == c("counts", "Fu", "HRF-Seq")), 
+#'  processed_data <- switch(which(euc == c("counts", "Fu", "HRF-Seq")),
 #'                           ubar(raw_data), Fu(raw_data, m), HRF_EUC(raw_data, k2n_values))
 #'  no_end_info <- is.na(processed_data[, 3])
-#'  processed_data[no_end_info, 3] <- processed_data[no_end_info, 
+#'  processed_data[no_end_info, 3] <- processed_data[no_end_info,
 #'                                                   2]
-#'  processed_data <- GRanges(seqnames = processed_data[, 1], 
-#'                            IRanges(start = processed_data[, 2], end = processed_data[, 
+#'  processed_data <- GRanges(seqnames = processed_data[, 1],
+#'                            IRanges(start = processed_data[, 2], end = processed_data[,
 #'                                                                                      3]), strand = "+", EUC = processed_data[, 4])
 #'  sort(processed_data)
 #' }
-
-#' @export
 #' 
+#' @import GenomicRanges
+#' @export readsamples
 readsamples <- function(samples, euc="counts", m="", k2n_files=""){
-require(GenomicRanges)
+
 ###Check conditions:
 	if(euc=="Fu" & (is.na(as.integer(m)) | length(m)!=1)){
 		print("Error: wrong m")
