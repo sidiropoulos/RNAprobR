@@ -101,7 +101,7 @@
 #' 
 #' @import GenomicRanges
 #' @export swinsor
-swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top=F, nt_offset=0, add_to){
+swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top=F, nt_offset=1, add_to){
 
 ###Check conditions:
 	if(nt_offset < 0){
