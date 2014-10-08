@@ -93,7 +93,7 @@ parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 Nucleic Acids Res.
 }
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{readsamples}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

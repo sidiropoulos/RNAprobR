@@ -84,7 +84,9 @@ Lukasz Jan Kielpinski
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-See Also as \code{\link{readsamples}}
+\code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
+\code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
+\code{\link{norm2bedgraph}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

@@ -17,7 +17,9 @@
 #' comp2'}
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso See Also as \code{\link{readsamples}}
+#' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
+#' \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
+#' \code{\link{norm2bedgraph}}
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples

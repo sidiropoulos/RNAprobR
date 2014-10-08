@@ -101,7 +101,9 @@ SHAPES publication. Poulsen, Kielpinski, Salama, Krogh, Vinther.
 In review as for 2nd Oct 2014.
 }
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
+\code{\link{compdata}}, \code{\link{GR2norm_df}},
+\code{\link{plotRNA}}, \code{\link{norm2bedgraph}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

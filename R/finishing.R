@@ -38,7 +38,8 @@
 #' @return Plotting function.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{dtcr}}, \code{\link{slograt}}
+#' \code{\link{swinsor}}, \code{\link{compdata}}, 
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples
@@ -132,7 +133,7 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' @return Plotting function.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{readsamples}}
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.

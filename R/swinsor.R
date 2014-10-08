@@ -43,7 +43,9 @@
 #' "swinsor.sd" (standard deviation of smooth-Winsor values) metadata.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}}, 
+#' \code{\link{compdata}}, \code{\link{GR2norm_df}}, 
+#' \code{\link{plotRNA}}, \code{\link{norm2bedgraph}}
 #' @references SHAPES publication. Poulsen, Kielpinski, Salama, Krogh, Vinther.
 #' In review as for 2nd Oct 2014.
 #' @keywords ~kwd1 ~kwd2

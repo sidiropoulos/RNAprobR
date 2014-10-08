@@ -23,6 +23,7 @@
 #' @return EUC_GR GRanges containing information: 1) seqnames (sequence name;
 #' RNAid) 2) Start, 3) End, 4) EUC
 #' @author Lukasz Jan Kielpinski
+#' @seealso \code{\link{comp}}, \code{\link{plotReads}}, \code{\link{k2n_calc}}
 #' @references Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting
 #' individual DNA molecules by the stochastic attachment of diverse labels.
 #' Proc Natl Acad Sci U S A 108, 9026-9031. Kielpinski, L.J., and Vinther, J.

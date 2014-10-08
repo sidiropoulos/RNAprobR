@@ -33,7 +33,6 @@
 #' equal to row number.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples
@@ -395,7 +394,8 @@ GR2norm_df <- function(norm_GR, RNAid="all", norm_methods="all")
 #' (dtcr(), slograt(), swinsor(), compdata())
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}}, 
+#' \code{\link{compdata}}, \code{\link{GR2norm_df}}, \code{\link{norm2bedgraph}}
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples

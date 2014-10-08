@@ -23,7 +23,8 @@
 #' @return Function writes bedgraph file.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}}, \code{\link{dtcr}},
+#' \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples
@@ -277,7 +278,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
             repeat_info <- repeat_info[repeat_info[,6]!= -1,] #Remove last repeated
             repeat_info[,1:4] #Return first 4 columns
         }
-    ##End of defining functions
+        ##End of defining functions
 
         #Run function:
         df_list <- split(bedgraph_dataframe, f=bedgraph_dataframe[,1], drop=TRUE)

@@ -48,7 +48,9 @@
 #' (p.value of comparing control and treated) metadata.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{compdata}},
+#' \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
+#' \code{\link{norm2bedgraph}}
 #' @references Wan, Y., Qu, K., Zhang, Q.C., Flynn, R.A., Manor, O., Ouyang,
 #' Z., Zhang, J., Spitale, R.C., Snyder, M.P., Segal, E., et al. (2014).
 #' Landscape and variation of RNA secondary structure across the human

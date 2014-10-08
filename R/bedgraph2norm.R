@@ -47,7 +47,9 @@
 #' metadata to already existing object
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{norm2bedgraph}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
+#' \code{\link{BED2txDb}}, \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
+#' \code{\link{compdata}}
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples

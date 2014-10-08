@@ -54,9 +54,6 @@ Lukasz Jan Kielpinski
 \references{
 %% ~put references to the literature/web site here ~
 }
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \keyword{~kwd1}
 \keyword{~kwd2}
 

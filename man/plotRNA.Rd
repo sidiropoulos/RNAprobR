@@ -77,7 +77,8 @@ Lukasz Jan Kielpinski
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{plot}}, \code{\link{plot.default}}, \code{\link{dtcr}}, \code{\link{slograt}}
+\code{\link{swinsor}}, \code{\link{compdata}},
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

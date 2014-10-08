@@ -42,7 +42,8 @@ Lukasz Jan Kielpinski
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
+\code{\link{compdata}}, \code{\link{GR2norm_df}}, \code{\link{norm2bedgraph}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

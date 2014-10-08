@@ -40,7 +40,9 @@
 #' comparing control and treated) metadata.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{comp}}, \code{\link{slograt}}, \code{\link{swinsor}}, 
+#' \code{\link{compdata}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}}, 
+#' \code{\link{norm2bedgraph}}
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.

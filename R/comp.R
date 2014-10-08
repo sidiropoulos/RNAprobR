@@ -17,7 +17,8 @@
 #' within each RNA.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @seealso \code{\link{readsamples}}, \code{\link{dtcr}}, \code{\link{slograt}}, 
+#' \code{\link{swinsor}}, \code{\link{compdata}}, \code{\link{comp}}
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.

@@ -92,4 +92,7 @@ Proc Natl Acad Sci U S A 108, 9026-9031. Kielpinski, L.J., and Vinther, J.
 (2014). Massive parallel-sequencing-based hydroxyl radical probing of RNA
 accessibility. Nucleic Acids Res.
 }
+\seealso{
+\code{\link{comp}}, \code{\link{plotReads}}, \code{\link{k2n_calc}}
+}
 
