@@ -14,7 +14,9 @@ Description: This package facilitates analysis of Net Generation Sequencing data
 Depends:
     R (>= 3.1.1),
     Biobase (>= 2.14),
-    GenomicRanges,
+    BiocGenerics(>= 0.10.0),
+    GenomicRanges(>= 1.16.4)
+Imports:
     Rsamtools,
     GenomicFeatures,
     plyr,
