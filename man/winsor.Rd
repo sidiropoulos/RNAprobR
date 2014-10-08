@@ -3,7 +3,7 @@
 \alias{winsor}
 \title{Winsor normalization with fitting to <0,1> range.}
 \usage{
-winsor(input_vector, winsor_level = 0.9, only_top = F)
+winsor(input_vector, winsor_level = 0.9, only_top = FALSE)
 }
 \arguments{
 \item{input_vector}{Vector with values to be Winsorized}
@@ -34,10 +34,10 @@ plot(winsor(data_set, winsor_level=0.8) ~ data_set)
 
 
 ## The function is currently defined as
-function (input_vector, winsor_level = 0.9, only_top = F)
+function (input_vector, winsor_level = 0.9, only_top = FALSE)
 {
     bounds <- quantile(input_vector, c((1 - winsor_level)/2,
-        1 - (1 - winsor_level)/2), names = F, na.rm = T)
+        1 - (1 - winsor_level)/2), names = FALSE, na.rm = TRUE)
     if (only_top) {
         bounds[1] <- 0
     }

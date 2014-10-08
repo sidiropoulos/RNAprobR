@@ -3,8 +3,8 @@
 \alias{swinsor}
 \title{Smooth Winsorization}
 \usage{
-swinsor(Comp_GR, winsor_level = 0.9, window_size = 71, only_top = F,
-  nt_offset = 0, add_to)
+swinsor(Comp_GR, winsor_level = 0.9, window_size = 71, only_top = FALSE,
+  nt_offset = 1, add_to)
 }
 \arguments{
 \item{Comp_GR}{GRanges object made by comp() function.}
@@ -47,7 +47,7 @@ dummy_comp_GR <- comp(dummy_euc_GR)
 swinsor(dummy_comp_GR)
 
 ## The function is currently defined as
-function (Comp_GR, winsor_level = 0.9, window_size = 71, only_top = F,
+function (Comp_GR, winsor_level = 0.9, window_size = 71, only_top = FALSE,
     nt_offset = 0, add_to)
 {
     if (nt_offset < 0) {
@@ -76,7 +76,7 @@ function (Comp_GR, winsor_level = 0.9, window_size = 71, only_top = F,
     Comp_df <- GR2norm_df(Comp_GR)
     Comp_df[is.na(Comp_df)] <- 0
     Comp_df <- Comp_df[order(Comp_df$RNAid, Comp_df$Pos), ]
-    Comp_df_by_RNA <- split(Comp_df, f = Comp_df$RNAid, drop = T)
+    Comp_df_by_RNA <- split(Comp_df, f = Comp_df$RNAid, drop = TRUE)
     normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN = swinsor_oneRNA))
     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos,
         nt = normalized$nt, swinsor = normalized$swinsor, swinsor.sd = normalized$swinsor.sd)

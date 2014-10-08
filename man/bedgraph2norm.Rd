@@ -44,7 +44,7 @@ for plus strand, second for minus strand.
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+##-- or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
 function (bedgraph_file, fasta_file, txDb, bed_file, column_name = "bedgraph_score",
@@ -87,7 +87,7 @@ function (bedgraph_file, fasta_file, txDb, bed_file, column_name = "bedgraph_sco
     if (missing(txDb)) {
         txDb <- BED2txDb(bed_file)
     }
-    all_exons <- exonsBy(txDb, "tx", use.names = T)
+    all_exons <- exonsBy(txDb, "tx", use.names = TRUE)
     my_exons <- all_exons[names(all_exons) \%in\% names(txs)]
     overlapping_transcripts <- which(countOverlaps(my_exons) >
         1)
@@ -101,7 +101,7 @@ function (bedgraph_file, fasta_file, txDb, bed_file, column_name = "bedgraph_sco
     normalized <- data.frame(RNAid = names(my_exons)[hits_in_tx],
         Pos = start(ranges(mapped_to_tx)), nt = NA, bedgraph_score = score(bedgraph_merged)[hits_in_EF])
     names(normalized)[names(normalized) == "bedgraph_score"] <- column_name
-    norm_by_RNA <- split(normalized, f = normalized$RNAid, drop = T)
+    norm_by_RNA <- split(normalized, f = normalized$RNAid, drop = TRUE)
     normalized <- do.call(rbind, lapply(norm_by_RNA, FUN = add_sequence))
     if (!missing(add_to)) {
         add_to_df <- GR2norm_df(add_to)

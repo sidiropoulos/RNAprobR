@@ -84,8 +84,8 @@ function (control_GR, treated_GR, window_size = 5, nt_offset = 1,
         return(Comp_df)
     }
     all_dc <- function(Comp_df) {
-        control_sum <- sum(Comp_df$TC.control, na.rm = T)
-        treated_sum <- sum(Comp_df$TC.treated, na.rm = T)
+        control_sum <- sum(Comp_df$TC.control, na.rm = TRUE)
+        treated_sum <- sum(Comp_df$TC.treated, na.rm = TRUE)
         if (control_sum * treated_sum > 0) {
             correction_factor <- control_sum/treated_sum
         }
@@ -105,21 +105,21 @@ function (control_GR, treated_GR, window_size = 5, nt_offset = 1,
     }
     RNA_dc <- function(Comp_df) {
         compmerg_by_RNA <- split(Comp_df, f = Comp_df$RNAid,
-            drop = T)
+            drop = TRUE)
         return(do.call(rbind, lapply(compmerg_by_RNA, FUN = all_dc)))
     }
     compare_prop_slograt <- function(T_ctrl, T_tr, window_size) {
         window_side <- window_size/2 - 0.5
         Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size),
-            na.rm = T)[(window_side + 1):(length(T_ctrl) + window_side)]
+            na.rm = TRUE)[(window_side + 1):(length(T_ctrl) + window_side)]
         Cc <- rep(sum(T_ctrl), length(Tc))
         Tt <- colSums(construct_smoothing_matrix(T_tr, window_size),
-            na.rm = T)[(window_side + 1):(length(T_tr) + window_side)]
+            na.rm = TRUE)[(window_side + 1):(length(T_tr) + window_side)]
         Ct <- rep(sum(T_tr), length(Tt))
         pp <- (Tc + Tt)/(Cc + Ct)
         se <- sqrt(pp * (1 - pp) * (1/Cc + 1/Ct))
         z <- (Tc/Cc - Tt/Ct)/se
-        p.values <- pnorm(abs(z), lower.tail = F) * 2
+        p.values <- pnorm(abs(z), lower.tail = FALSE) * 2
         return(p.values)
     }
     process_oneRNA_compmerg_slograt <- function(oneRNA_compmerg) {
@@ -131,10 +131,10 @@ function (control_GR, treated_GR, window_size = 5, nt_offset = 1,
             1)) == 1) {
             window_side <- window_size/2 - 0.5
             treated_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.treated,
-                window_size) + pseudocount, na.rm = T)[(window_side +
+                window_size) + pseudocount, na.rm = TRUE)[(window_side +
                 1):(length(oneRNA_compmerg$TC.treated) + window_side)]
             control_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.control,
-                window_size) + pseudocount, na.rm = T)[(window_side +
+                window_size) + pseudocount, na.rm = TRUE)[(window_side +
                 1):(length(oneRNA_compmerg$TC.control) + window_side)]
             oneRNA_compmerg$slograt <- log2(treated_summed/control_summed)[(1 +
                 nt_offset):(length(treated_summed) + nt_offset)]
@@ -169,8 +169,8 @@ function (control_GR, treated_GR, window_size = 5, nt_offset = 1,
     control <- GR2norm_df(control_GR)
     treated <- GR2norm_df(treated_GR)
     comp_merg <- merge(control, treated, by = c("RNAid", "Pos",
-        "nt"), all = T, suffixes = c(".control", ".treated"),
-        sort = F)
+        "nt"), all = TRUE, suffixes = c(".control", ".treated"),
+        sort = FALSE)
     comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),
         ]
     comp_merg[is.na(comp_merg)] <- 0
@@ -178,17 +178,17 @@ function (control_GR, treated_GR, window_size = 5, nt_offset = 1,
         "all")), no_dc, RNA_dc, all_dc)
     comp_merg_dc <- dc_fun(comp_merg)
     compmerg_dc_by_RNA <- split(comp_merg_dc, f = comp_merg_dc$RNAid,
-        drop = T)
+        drop = TRUE)
     normalized <- do.call(rbind, lapply(compmerg_dc_by_RNA, FUN = process_oneRNA_compmerg_slograt))
     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos,
         nt = normalized$nt, slograt = normalized$slograt)
     compmerg_by_RNA <- split(comp_merg, f = comp_merg$RNAid,
-        drop = T)
+        drop = TRUE)
     normalized2 <- do.call(rbind, lapply(compmerg_by_RNA, FUN = process_oneRNA_compmerg_slograt_pvalues))
     normalized2 <- data.frame(RNAid = normalized2$RNAid, Pos = normalized2$Pos,
         nt = normalized2$nt, slograt.p = normalized2$slograt.p)
     normalized <- merge(normalized, normalized2, by = c("RNAid",
-        "Pos", "nt"), sort = F)
+        "Pos", "nt"), sort = FALSE)
     normalized$slograt[is.nan(normalized$slograt)] <- NA
     normalized$slograt.p[is.nan(normalized$slograt.p)] <- NA
     if (!missing(add_to)) {

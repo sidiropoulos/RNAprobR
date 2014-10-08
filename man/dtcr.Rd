@@ -4,7 +4,7 @@
 \title{Function to calculate deltaTCR.}
 \usage{
 dtcr(control_GR, treated_GR, window_size = 3, nt_offset = 1,
-  bring_to_zero = T, add_to)
+  bring_to_zero = TRUE, add_to)
 }
 \arguments{
 \item{control_GR}{GRanges object made by comp() function from the control
@@ -51,7 +51,7 @@ dtcr(control_GR=dummy_comp_GR_control, treated_GR=dummy_comp_GR_treated)
 
 ## The function is currently defined as
 function (control_GR, treated_GR, window_size = 3, nt_offset = 1,
-    bring_to_zero = T, add_to)
+    bring_to_zero = TRUE, add_to)
 {
     if (nt_offset < 0) {
         stop("error: nt_offset must be >= 0")
@@ -78,17 +78,17 @@ function (control_GR, treated_GR, window_size = 3, nt_offset = 1,
     compare_prop <- function(T_ctrl, C_ctrl, T_tr, C_tr, window_size) {
         window_side <- window_size/2 - 0.5
         Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size),
-            na.rm = T)[(window_side + 1):(length(T_ctrl) + window_side)]
+            na.rm = TRUE)[(window_side + 1):(length(T_ctrl) + window_side)]
         Cc <- colSums(construct_smoothing_matrix(C_ctrl, window_size),
-            na.rm = T)[(window_side + 1):(length(C_ctrl) + window_side)]
+            na.rm = TRUE)[(window_side + 1):(length(C_ctrl) + window_side)]
         Tt <- colSums(construct_smoothing_matrix(T_tr, window_size),
-            na.rm = T)[(window_side + 1):(length(T_tr) + window_side)]
+            na.rm = TRUE)[(window_side + 1):(length(T_tr) + window_side)]
         Ct <- colSums(construct_smoothing_matrix(C_tr, window_size),
-            na.rm = T)[(window_side + 1):(length(C_tr) + window_side)]
+            na.rm = TRUE)[(window_side + 1):(length(C_tr) + window_side)]
         pp <- (Tc + Tt)/(Cc + Ct)
         se <- sqrt(pp * (1 - pp) * (1/Cc + 1/Ct))
         z <- (Tc/Cc - Tt/Ct)/se
-        p.values <- pnorm(abs(z), lower.tail = F) * 2
+        p.values <- pnorm(abs(z), lower.tail = FALSE) * 2
         return(p.values)
     }
     process_oneRNA_compmerg <- function(oneRNA_compmerg) {
@@ -117,7 +117,7 @@ function (control_GR, treated_GR, window_size = 3, nt_offset = 1,
     control <- GR2norm_df(control_GR)
     treated <- GR2norm_df(treated_GR)
     comp_merg <- merge(control, treated, by = c("RNAid", "Pos",
-        "nt"), all = T, suffixes = c(".control", ".treated"))
+        "nt"), all = TRUE, suffixes = c(".control", ".treated"))
     comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),
         ]
     comp_merg[is.na(comp_merg)] <- 0
@@ -131,7 +131,7 @@ function (control_GR, treated_GR, window_size = 3, nt_offset = 1,
     }
     comp_merg$dtcr <- dtcr
     compmerg_by_RNA <- split(comp_merg, f = comp_merg$RNAid,
-        drop = T)
+        drop = TRUE)
     normalized <- do.call(rbind, lapply(compmerg_by_RNA, FUN = process_oneRNA_compmerg))
     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos,
         nt = normalized$nt, dtcr = normalized$dtcr, dtcr.p = normalized$dtcr.p)

@@ -9,8 +9,8 @@ BED2txDb(input_bed_path)
 \item{input_bed_path}{Path to 12 column BED file}
 }
 \value{
-\item{comp1 }{Description of 'comp1'}
-\item{comp2 }{Description of 'comp2'}
+\item{comp1 }{Description of 'comp1'} \item{comp2 }{Description of
+'comp2'}
 }
 \description{
 Function to transform BED format file to Bioconductor TranscriptDb object
@@ -53,14 +53,14 @@ function (input_bed_path)
         as.integer)
     exon_start_genome_list <- mapply(FUN = function(x, y) {
         x + y + 1
-    }, exon_start_tx_list, input_bed[, 2], SIMPLIFY = F)
+    }, exon_start_tx_list, input_bed[, 2], SIMPLIFY = FALSE)
     exon_end_genome_list <- mapply(FUN = function(x, y) {
         x + y - 1
-    }, exon_start_genome_list, exon_size_tx_list, SIMPLIFY = F)
+    }, exon_start_genome_list, exon_size_tx_list, SIMPLIFY = FALSE)
     exon_rank_list <- mapply(FUN = rank_fun, input_bed[, 10],
-        input_bed[, 6], SIMPLIFY = F)
+        input_bed[, 6], SIMPLIFY = FALSE)
     tx_id_list <- mapply(FUN = rep, input_bed$tx_id, input_bed[,
-        10], SIMPLIFY = F)
+        10], SIMPLIFY = FALSE)
     splicings <- data.frame(tx_id = unlist(tx_id_list), exon_rank = unlist(exon_rank_list),
         exon_start = unlist(exon_start_genome_list), exon_end = unlist(exon_end_genome_list))
     txDb_from_BED <- makeTranscriptDb(transcripts = transcripts,

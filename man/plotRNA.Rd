@@ -3,7 +3,8 @@
 \alias{plotRNA}
 \title{Function plotting normalized values over transcript positions}
 \usage{
-plotRNA(norm_GR, RNAid, norm_method, stat_method, stat_cutoff)
+plotRNA(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main, type, ylab,
+  xlab, ...)
 }
 \arguments{
 \item{norm_GR}{norm_GR GRanges with data to be exported, required}
@@ -60,11 +61,11 @@ function (norm_GR, RNAid, norm_method, stat_method, stat_cutoff)
         ylab = norm_method, main = RNAid, type = "l")
     if (length(stat_method) == 1) {
         if (missing(stat_cutoff)) {
-            stat_cutoff <- min(mcols(oneRNA_GR)[, 2], na.rm = T)
+            stat_cutoff <- min(mcols(oneRNA_GR)[, 2], na.rm = TRUE)
         }
         stat_values <- rep(NA, length(oneRNA_GR))
         stat_values[mcols(oneRNA_GR)[, 2] <= stat_cutoff] <- max(mcols(oneRNA_GR)[,
-            1], na.rm = T) * 1.01
+            1], na.rm = TRUE) * 1.01
         points(stat_values ~ start(oneRNA_GR), col = "red", pch = "*")
     }
   }

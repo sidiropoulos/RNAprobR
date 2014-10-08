@@ -2,8 +2,8 @@
 \name{GR2norm_df}
 \alias{GR2norm_df}
 \title{Function to make data frame out of GRanges output of normalizing functions
-(dtcr(), slograt(), swinsor(), compdata()) for all or a set of chosen transcripts
-in the file.}
+(dtcr(), slograt(), swinsor(), compdata()) for all or a set of chosen
+transcripts in the file.}
 \usage{
 GR2norm_df(norm_GR, RNAid = "all", norm_methods = "all")
 }
@@ -60,7 +60,8 @@ Lukasz Jan Kielpinski, Nikos Sidiropoulos
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-\code{\link{norm_df2GR}}, \code{\link{dtcr}}, \code{\link{swinsor}}, \code{\link{slograt}}, \code{\link{compdata}}
+\code{\link{norm_df2GR}}, \code{\link{dtcr}},
+\code{\link{swinsor}}, \code{\link{slograt}}, \code{\link{compdata}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

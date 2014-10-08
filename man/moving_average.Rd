@@ -31,7 +31,7 @@ function (input_vector, window_size)
 {
     window_side <- window_size/2 - 0.5
     return(colMeans(construct_smoothing_matrix(input_vector,
-        window_size), na.rm = T)[(window_side + 1):(length(input_vector) +
+        window_size), na.rm = TRUE)[(window_side + 1):(length(input_vector) +
         window_side)])
   }
 }

@@ -13,11 +13,12 @@ compdata(Comp_GR, nt_offset = 1, add_to)
 \item{nt_offset}{how many nucleotides before modification the reverse
 transcription terminates (default: 1)}
 
-\item{add_to}{normalized data frame with already performed normalization of another kind. Results will be merged}
+\item{add_to}{normalized data frame with already performed normalization of
+another kind. Results will be merged}
 }
 \value{
-\item{comp1 }{Description of 'comp1'}
-\item{comp2 }{Description of comp2'}
+\item{comp1 }{Description of 'comp1'} \item{comp2 }{Description of
+comp2'}
 }
 \description{
 Main use is to add metadata present in GRanges made by comp() function to
@@ -62,7 +63,7 @@ function (Comp_GR, nt_offset = 1, add_to)
         "Cover", "PC")
     Comp_df[is.na(Comp_df)] <- 0
     Comp_df <- Comp_df[order(Comp_df$RNAid, Comp_df$Pos), ]
-    Comp_by_RNA <- split(Comp_df, f = Comp_df$RNAid, drop = T)
+    Comp_by_RNA <- split(Comp_df, f = Comp_df$RNAid, drop = TRUE)
     normalized <- do.call(rbind, lapply(Comp_by_RNA, FUN = offset_oneRNA))
     normalized[is.na(normalized)] <- 0
     if (!missing(add_to)) {
@@ -83,7 +84,7 @@ Lukasz Jan Kielpinski
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+See Also as \code{\link{readsamples}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

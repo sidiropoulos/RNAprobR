@@ -47,7 +47,7 @@ creates two-track bedgraph file (one track for each strand)
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+##-- or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
 function (norm_GR, txDb, bed_file, norm_method, genome_build,
@@ -61,7 +61,8 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
     if (missing(norm_method)) {
         norm_method <- names(norm_df)[names(norm_df) \%in\% c("dtcr",
             "slograt", "swinsor")][1]
-        print(paste("Warning: normalization method to convert not specified.",
+        print(paste("Warning: normalization method to convert not
+                     specified.",
             norm_method, "chosen."))
     }
     if (missing(txDb) & missing(bed_file)) {
@@ -73,7 +74,7 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
         tx_lengths <- data.frame(RNAid = names(max_lengths),
             max_lengths)
         norm_max_length <- merge(norm_df, tx_lengths, by = "RNAid",
-            sort = F)
+            sort = FALSE)
         discarded_transcripts <- as.character(unique(norm_df[,
             1])[!(unique(norm_df[, 1]) \%in\% unique(norm_max_length[,
             1]))])
@@ -102,7 +103,8 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
                   my_delta = c(0, diff(cons_identical), -1))
             }
             if (sum(seq_start_and_end) == 0) {
-                if (min(which(seq_start_and_end == 1)) < min(which(seq_start_and_end ==
+                if (min(which(seq_start_and_end == 1)) <
+                    min(which(seq_start_and_end ==
                   -1))) {
                   repeat_info <- data.frame(one_chrom, c(F, cons_identical),
                     my_delta = c(0, diff(cons_identical), 0))
@@ -117,7 +119,7 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
                 repeat_info <- data.frame(one_chrom, c(F, cons_identical),
                   my_delta = c(1, diff(cons_identical), 0))
             }
-            repeat_info <- repeat_info[repeat_info[, 5] == F |
+            repeat_info <- repeat_info[repeat_info[, 5] == FALSE |
                 repeat_info[, 6] == -1, ]
             repeat_info[repeat_info[, 6] == 1, 3] <- repeat_info[repeat_info[,
                 6] == -1, 3]
@@ -126,7 +128,7 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
             repeat_info[, 1:4]
         }
         df_list <- split(bedgraph_dataframe, f = bedgraph_dataframe[,
-            1], drop = T)
+            1], drop = TRUE)
         return(do.call(rbind, lapply(df_list, FUN = compress_one_chromosome)))
     }
     norm_df <- GR2norm_df(norm_GR)
@@ -134,7 +136,7 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
     if (missing(txDb)) {
         txDb <- BED2txDb(bed_file)
     }
-    my_exons <- exonsBy(txDb, by = "tx", use.names = T)
+    my_exons <- exonsBy(txDb, by = "tx", use.names = TRUE)
     dup_txs <- names(my_exons)[duplicated(names(my_exons))]
     my_exons <- my_exons[!(names(my_exons) \%in\% dup_txs)]
     my_dup_discarded <- unique(norm_df$RNAid[norm_df$RNAid \%in\%
@@ -144,7 +146,7 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
             "discarded. Provided more than one genomic location."))
     }
     norm_good <- remove_unannotated(norm_df, my_exons)
-    norm_list <- split(norm_good, f = norm_good$RNAid, drop = T)
+    norm_list <- split(norm_good, f = norm_good$RNAid, drop = TRUE)
     Pos_list <- lapply(norm_list, FUN = function(norm_df) {
         as.integer(norm_df$Pos)
     })
@@ -154,7 +156,7 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
     ordering_df_exons <- data.frame(tx_name = names(exons_of_interest),
         i = 1:length(exons_of_interest))
     ordering_merged <- merge(ordering_df_Pos, ordering_df_exons,
-        by = 1, all = T, suffixes = c(".Pos", ".ex"), sort = F)
+        by = 1, all = TRUE, suffixes = c(".Pos", ".ex"), sort = FALSE)
     ordering_merged <- ordering_merged[order(ordering_merged[,
         2]), ]
     exons_of_interest <- exons_of_interest[ordering_merged[,
@@ -191,14 +193,14 @@ function (norm_GR, txDb, bed_file, norm_method, genome_build,
         "(plus)\\" description=\\"", track_description, "-plus_strand\\" visibility=full color=0,0,100 altColor=0,0,0 priority=100 autoScale=on alwaysZero=on gridDefault=off maxHeightPixels=128:128:11 graphType=bar yLineMark=0 yLineOnOff=on smoothingWindow=off db=",
         genome_build, sep = "")
     write(bedgraph_header, file = bedgraph_out_file)
-    write.table(df_plus, row.names = F, col.names = F, quote = F,
-        sep = "\\t", file = bedgraph_out_file, append = T)
+    write.table(df_plus, row.names = FALSE, col.names = FALSE, quote = FALSE,
+        sep = "\\t", file = bedgraph_out_file, append = TRUE)
     bedgraph_header <- paste("track type=bedGraph name=\\"", track_name,
         "(minus)\\" description=\\"", track_description, "-minus_strand\\" visibility=full color=0,0,100 altColor=0,0,0 priority=100 autoScale=on alwaysZero=on gridDefault=off maxHeightPixels=128:128:11 graphType=bar yLineMark=0 yLineOnOff=on smoothingWindow=off db=",
         genome_build, sep = "")
-    write(bedgraph_header, file = bedgraph_out_file, append = T)
-    write.table(df_minus, row.names = F, col.names = F, quote = F,
-        sep = "\\t", file = bedgraph_out_file, append = T)
+    write(bedgraph_header, file = bedgraph_out_file, append = TRUE)
+    write.table(df_minus, row.names = FALSE, col.names = FALSE, quote = FALSE,
+        sep = "\\t", file = bedgraph_out_file, append = TRUE)
   }
 }
 \author{

@@ -19,6 +19,10 @@ equal to row number.
 Auxiliary functions for package RNAstr
 }
 \details{
+Auxiliary functions for package RNAstr
+
+Auxiliary functions for package RNAstr
+
 Make smoothing matrix
 
 Auxiliary function speeding up calculations in functions operating on

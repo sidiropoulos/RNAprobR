@@ -3,7 +3,8 @@
 \alias{swinsor_vector}
 \title{Smooth Winsor Normalization}
 \usage{
-swinsor_vector(input_vector, window_size, winsor_level = 0.9, only_top = F)
+swinsor_vector(input_vector, window_size, winsor_level = 0.9,
+  only_top = FALSE)
 }
 \arguments{
 \item{input_vector}{Vector with values to be smooth-Winsorized}
@@ -17,9 +18,9 @@ swinsor_vector(input_vector, window_size, winsor_level = 0.9, only_top = F)
 0.}
 }
 \value{
-\item{comp1}{Vector with mean Winsorized values for each input_vector position}
-\item{comp2 }{Vector with standard deviation of Winsorized values for each
-input_vector position}
+\item{comp1}{Vector with mean Winsorized values for each
+input_vector position} \item{comp2 }{Vector with standard deviation of
+Winsorized values for each input_vector position}
 
 %% ...
 }
@@ -42,7 +43,7 @@ plot(swinsor_vector(data_set, window_size=71, winsor_level=0.8)[[1]] ~ data_set)
 
 
 ## The function is currently defined as
-function (input_vector, window_size, winsor_level = 0.9, only_top = F)
+function (input_vector, window_size, winsor_level = 0.9, only_top = FALSE)
 {
     align_smoothing_matrix <- function(input_matrix) {
         vector_length <- ncol(input_matrix) - nrow(input_matrix) +
@@ -60,9 +61,9 @@ function (input_vector, window_size, winsor_level = 0.9, only_top = F)
     winsorized_matrix[, c(1:(window_size - 1), (length(input_vector) +
         1):ncol(winsorized_matrix))] <- NA
     aligned_winsorized_matrix <- align_smoothing_matrix(winsorized_matrix)
-    means_vector <- colMeans(aligned_winsorized_matrix, na.rm = T)
+    means_vector <- colMeans(aligned_winsorized_matrix, na.rm = TRUE)
     sds_vector <- apply(aligned_winsorized_matrix, 2, FUN = sd,
-        na.rm = T)
+        na.rm = TRUE)
     return(list(means_vector, sds_vector))
   }
 }

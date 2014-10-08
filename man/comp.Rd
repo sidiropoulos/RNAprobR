@@ -45,17 +45,17 @@ function (euc_GR, cutoff = 1, fasta_file)
     }
     if (missing(fasta_file)) {
         print("Fasta file not specified.")
-        fasta_exists <- F
+        fasta_exists <- FALSE
     }
     else {
         if (file.exists(fasta_file)) {
             indexFa(fasta_file)
             fasta_ref <- FaFile(fasta_file)
-            fasta_exists <- T
+            fasta_exists <- TRUE
         }
         else {
             print("Warning: Fasta file not found.")
-            fasta_exists <- F
+            fasta_exists <- FALSE
         }
     }
     process_oneRNA_euc <- function(oneRNA_euc) {
@@ -73,9 +73,9 @@ function (euc_GR, cutoff = 1, fasta_file)
         Cover_oneRNA <- data.frame(Pos = 1:length(gene_coverage),
             gene_coverage)
         merged_oneRNA <- merge(TC_oneRNA, PC_oneRNA, by = "Pos",
-            all = T)
+            all = TRUE)
         merged_oneRNA <- merge(merged_oneRNA, Cover_oneRNA, by = "Pos",
-            all = T)
+            all = TRUE)
         merged_oneRNA$TCR <- merged_oneRNA$gene_TC/merged_oneRNA$gene_coverage
         GR_oneRNA <- GRanges(seqnames = RNAid, IRanges(start = merged_oneRNA$Pos,
             width = 1), strand = "+", TC = merged_oneRNA$gene_TC,
@@ -96,12 +96,12 @@ function (euc_GR, cutoff = 1, fasta_file)
     start(euc_forPC) <- end(euc_forPC)
     PC_all <- coverage(euc_forPC, weight = euc_forPC$EUC)
     euc_by_RNA <- split(euc_GR_good, f = seqnames(euc_GR_good),
-        drop = T)
+        drop = TRUE)
     Comp_GR <- unlist(suppressWarnings(endoapply(euc_by_RNA,
         FUN = process_oneRNA_euc)))
     if (fasta_exists) {
         Comp_GR$nt <- as.character(getSeq(fasta_ref, Comp_GR),
-            use.names = F)
+            use.names = FALSE)
     }
     else {
         Comp_GR$nt <- NA
