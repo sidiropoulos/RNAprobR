@@ -16,6 +16,8 @@
 
 
 
+
+
 #' Smooth Log2-ratio
 #' 
 #' Performs smooth-log2(ratio) (slograt) calculation given control and treated
@@ -54,7 +56,6 @@
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #' 
-#' 
 #' dummy_euc_GR_control <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 #' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 #' dummy_comp_GR_control <- comp(dummy_euc_GR_control)
@@ -62,8 +63,8 @@
 #' slograt(control_GR=dummy_comp_GR_control, treated_GR=dummy_comp_GR_treated)
 #' 
 #' ## The function is currently defined as
-#' function (control_GR, treated_GR, window_size = 5, nt_offset = 1, 
-#'     depth_correction = "all", pseudocount = 5, add_to) 
+#' function (control_GR, treated_GR, window_size = 5, nt_offset = 1,
+#'     depth_correction = "all", pseudocount = 5, add_to)
 #' {
 #'     if (nt_offset < 0) {
 #'         stop("error: nt_offset must be >= 0")
@@ -77,11 +78,11 @@
 #'     correct_merged <- function(oneRNA_compmerg) {
 #'         df_gaps <- diff(oneRNA_compmerg$Pos)
 #'         rnaid_column <- which(names(oneRNA_compmerg) == "RNAid")
-#'         oneRNA_out <- oneRNA_compmerg[c(rep(1:length(df_gaps), 
+#'         oneRNA_out <- oneRNA_compmerg[c(rep(1:length(df_gaps),
 #'             df_gaps), nrow(oneRNA_compmerg)), ]
-#'         oneRNA_out[duplicated(rep(1:length(df_gaps), df_gaps)), 
+#'         oneRNA_out[duplicated(rep(1:length(df_gaps), df_gaps)),
 #'             (1:ncol(oneRNA_out))[-rnaid_column]] <- NA
-#'         oneRNA_out$Pos <- oneRNA_compmerg$Pos[1]:(oneRNA_compmerg$Pos[1] + 
+#'         oneRNA_out$Pos <- oneRNA_compmerg$Pos[1]:(oneRNA_compmerg$Pos[1] +
 #'             nrow(oneRNA_out) - 1)
 #'         oneRNA_out$nt[is.na(oneRNA_out$nt)] <- "N"
 #'         oneRNA_out[is.na(oneRNA_out)] <- 0
@@ -91,15 +92,15 @@
 #'         return(Comp_df)
 #'     }
 #'     all_dc <- function(Comp_df) {
-#'         control_sum <- sum(Comp_df$TC.control, na.rm = T)
-#'         treated_sum <- sum(Comp_df$TC.treated, na.rm = T)
+#'         control_sum <- sum(Comp_df$TC.control, na.rm = TRUE)
+#'         treated_sum <- sum(Comp_df$TC.treated, na.rm = TRUE)
 #'         if (control_sum * treated_sum > 0) {
 #'             correction_factor <- control_sum/treated_sum
 #'         }
 #'         else {
 #'             correction_factor <- 1
-#'             switch(which(depth_correction == c("no", "RNA", "all")), 
-#'                 "Something wrong", print(paste("For RNA", Comp_df[1, 
+#'             switch(which(depth_correction == c("no", "RNA", "all")),
+#'                 "Something wrong", print(paste("For RNA", Comp_df[1,
 #'                   1], "Depth correction factor set to 1")), "Depth correction factor set to 1")
 #'         }
 #'         if (control_sum > treated_sum) {
@@ -111,99 +112,99 @@
 #'         return(Comp_df)
 #'     }
 #'     RNA_dc <- function(Comp_df) {
-#'         compmerg_by_RNA <- split(Comp_df, f = Comp_df$RNAid, 
-#'             drop = T)
+#'         compmerg_by_RNA <- split(Comp_df, f = Comp_df$RNAid,
+#'             drop = TRUE)
 #'         return(do.call(rbind, lapply(compmerg_by_RNA, FUN = all_dc)))
 #'     }
 #'     compare_prop_slograt <- function(T_ctrl, T_tr, window_size) {
 #'         window_side <- window_size/2 - 0.5
-#'         Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size), 
-#'             na.rm = T)[(window_side + 1):(length(T_ctrl) + window_side)]
+#'         Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size),
+#'             na.rm = TRUE)[(window_side + 1):(length(T_ctrl) + window_side)]
 #'         Cc <- rep(sum(T_ctrl), length(Tc))
-#'         Tt <- colSums(construct_smoothing_matrix(T_tr, window_size), 
-#'             na.rm = T)[(window_side + 1):(length(T_tr) + window_side)]
+#'         Tt <- colSums(construct_smoothing_matrix(T_tr, window_size),
+#'             na.rm = TRUE)[(window_side + 1):(length(T_tr) + window_side)]
 #'         Ct <- rep(sum(T_tr), length(Tt))
 #'         pp <- (Tc + Tt)/(Cc + Ct)
 #'         se <- sqrt(pp * (1 - pp) * (1/Cc + 1/Ct))
 #'         z <- (Tc/Cc - Tt/Ct)/se
-#'         p.values <- pnorm(abs(z), lower.tail = F) * 2
+#'         p.values <- pnorm(abs(z), lower.tail = FALSE) * 2
 #'         return(p.values)
 #'     }
 #'     process_oneRNA_compmerg_slograt <- function(oneRNA_compmerg) {
-#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) - 
+#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) -
 #'             1)) != 1) {
 #'             oneRNA_compmerg <- correct_merged(oneRNA_compmerg)
 #'         }
-#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) - 
+#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) -
 #'             1)) == 1) {
 #'             window_side <- window_size/2 - 0.5
-#'             treated_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.treated, 
-#'                 window_size) + pseudocount, na.rm = T)[(window_side + 
+#'             treated_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.treated,
+#'                 window_size) + pseudocount, na.rm = TRUE)[(window_side +
 #'                 1):(length(oneRNA_compmerg$TC.treated) + window_side)]
-#'             control_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.control, 
-#'                 window_size) + pseudocount, na.rm = T)[(window_side + 
+#'             control_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.control,
+#'                 window_size) + pseudocount, na.rm = TRUE)[(window_side +
 #'                 1):(length(oneRNA_compmerg$TC.control) + window_side)]
-#'             oneRNA_compmerg$slograt <- log2(treated_summed/control_summed)[(1 + 
+#'             oneRNA_compmerg$slograt <- log2(treated_summed/control_summed)[(1 +
 #'                 nt_offset):(length(treated_summed) + nt_offset)]
-#'             return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg) - 
+#'             return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg) -
 #'                 nt_offset), ])
 #'         }
 #'         else {
-#'             print(paste("Check if data was properly sorted by comp() function. Problem with", 
+#'             print(paste("Check if data was properly sorted by comp() function. Problem with",
 #'                 oneRNA_compmerg$RNAid[1]))
 #'             stop()
 #'         }
 #'     }
 #'     process_oneRNA_compmerg_slograt_pvalues <- function(oneRNA_compmerg) {
-#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) - 
+#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) -
 #'             1)) != 1) {
 #'             oneRNA_compmerg <- correct_merged(oneRNA_compmerg)
 #'         }
-#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) - 
+#'         if (prod(diff(oneRNA_compmerg$Pos) == rep(1, nrow(oneRNA_compmerg) -
 #'             1)) == 1) {
-#'             oneRNA_compmerg$slograt.p <- compare_prop_slograt(T_ctrl = oneRNA_compmerg$TC.control, 
-#'                 T_tr = oneRNA_compmerg$TC.treated, window_size = window_size)[(1 + 
+#'             oneRNA_compmerg$slograt.p <- compare_prop_slograt(T_ctrl = oneRNA_compmerg$TC.control,
+#'                 T_tr = oneRNA_compmerg$TC.treated, window_size = window_size)[(1 +
 #'                 nt_offset):(nrow(oneRNA_compmerg) + nt_offset)]
-#'             return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg) - 
+#'             return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg) -
 #'                 nt_offset), ])
 #'         }
 #'         else {
-#'             print(paste("Check if data was properly sorted by comp() function. Problem with", 
+#'             print(paste("Check if data was properly sorted by comp() function. Problem with",
 #'                 oneRNA_compmerg$RNAid[1]))
 #'             stop()
 #'         }
 #'     }
 #'     control <- GR2norm_df(control_GR)
 #'     treated <- GR2norm_df(treated_GR)
-#'     comp_merg <- merge(control, treated, by = c("RNAid", "Pos", 
-#'         "nt"), all = T, suffixes = c(".control", ".treated"), 
-#'         sort = F)
-#'     comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos), 
+#'     comp_merg <- merge(control, treated, by = c("RNAid", "Pos",
+#'         "nt"), all = TRUE, suffixes = c(".control", ".treated"),
+#'         sort = FALSE)
+#'     comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),
 #'         ]
 #'     comp_merg[is.na(comp_merg)] <- 0
-#'     dc_fun <- switch(which(depth_correction == c("no", "RNA", 
+#'     dc_fun <- switch(which(depth_correction == c("no", "RNA",
 #'         "all")), no_dc, RNA_dc, all_dc)
 #'     comp_merg_dc <- dc_fun(comp_merg)
-#'     compmerg_dc_by_RNA <- split(comp_merg_dc, f = comp_merg_dc$RNAid, 
-#'         drop = T)
+#'     compmerg_dc_by_RNA <- split(comp_merg_dc, f = comp_merg_dc$RNAid,
+#'         drop = TRUE)
 #'     normalized <- do.call(rbind, lapply(compmerg_dc_by_RNA, FUN = process_oneRNA_compmerg_slograt))
-#'     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos, 
+#'     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos,
 #'         nt = normalized$nt, slograt = normalized$slograt)
-#'     compmerg_by_RNA <- split(comp_merg, f = comp_merg$RNAid, 
-#'         drop = T)
+#'     compmerg_by_RNA <- split(comp_merg, f = comp_merg$RNAid,
+#'         drop = TRUE)
 #'     normalized2 <- do.call(rbind, lapply(compmerg_by_RNA, FUN = process_oneRNA_compmerg_slograt_pvalues))
-#'     normalized2 <- data.frame(RNAid = normalized2$RNAid, Pos = normalized2$Pos, 
+#'     normalized2 <- data.frame(RNAid = normalized2$RNAid, Pos = normalized2$Pos,
 #'         nt = normalized2$nt, slograt.p = normalized2$slograt.p)
-#'     normalized <- merge(normalized, normalized2, by = c("RNAid", 
-#'         "Pos", "nt"), sort = F)
+#'     normalized <- merge(normalized, normalized2, by = c("RNAid",
+#'         "Pos", "nt"), sort = FALSE)
 #'     normalized$slograt[is.nan(normalized$slograt)] <- NA
 #'     normalized$slograt.p[is.nan(normalized$slograt.p)] <- NA
 #'     if (!missing(add_to)) {
 #'         add_to_df <- GR2norm_df(add_to)
-#'         normalized <- merge(add_to_df, normalized, by = c("RNAid", 
+#'         normalized <- merge(add_to_df, normalized, by = c("RNAid",
 #'             "Pos", "nt"), suffixes = c(".old", ".new"))
 #'     }
-#'     normalized <- normalized[order(normalized$RNAid, normalized$Pos), 
+#'     normalized <- normalized[order(normalized$RNAid, normalized$Pos),
 #'         ]
 #'     normalized_GR <- norm_df2GR(normalized)
 #'     normalized_GR
@@ -214,137 +215,138 @@
 slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1, depth_correction="all", pseudocount=5, add_to){
 
 ###Check conditions:
-	if(nt_offset < 0){
-	stop("error: nt_offset must be >= 0")
-	}
-	if(window_size < 1){
-	stop("error: window_size must be >= 0")
-	}
-	if((window_size%%2)!=1){
-	stop("error: window_size must be odd")
-	}
+    if(nt_offset < 0){
+    stop("error: nt_offset must be >= 0")
+    }
+    if(window_size < 1){
+    stop("error: window_size must be >= 0")
+    }
+    if((window_size%%2)!=1){
+    stop("error: window_size must be odd")
+    }
 ###Define functions:
-	#Special function to repair merged Comp_df data frames if there is gap between merged nucleotides:
-	correct_merged <- function(oneRNA_compmerg){
-		df_gaps <- diff(oneRNA_compmerg$Pos)
-		rnaid_column <- which(names(oneRNA_compmerg)=="RNAid")
-		oneRNA_out <- oneRNA_compmerg[c(rep(1:length(df_gaps), df_gaps), nrow(oneRNA_compmerg)),]
-		oneRNA_out[duplicated(rep(1:length(df_gaps), df_gaps)),(1:ncol(oneRNA_out))[-rnaid_column]] <- NA
-		oneRNA_out$Pos <- oneRNA_compmerg$Pos[1]:(oneRNA_compmerg$Pos[1]+nrow(oneRNA_out)-1)
-		oneRNA_out$nt[is.na(oneRNA_out$nt)] <- "N"
-		oneRNA_out[is.na(oneRNA_out)] <- 0
-		return(oneRNA_out)
-	}
-	###
-	#Depth correction:
-		#No depth correction:
-		no_dc <- function(Comp_df){
-			return(Comp_df)
-		}
-		#Global depth correction (to depth of a sample with lower coverage)
-		all_dc <- function(Comp_df){
-			control_sum <- sum(Comp_df$TC.control, na.rm=T)
-			treated_sum <- sum(Comp_df$TC.treated, na.rm=T)
-			
-			###Check if there are reads in both control and treated. If yes - correction factor is a ratio between control and treated reads, if not - set correction_factor to 1.
-			if(control_sum*treated_sum > 0){correction_factor <- control_sum/treated_sum}else{
-				correction_factor <- 1
-				switch(which(depth_correction==c("no", "RNA", "all")), "Something wrong", print(paste("For RNA", Comp_df[1,1],"Depth correction factor set to 1")), "Depth correction factor set to 1")
-				}
-			if(control_sum > treated_sum){
-				Comp_df$TC.control <- Comp_df$TC.control/correction_factor
-			}else{			
-				Comp_df$TC.treated <- Comp_df$TC.treated*correction_factor #Multiply treated reads by correction factor
-			}
-			return(Comp_df)
-		}	
-		#RNA based depth correction, it runs the all_dc function for each RNA separately:
-		RNA_dc <- function(Comp_df){
-			compmerg_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=T)
-			return(do.call(rbind, lapply(compmerg_by_RNA, FUN=all_dc)))
-		}
-	###
-	#Function to calculate p-values for dtcr, it uses test for comparing Two Population Proportions: (z-test, as e.g. shown on http://www.socscistatistics.com/tests/ztest/ or https://onlinecourses.science.psu.edu/stat414/node/268)
-	#Comparison done in windows of the same size as smoothing
-	compare_prop_slograt <- function(T_ctrl, T_tr, window_size){ #T_ctrl - terminations control, C_ctrl - coverage control, T_tr - terminations treated, C_tr - coverage treated
-		window_side <- window_size/2-0.5
-		#Prepare running sums (the same window as in for smoothing dtcr):
-		Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size), na.rm=T)[(window_side+1):(length(T_ctrl)+window_side)]
-		Cc <- rep(sum(T_ctrl), length(Tc))
-		Tt <- colSums(construct_smoothing_matrix(T_tr, window_size), na.rm=T)[(window_side+1):(length(T_tr)+window_side)]
-		Ct <- rep(sum(T_tr), length(Tt))
-		#Calculate test statistics z:
-		pp <- (Tc + Tt)/(Cc + Ct) #pooled proportion
-		se <- sqrt(pp*(1-pp)*(1/Cc + 1/Ct)) #standard error
-		z <- (Tc/Cc - Tt/Ct)/se
-		#Transform 'z' to two-tailed p-value:
-		p.values <- pnorm(abs(z), lower.tail=F)*2
-		return(p.values)
-	}
+    #Special function to repair merged Comp_df data frames if there is gap between merged nucleotides:
+    correct_merged <- function(oneRNA_compmerg){
+        df_gaps <- diff(oneRNA_compmerg$Pos)
+        rnaid_column <- which(names(oneRNA_compmerg)=="RNAid")
+        oneRNA_out <- oneRNA_compmerg[c(rep(1:length(df_gaps), df_gaps), nrow(oneRNA_compmerg)),]
+        oneRNA_out[duplicated(rep(1:length(df_gaps), df_gaps)),(1:ncol(oneRNA_out))[-rnaid_column]] <- NA
+        oneRNA_out$Pos <- oneRNA_compmerg$Pos[1]:(oneRNA_compmerg$Pos[1]+nrow(oneRNA_out)-1)
+        oneRNA_out$nt[is.na(oneRNA_out$nt)] <- "N"
+        oneRNA_out[is.na(oneRNA_out)] <- 0
+        return(oneRNA_out)
+    }
+    ###
+    #Depth correction:
+        #No depth correction:
+        no_dc <- function(Comp_df){
+            return(Comp_df)
+        }
+        #Global depth correction (to depth of a sample with lower coverage)
+        all_dc <- function(Comp_df){
+            control_sum <- sum(Comp_df$TC.control, na.rm=TRUE)
+            treated_sum <- sum(Comp_df$TC.treated, na.rm=TRUE)
+            
+            ###Check if there are reads in both control and treated. If yes - correction factor is a ratio between control and treated reads, if not - set correction_factor to 1.
+            if(control_sum*treated_sum > 0){correction_factor <- control_sum/treated_sum}else{
+                correction_factor <- 1
+                switch(which(depth_correction==c("no", "RNA", "all")), "Something wrong", print(paste("For RNA", Comp_df[1,1],"Depth correction factor set to 1")), "Depth correction factor set to 1")
+                }
+            if(control_sum > treated_sum){
+                Comp_df$TC.control <- Comp_df$TC.control/correction_factor
+            }else{          
+                Comp_df$TC.treated <- Comp_df$TC.treated*correction_factor #Multiply treated reads by correction factor
+            }
+            return(Comp_df)
+        }   
+        #RNA based depth correction, it runs the all_dc function for each RNA separately:
+        RNA_dc <- function(Comp_df){
+            compmerg_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=TRUE)
+            return(do.call(rbind, lapply(compmerg_by_RNA, FUN=all_dc)))
+        }
+    ###
+    #Function to calculate p-values for dtcr, it uses test for comparing Two Population Proportions: (z-test, as e.g. shown on http://www.socscistatistics.com/tests/ztest/ or https://onlinecourses.science.psu.edu/stat414/node/268)
+    #Comparison done in windows of the same size as smoothing
+    compare_prop_slograt <- function(T_ctrl, T_tr, window_size){ #T_ctrl - terminations control, C_ctrl - coverage control, T_tr - terminations treated, C_tr - coverage treated
+        window_side <- window_size/2-0.5
+        #Prepare running sums (the same window as in for smoothing dtcr):
+        Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size), na.rm=TRUE)[(window_side+1):(length(T_ctrl)+window_side)]
+        Cc <- rep(sum(T_ctrl), length(Tc))
+        Tt <- colSums(construct_smoothing_matrix(T_tr, window_size), na.rm=TRUE)[(window_side+1):(length(T_tr)+window_side)]
+        Ct <- rep(sum(T_tr), length(Tt))
+        #Calculate test statistics z:
+        pp <- (Tc + Tt)/(Cc + Ct) #pooled proportion
+        se <- sqrt(pp*(1-pp)*(1/Cc + 1/Ct)) #standard error
+        z <- (Tc/Cc - Tt/Ct)/se
+        #Transform 'z' to two-tailed p-value:
+        p.values <- pnorm(abs(z), lower.tail= FALSE)*2
+        return(p.values)
+    }
 
-	##one RNA processing:
-	#Calculate smooth-log-ratio:
-	process_oneRNA_compmerg_slograt <- function(oneRNA_compmerg){
-		if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))!=1){oneRNA_compmerg <- correct_merged(oneRNA_compmerg)}
-		if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))==1){ #Check if data is properly sorted.
-			window_side <- window_size/2-0.5
-			
-			treated_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.treated, window_size)+pseudocount, na.rm=T)[(window_side+1):(length(oneRNA_compmerg$TC.treated)+window_side)]
-			control_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.control, window_size)+pseudocount, na.rm=T)[(window_side+1):(length(oneRNA_compmerg$TC.control)+window_side)]
-			oneRNA_compmerg$slograt <- log2(treated_summed/control_summed)[(1+nt_offset):(length(treated_summed)+nt_offset)]
-			return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
-		}else{
-			print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
-			stop()
-			}
-	}
-	#Calculate p.values:
-	process_oneRNA_compmerg_slograt_pvalues <- function(oneRNA_compmerg){
-		if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))!=1){oneRNA_compmerg <- correct_merged(oneRNA_compmerg)}
-		if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))==1){ #Check if data is properly sorted.
-			oneRNA_compmerg$slograt.p <- compare_prop_slograt(T_ctrl=oneRNA_compmerg$TC.control, T_tr=oneRNA_compmerg$TC.treated, window_size=window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
-			return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
-		}else{
-			print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
-			stop()
-			}
-	}
-###Function body: 
-control <- GR2norm_df(control_GR)
-treated <- GR2norm_df(treated_GR)
+    ##one RNA processing:
+    #Calculate smooth-log-ratio:
+    process_oneRNA_compmerg_slograt <- function(oneRNA_compmerg){
+        if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))!=1){oneRNA_compmerg <- correct_merged(oneRNA_compmerg)}
+        if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))==1){ #Check if data is properly sorted.
+            window_side <- window_size/2-0.5
+            
+            treated_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.treated, window_size)+pseudocount, na.rm=TRUE)[(window_side+1):(length(oneRNA_compmerg$TC.treated)+window_side)]
+            control_summed <- colSums(construct_smoothing_matrix(oneRNA_compmerg$TC.control, window_size)+pseudocount, na.rm=TRUE)[(window_side+1):(length(oneRNA_compmerg$TC.control)+window_side)]
+            oneRNA_compmerg$slograt <- log2(treated_summed/control_summed)[(1+nt_offset):(length(treated_summed)+nt_offset)]
+            return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
+        }else{
+            print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
+            stop()
+            }
+    }
+    #Calculate p.values:
+    process_oneRNA_compmerg_slograt_pvalues <- function(oneRNA_compmerg){
+        if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))!=1){oneRNA_compmerg <- correct_merged(oneRNA_compmerg)}
+        if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))==1){ #Check if data is properly sorted.
+            oneRNA_compmerg$slograt.p <- compare_prop_slograt(T_ctrl=oneRNA_compmerg$TC.control, T_tr=oneRNA_compmerg$TC.treated, window_size=window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
+            return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
+        }else{
+            print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
+            stop()
+            }
+    }
 
-comp_merg <- merge(control, treated, by=c("RNAid", "Pos", "nt"), all=T, suffixes=c(".control",".treated"), sort=F) #Merges control and treated
-comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),] #repair ordering after merging.
-comp_merg[is.na(comp_merg)] <- 0 #Changes NA to 0
+    ###Function body: 
+    control <- GR2norm_df(control_GR)
+    treated <- GR2norm_df(treated_GR)
 
-dc_fun <- switch(which(depth_correction==c("no", "RNA", "all")), no_dc, RNA_dc, all_dc) ##Rename chosen depth correction function to dc_fun
-comp_merg_dc <- dc_fun(comp_merg) #Corrects the sequencing depth. dc_fun is a different function depending on the depth_correction mode
+    comp_merg <- merge(control, treated, by=c("RNAid", "Pos", "nt"), all=TRUE, suffixes=c(".control",".treated"), sort= FALSE) #Merges control and treated
+    comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),] #repair ordering after merging.
+    comp_merg[is.na(comp_merg)] <- 0 #Changes NA to 0
 
-compmerg_dc_by_RNA <- split(comp_merg_dc, f=comp_merg_dc$RNAid, drop=T) #Splits the data frame into a list of data frames, one for each RNA
+    dc_fun <- switch(which(depth_correction==c("no", "RNA", "all")), no_dc, RNA_dc, all_dc) ##Rename chosen depth correction function to dc_fun
+    comp_merg_dc <- dc_fun(comp_merg) #Corrects the sequencing depth. dc_fun is a different function depending on the depth_correction mode
 
-normalized <- do.call(rbind, lapply(compmerg_dc_by_RNA, FUN=process_oneRNA_compmerg_slograt)) #Do processing (calculate smooth log ratio) and join into data frame
-normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, slograt=normalized$slograt) #Keep only relevant columns
+    compmerg_dc_by_RNA <- split(comp_merg_dc, f=comp_merg_dc$RNAid, drop=TRUE) #Splits the data frame into a list of data frames, one for each RNA
 
-###Add p.values:
-compmerg_by_RNA <- split(comp_merg, f=comp_merg$RNAid, drop=T) #not depth corrected!
+    normalized <- do.call(rbind, lapply(compmerg_dc_by_RNA, FUN=process_oneRNA_compmerg_slograt)) #Do processing (calculate smooth log ratio) and join into data frame
+    normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, slograt=normalized$slograt) #Keep only relevant columns
 
-normalized2 <- do.call(rbind, lapply(compmerg_by_RNA, FUN=process_oneRNA_compmerg_slograt_pvalues)) #Do processing (calculate pvalues) and join into data frame
-normalized2 <- data.frame(RNAid=normalized2$RNAid, Pos=normalized2$Pos, nt=normalized2$nt, slograt.p=normalized2$slograt.p) #Keep only relevant columns
-#merge with ratios:
-normalized <- merge(normalized, normalized2, by=c("RNAid","Pos","nt"), sort=F)
+    ###Add p.values:
+    compmerg_by_RNA <- split(comp_merg, f=comp_merg$RNAid, drop=TRUE) #not depth corrected!
 
-normalized$slograt[is.nan(normalized$slograt)] <- NA #Change NaN to NA, for consistency [NaN often created at the 5' end of RNA]
-normalized$slograt.p[is.nan(normalized$slograt.p)] <- NA #Change NaN to NA, for consistency
+    normalized2 <- do.call(rbind, lapply(compmerg_by_RNA, FUN=process_oneRNA_compmerg_slograt_pvalues)) #Do processing (calculate pvalues) and join into data frame
+    normalized2 <- data.frame(RNAid=normalized2$RNAid, Pos=normalized2$Pos, nt=normalized2$nt, slograt.p=normalized2$slograt.p) #Keep only relevant columns
+    #merge with ratios:
+    normalized <- merge(normalized, normalized2, by=c("RNAid","Pos","nt"), sort= FALSE)
 
-#If add_to specified, merge with existing normalized data frame:
-if(!missing(add_to)){
-add_to_df <- GR2norm_df(add_to)
-normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
-}
-###
+    normalized$slograt[is.nan(normalized$slograt)] <- NA #Change NaN to NA, for consistency [NaN often created at the 5' end of RNA]
+    normalized$slograt.p[is.nan(normalized$slograt.p)] <- NA #Change NaN to NA, for consistency
 
-normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-normalized_GR <- norm_df2GR(normalized)
+    #If add_to specified, merge with existing normalized data frame:
+    if(!missing(add_to)){
+        add_to_df <- GR2norm_df(add_to)
+        normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
+    }
+    ###
 
-normalized_GR
+    normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
+    normalized_GR <- norm_df2GR(normalized)
+
+    normalized_GR
 }

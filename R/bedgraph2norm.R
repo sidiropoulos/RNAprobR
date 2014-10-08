@@ -20,6 +20,8 @@
 
 
 
+
+
 #' Import bedgraph to GRanges
 #' 
 #' Function importing data from bedgraph format compatible with UCSC Genome
@@ -52,11 +54,11 @@
 #' 
 #' ##---- Should be DIRECTLY executable !! ----
 #' ##-- ==>  Define data, use random,
-#' ##--	or do  help(data=index)  for the standard data sets.
+#' ##-- or do  help(data=index)  for the standard data sets.
 #' 
 #' ## The function is currently defined as
-#' function (bedgraph_file, fasta_file, txDb, bed_file, column_name = "bedgraph_score", 
-#'     add_to) 
+#' function (bedgraph_file, fasta_file, txDb, bed_file, column_name = "bedgraph_score",
+#'     add_to)
 #' {
 #'     if (missing(txDb) & missing(bed_file)) {
 #'         print("Error: specify gene annotation")
@@ -70,15 +72,15 @@
 #'     }
 #'     add_sequence <- function(oneRNA_norm) {
 #'         if (max(oneRNA_norm$Pos) > length(txs[[as.character(oneRNA_norm$RNAid[1])]])) {
-#'             unexpected_length_difference <- max(oneRNA_norm$Pos) - 
+#'             unexpected_length_difference <- max(oneRNA_norm$Pos) -
 #'                 length(txs[[as.character(oneRNA_norm$RNAid[1])]])
-#'             one_gene_sequence <- unlist(strsplit(as.character(c(txs[[as.character(oneRNA_norm$RNAid[1])]], 
-#'                 DNAString(paste(rep("N", unexpected_length_difference), 
+#'             one_gene_sequence <- unlist(strsplit(as.character(c(txs[[as.character(oneRNA_norm$RNAid[1])]],
+#'                 DNAString(paste(rep("N", unexpected_length_difference),
 #'                   collapse = "")))[oneRNA_norm$Pos]), ""))
 #'             print(paste("For RNA ", oneRNA_euc[1, 1], "positions outside FASTA annotation exist. N's added"))
 #'         }
 #'         else {
-#'             one_gene_sequence <- unlist(strsplit(as.character(txs[[as.character(oneRNA_norm$RNAid[1])]][oneRNA_norm$Pos]), 
+#'             one_gene_sequence <- unlist(strsplit(as.character(txs[[as.character(oneRNA_norm$RNAid[1])]][oneRNA_norm$Pos]),
 #'                 ""))
 #'         }
 #'         oneRNA_norm$nt <- one_gene_sequence
@@ -95,58 +97,58 @@
 #'     if (missing(txDb)) {
 #'         txDb <- BED2txDb(bed_file)
 #'     }
-#'     all_exons <- exonsBy(txDb, "tx", use.names = T)
+#'     all_exons <- exonsBy(txDb, "tx", use.names = TRUE)
 #'     my_exons <- all_exons[names(all_exons) %in% names(txs)]
-#'     overlapping_transcripts <- which(countOverlaps(my_exons) > 
+#'     overlapping_transcripts <- which(countOverlaps(my_exons) >
 #'         1)
 #'     if (length(overlapping_transcripts) > 0) {
-#'         print(paste("Warning: transcript", names(my_exons)[overlapping_transcripts], 
+#'         print(paste("Warning: transcript", names(my_exons)[overlapping_transcripts],
 #'             "overlaps with another transcript. Score is added to more than one RNA."))
 #'     }
 #'     mapped_to_tx <- map(bedgraph_merged, my_exons)
 #'     hits_in_tx <- subjectHits(mapped_to_tx)
 #'     hits_in_EF <- queryHits(mapped_to_tx)
-#'     normalized <- data.frame(RNAid = names(my_exons)[hits_in_tx], 
+#'     normalized <- data.frame(RNAid = names(my_exons)[hits_in_tx],
 #'         Pos = start(ranges(mapped_to_tx)), nt = NA, bedgraph_score = score(bedgraph_merged)[hits_in_EF])
 #'     names(normalized)[names(normalized) == "bedgraph_score"] <- column_name
-#'     norm_by_RNA <- split(normalized, f = normalized$RNAid, drop = T)
+#'     norm_by_RNA <- split(normalized, f = normalized$RNAid, drop = TRUE)
 #'     normalized <- do.call(rbind, lapply(norm_by_RNA, FUN = add_sequence))
 #'     if (!missing(add_to)) {
 #'         add_to_df <- GR2norm_df(add_to)
-#'         normalized <- merge(add_to_df, normalized, by = c("RNAid", 
+#'         normalized <- merge(add_to_df, normalized, by = c("RNAid",
 #'             "Pos", "nt"), suffixes = c(".old", ".new"))
 #'     }
-#'     normalized <- normalized[order(normalized$RNAid, normalized$Pos), 
+#'     normalized <- normalized[order(normalized$RNAid, normalized$Pos),
 #'         ]
 #'     normalized_GR <- norm_df2GR(normalized)
 #'     normalized_GR
 #'   }
-#'
+#' 
 #' @import rtracklayer Biostrings
 #' @export bedgraph2norm
 bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file, column_name="bedgraph_score", add_to){
 
 ###Check conditions:
 if(missing(txDb) & missing(bed_file)){
-	print("Error: specify gene annotation")
-	stop()
+    print("Error: specify gene annotation")
+    stop()
 }
 if(missing(fasta_file)){stop("Specify fasta file")}
 if(!file.exists(fasta_file)){stop("Fasta file not found")}
 
 ###Define functions:
-	#Function to import the sequence from fasta file, if no sequence - fill in with N's:
-	add_sequence <- function(oneRNA_norm){
-		if(max(oneRNA_norm$Pos) > length(txs[[as.character(oneRNA_norm$RNAid[1])]])){
-			unexpected_length_difference <- max(oneRNA_norm$Pos) - length(txs[[as.character(oneRNA_norm$RNAid[1])]])
-			one_gene_sequence <- unlist(strsplit(as.character(c(txs[[as.character(oneRNA_norm$RNAid[1])]], DNAString(paste(rep("N",unexpected_length_difference), collapse="")))[oneRNA_norm$Pos]), ""))
-			print(paste("For RNA ", oneRNA_euc[1,1], "positions outside FASTA annotation exist. N's added"))
-		}else{
-			one_gene_sequence <- unlist(strsplit(as.character(txs[[as.character(oneRNA_norm$RNAid[1])]][oneRNA_norm$Pos]), ""))
-			}
-		oneRNA_norm$nt <- one_gene_sequence
-		oneRNA_norm
-		}
+    #Function to import the sequence from fasta file, if no sequence - fill in with N's:
+    add_sequence <- function(oneRNA_norm){
+        if(max(oneRNA_norm$Pos) > length(txs[[as.character(oneRNA_norm$RNAid[1])]])){
+            unexpected_length_difference <- max(oneRNA_norm$Pos) - length(txs[[as.character(oneRNA_norm$RNAid[1])]])
+            one_gene_sequence <- unlist(strsplit(as.character(c(txs[[as.character(oneRNA_norm$RNAid[1])]], DNAString(paste(rep("N",unexpected_length_difference), collapse="")))[oneRNA_norm$Pos]), ""))
+            print(paste("For RNA ", oneRNA_euc[1,1], "positions outside FASTA annotation exist. N's added"))
+        }else{
+            one_gene_sequence <- unlist(strsplit(as.character(txs[[as.character(oneRNA_norm$RNAid[1])]][oneRNA_norm$Pos]), ""))
+            }
+        oneRNA_norm$nt <- one_gene_sequence
+        oneRNA_norm
+        }
 ###
 
 #Read in bedgraph file and convert both strands to single UCSCdata entry:
@@ -159,14 +161,14 @@ bedgraph_merged <- c(bedgraph_list[[1]], bedgraph_list[[2]])
 ##Prepare GRangesList for mapping values to:
 txs <- readDNAStringSet(fasta_file) #read in fasta file. 
 if(missing(txDb)){txDb <- BED2txDb(bed_file)} #if txDb not given, make it from bed file
-all_exons <- exonsBy(txDb, "tx", use.names=T) #build GRangesList from txDb
+all_exons <- exonsBy(txDb, "tx", use.names=TRUE) #build GRangesList from txDb
 my_exons <- all_exons[names(all_exons) %in% names(txs)] #keep in GRangesList only those transcript that are present in fasta file
 
 #Print warning if transcripts overlap:
 overlapping_transcripts <- which(countOverlaps(my_exons) > 1)
 if(length(overlapping_transcripts) > 0){
-	print(paste("Warning: transcript",names(my_exons)[overlapping_transcripts], "overlaps with another transcript. Score is added to more than one RNA."))
-	}
+    print(paste("Warning: transcript",names(my_exons)[overlapping_transcripts], "overlaps with another transcript. Score is added to more than one RNA."))
+    }
 
 #Map bedgraph positions to annotated transcripts and format to norm_df:
 mapped_to_tx <- map(bedgraph_merged, my_exons)
@@ -176,7 +178,7 @@ normalized <- data.frame(RNAid=names(my_exons)[hits_in_tx],Pos=start(ranges(mapp
 names(normalized)[names(normalized)=="bedgraph_score"] <- column_name #change column name to one provided by user
 
 ###Add sequence information from fasta file (on per RNA basis)
-norm_by_RNA <- split(normalized, f=normalized$RNAid, drop=T)
+norm_by_RNA <- split(normalized, f=normalized$RNAid, drop=TRUE)
 normalized <- do.call(rbind, lapply(norm_by_RNA, FUN=add_sequence))
 
 #If add_to specified, merge with existing normalized data frame:

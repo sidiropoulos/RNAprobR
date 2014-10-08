@@ -56,7 +56,7 @@
 #' 
 #' ## The function is currently defined as
 #' function (control_GR, treated_GR, window_size = 3, nt_offset = 1, 
-#'     bring_to_zero = T, add_to) 
+#'     bring_to_zero = TRUE, add_to) 
 #' {
 #'     if (nt_offset < 0) {
 #'         stop("error: nt_offset must be >= 0")
@@ -83,17 +83,17 @@
 #'     compare_prop <- function(T_ctrl, C_ctrl, T_tr, C_tr, window_size) {
 #'         window_side <- window_size/2 - 0.5
 #'         Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size), 
-#'             na.rm = T)[(window_side + 1):(length(T_ctrl) + window_side)]
+#'             na.rm = TRUE)[(window_side + 1):(length(T_ctrl) + window_side)]
 #'         Cc <- colSums(construct_smoothing_matrix(C_ctrl, window_size), 
-#'             na.rm = T)[(window_side + 1):(length(C_ctrl) + window_side)]
+#'             na.rm = TRUE)[(window_side + 1):(length(C_ctrl) + window_side)]
 #'         Tt <- colSums(construct_smoothing_matrix(T_tr, window_size), 
-#'             na.rm = T)[(window_side + 1):(length(T_tr) + window_side)]
+#'             na.rm = TRUE)[(window_side + 1):(length(T_tr) + window_side)]
 #'         Ct <- colSums(construct_smoothing_matrix(C_tr, window_size), 
-#'             na.rm = T)[(window_side + 1):(length(C_tr) + window_side)]
+#'             na.rm = TRUE)[(window_side + 1):(length(C_tr) + window_side)]
 #'         pp <- (Tc + Tt)/(Cc + Ct)
 #'         se <- sqrt(pp * (1 - pp) * (1/Cc + 1/Ct))
 #'         z <- (Tc/Cc - Tt/Ct)/se
-#'         p.values <- pnorm(abs(z), lower.tail = F) * 2
+#'         p.values <- pnorm(abs(z), lower.tail = FALSE) * 2
 #'         return(p.values)
 #'     }
 #'     process_oneRNA_compmerg <- function(oneRNA_compmerg) {
@@ -122,7 +122,7 @@
 #'     control <- GR2norm_df(control_GR)
 #'     treated <- GR2norm_df(treated_GR)
 #'     comp_merg <- merge(control, treated, by = c("RNAid", "Pos", 
-#'         "nt"), all = T, suffixes = c(".control", ".treated"))
+#'         "nt"), all = TRUE, suffixes = c(".control", ".treated"))
 #'     comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos), 
 #'         ]
 #'     comp_merg[is.na(comp_merg)] <- 0
@@ -136,7 +136,7 @@
 #'     }
 #'     comp_merg$dtcr <- dtcr
 #'     compmerg_by_RNA <- split(comp_merg, f = comp_merg$RNAid, 
-#'         drop = T)
+#'         drop = TRUE)
 #'     normalized <- do.call(rbind, lapply(compmerg_by_RNA, FUN = process_oneRNA_compmerg))
 #'     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos, 
 #'         nt = normalized$nt, dtcr = normalized$dtcr, dtcr.p = normalized$dtcr.p)
@@ -155,85 +155,86 @@
 #' 
 #' @import GenomicRanges
 #' @export dtcr
-dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1, bring_to_zero=T, add_to){
+dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1, bring_to_zero=TRUE, add_to){
 
 ###Check conditions:
-	if(nt_offset < 0){stop("error: nt_offset must be >= 0")}
-	if(window_size < 0){stop("error: window_size must be >= 0")}
-	if((window_size%%2)!=1){stop("error: window_size must be odd")}
+    if(nt_offset < 0){stop("error: nt_offset must be >= 0")}
+    if(window_size < 0){stop("error: window_size must be >= 0")}
+    if((window_size%%2)!=1){stop("error: window_size must be odd")}
 ###Define functions:
-	#Special function to repair merged Comp_df data frames if there is gap between merged nucleotides:
-	correct_merged <- function(oneRNA_compmerg){
-		df_gaps <- diff(oneRNA_compmerg$Pos)
-		rnaid_column <- which(names(oneRNA_compmerg)=="RNAid")
-		oneRNA_out <- oneRNA_compmerg[c(rep(1:length(df_gaps), df_gaps), nrow(oneRNA_compmerg)),]
-		oneRNA_out[duplicated(rep(1:length(df_gaps), df_gaps)),(1:ncol(oneRNA_out))[-rnaid_column]] <- NA
-		oneRNA_out$Pos <- oneRNA_compmerg$Pos[1]:(oneRNA_compmerg$Pos[1]+nrow(oneRNA_out)-1)
-		oneRNA_out$nt[is.na(oneRNA_out$nt)] <- "N"
-		oneRNA_out[is.na(oneRNA_out)] <- 0
-		return(oneRNA_out)
-	}
-	#Function to calculate p-values for dtcr, it uses test for comparing Two Population Proportions: (z-test, as e.g. shown on http://www.socscistatistics.com/tests/ztest/ or https://onlinecourses.science.psu.edu/stat414/node/268)
-	#Comparison done in windows of the same size as smoothing of deltaTCR
-	compare_prop <- function(T_ctrl, C_ctrl, T_tr, C_tr, window_size){ #T_ctrl - terminations control, C_ctrl - coverage control, T_tr - terminations treated, C_tr - coverage treated
-		window_side <- window_size/2-0.5
-		#Prepare running sums (the same window as in for smoothing dtcr):
-		Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size), na.rm=T)[(window_side+1):(length(T_ctrl)+window_side)]
-		Cc <- colSums(construct_smoothing_matrix(C_ctrl, window_size), na.rm=T)[(window_side+1):(length(C_ctrl)+window_side)]
-		Tt <- colSums(construct_smoothing_matrix(T_tr, window_size), na.rm=T)[(window_side+1):(length(T_tr)+window_side)]
-		Ct <- colSums(construct_smoothing_matrix(C_tr, window_size), na.rm=T)[(window_side+1):(length(C_tr)+window_side)]
-		#Calculate test statistics z:
-		pp <- (Tc + Tt)/(Cc + Ct) #pooled proportion
-		se <- sqrt(pp*(1-pp)*(1/Cc + 1/Ct)) #standard error
-		z <- (Tc/Cc - Tt/Ct)/se
-		#Transform 'z' to two-tailed p-value:
-		p.values <- pnorm(abs(z), lower.tail=F)*2
-		return(p.values)
-		}
-	###
-	#Function smoothing and offsetting dtcr and adding p-values to each nucleotide (dataset split by RNA):
-	process_oneRNA_compmerg <- function(oneRNA_compmerg){
-		if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))!=1){oneRNA_compmerg <- correct_merged(oneRNA_compmerg)}
-		if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))==1){ #Check if data is properly sorted/corrected
-			oneRNA_compmerg$dtcr <- moving_average(oneRNA_compmerg$dtcr, window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
-			oneRNA_compmerg$dtcr.p <- compare_prop(T_ctrl=oneRNA_compmerg$TC.control, C_ctrl=oneRNA_compmerg$Cover.control, T_tr=oneRNA_compmerg$TC.treated, C_tr=oneRNA_compmerg$Cover.treated, window_size=window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
-			return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
-		}else{
-			print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
-			stop()
-		}
-	}
-###Main Body:
-control <- GR2norm_df(control_GR)
-treated <- GR2norm_df(treated_GR)
+    #Special function to repair merged Comp_df data frames if there is gap between merged nucleotides:
+    correct_merged <- function(oneRNA_compmerg){
+        df_gaps <- diff(oneRNA_compmerg$Pos)
+        rnaid_column <- which(names(oneRNA_compmerg)=="RNAid")
+        oneRNA_out <- oneRNA_compmerg[c(rep(1:length(df_gaps), df_gaps), nrow(oneRNA_compmerg)),]
+        oneRNA_out[duplicated(rep(1:length(df_gaps), df_gaps)),(1:ncol(oneRNA_out))[-rnaid_column]] <- NA
+        oneRNA_out$Pos <- oneRNA_compmerg$Pos[1]:(oneRNA_compmerg$Pos[1]+nrow(oneRNA_out)-1)
+        oneRNA_out$nt[is.na(oneRNA_out$nt)] <- "N"
+        oneRNA_out[is.na(oneRNA_out)] <- 0
+        return(oneRNA_out)
+    }
+    #Function to calculate p-values for dtcr, it uses test for comparing Two Population Proportions: (z-test, as e.g. shown on http://www.socscistatistics.com/tests/ztest/ or https://onlinecourses.science.psu.edu/stat414/node/268)
+    #Comparison done in windows of the same size as smoothing of deltaTCR
+    compare_prop <- function(T_ctrl, C_ctrl, T_tr, C_tr, window_size){ #T_ctrl - terminations control, C_ctrl - coverage control, T_tr - terminations treated, C_tr - coverage treated
+        window_side <- window_size/2-0.5
+        #Prepare running sums (the same window as in for smoothing dtcr):
+        Tc <- colSums(construct_smoothing_matrix(T_ctrl, window_size), na.rm=TRUE)[(window_side+1):(length(T_ctrl)+window_side)]
+        Cc <- colSums(construct_smoothing_matrix(C_ctrl, window_size), na.rm=TRUE)[(window_side+1):(length(C_ctrl)+window_side)]
+        Tt <- colSums(construct_smoothing_matrix(T_tr, window_size), na.rm=TRUE)[(window_side+1):(length(T_tr)+window_side)]
+        Ct <- colSums(construct_smoothing_matrix(C_tr, window_size), na.rm=TRUE)[(window_side+1):(length(C_tr)+window_side)]
+        #Calculate test statistics z:
+        pp <- (Tc + Tt)/(Cc + Ct) #pooled proportion
+        se <- sqrt(pp*(1-pp)*(1/Cc + 1/Ct)) #standard error
+        z <- (Tc/Cc - Tt/Ct)/se
+        #Transform 'z' to two-tailed p-value:
+        p.values <- pnorm(abs(z), lower.tail= FALSE)*2
+        return(p.values)
+        }
+    ###
+    #Function smoothing and offsetting dtcr and adding p-values to each nucleotide (dataset split by RNA):
+    process_oneRNA_compmerg <- function(oneRNA_compmerg){
+        if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))!=1){oneRNA_compmerg <- correct_merged(oneRNA_compmerg)}
+        if(prod(diff(oneRNA_compmerg$Pos)==rep(1, nrow(oneRNA_compmerg)-1))==1){ #Check if data is properly sorted/corrected
+            oneRNA_compmerg$dtcr <- moving_average(oneRNA_compmerg$dtcr, window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
+            oneRNA_compmerg$dtcr.p <- compare_prop(T_ctrl=oneRNA_compmerg$TC.control, C_ctrl=oneRNA_compmerg$Cover.control, T_tr=oneRNA_compmerg$TC.treated, C_tr=oneRNA_compmerg$Cover.treated, window_size=window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
+            return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
+        }else{
+            print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
+            stop()
+        }
+    }
 
-comp_merg <- merge(control, treated, by=c("RNAid", "Pos", "nt"), all=T, suffixes=c(".control",".treated")) #Merge control and treated
-comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),] #repair ordering after merging.
-comp_merg[is.na(comp_merg)] <- 0 #Changes NA to 0 - treat no events as 0 events.
+    ###Main Body:
+    control <- GR2norm_df(control_GR)
+    treated <- GR2norm_df(treated_GR)
 
-###Calculate deltaTCR as described in HRF-Seq paper:
-dtcr <- (comp_merg$TCR.treated - comp_merg$TCR.control)/(1 - comp_merg$TCR.control) #Calculate probabilistic difference
-if(bring_to_zero){dtcr[dtcr < 0] <- 0}else{dtcr[dtcr==-Inf] <- NA} #If bring_to_zero=T, all negative deltaTCRs bring to 0, else change -Inf to NA [possible when treated=0 and control=1]
-comp_merg$dtcr <- dtcr #Import dtcr to merged data frame
-###
+    comp_merg <- merge(control, treated, by=c("RNAid", "Pos", "nt"), all=TRUE, suffixes=c(".control",".treated")) #Merge control and treated
+    comp_merg <- comp_merg[order(comp_merg$RNAid, comp_merg$Pos),] #repair ordering after merging.
+    comp_merg[is.na(comp_merg)] <- 0 #Changes NA to 0 - treat no events as 0 events.
 
-compmerg_by_RNA <- split(comp_merg, f=comp_merg$RNAid, drop=T) #split merged data frame by RNA
+    ###Calculate deltaTCR as described in HRF-Seq paper:
+    dtcr <- (comp_merg$TCR.treated - comp_merg$TCR.control)/(1 - comp_merg$TCR.control) #Calculate probabilistic difference
+    if(bring_to_zero){dtcr[dtcr < 0] <- 0}else{dtcr[dtcr==-Inf] <- NA} #If bring_to_zero=TRUE, all negative deltaTCRs bring to 0, else change -Inf to NA [possible when treated=0 and control=1]
+    comp_merg$dtcr <- dtcr #Import dtcr to merged data frame
+    ###
 
-normalized <- do.call(rbind, lapply(compmerg_by_RNA, FUN=process_oneRNA_compmerg)) #Do processing (smooth, offset, p-values)
-normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, dtcr=normalized$dtcr, dtcr.p=normalized$dtcr.p) #Keep only relevant columns
+    compmerg_by_RNA <- split(comp_merg, f=comp_merg$RNAid, drop=TRUE) #split merged data frame by RNA
 
-normalized$dtcr[is.nan(normalized$dtcr)] <- NA #Change NaN to NA, for consistency [NaN often created at the 5' end of RNA]
-normalized$dtcr.p[is.nan(normalized$dtcr.p)] <- NA #Change NaN to NA, for consistency
+    normalized <- do.call(rbind, lapply(compmerg_by_RNA, FUN=process_oneRNA_compmerg)) #Do processing (smooth, offset, p-values)
+    normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, dtcr=normalized$dtcr, dtcr.p=normalized$dtcr.p) #Keep only relevant columns
 
-#If add_to specified, merge with existing normalized data frame:
-if(!missing(add_to)){
-add_to_df <- GR2norm_df(add_to)
-normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
-}
-###
+    normalized$dtcr[is.nan(normalized$dtcr)] <- NA #Change NaN to NA, for consistency [NaN often created at the 5' end of RNA]
+    normalized$dtcr.p[is.nan(normalized$dtcr.p)] <- NA #Change NaN to NA, for consistency
 
-normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-normalized_GR <- norm_df2GR(normalized)
+    #If add_to specified, merge with existing normalized data frame:
+    if(!missing(add_to)){
+        add_to_df <- GR2norm_df(add_to)
+        normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
+    }
+    ###
 
-normalized_GR
+    normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
+    normalized_GR <- norm_df2GR(normalized)
+
+    normalized_GR
 }

@@ -4,8 +4,10 @@
 # winsor_level - where should winsorization boundaries be made. Value 0.9 indicates that top 5% of data will be reduced to 95% quantile and bottom 5% to 5% quantile (default: 0.9)
 # window_size - window size for Winsorazation (default: 71)
 # nt_offset - how many nucleotides before modification the reverse transcription terminates (default: 0)
-# only_top - if TRUE then bottom quantile is fixed to 0 (default=F)
+# only_top - if TRUE then bottom quantile is fixed to 0 (default= FALSE)
 # add_to - normalized GRanges with already performed normalization of another kind. Results will be merged
+
+
 
 
 
@@ -47,34 +49,33 @@
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #' 
-#' 
 #' dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 #' dummy_comp_GR <- comp(dummy_euc_GR)
 #' swinsor(dummy_comp_GR)
 #' 
 #' ## The function is currently defined as
-#' function (Comp_GR, winsor_level = 0.9, window_size = 71, only_top = F, 
-#'     nt_offset = 0, add_to) 
+#' function (Comp_GR, winsor_level = 0.9, window_size = 71, only_top = FALSE,
+#'     nt_offset = 0, add_to)
 #' {
 #'     if (nt_offset < 0) {
 #'         print("error: nt_offset must be >= 0")
 #'         stop()
 #'     }
 #'     swinsor_oneRNA <- function(oneRNA_comp_df) {
-#'         if (prod(diff(oneRNA_comp_df$Pos) == rep(1, nrow(oneRNA_comp_df) - 
+#'         if (prod(diff(oneRNA_comp_df$Pos) == rep(1, nrow(oneRNA_comp_df) -
 #'             1)) == 1) {
-#'             means_and_sds <- swinsor_vector(oneRNA_comp_df$TC, 
-#'                 window_size = window_size, winsor_level = winsor_level, 
+#'             means_and_sds <- swinsor_vector(oneRNA_comp_df$TC,
+#'                 window_size = window_size, winsor_level = winsor_level,
 #'                 only_top = only_top)
-#'             oneRNA_comp_df$swinsor <- means_and_sds[[1]][(1 + 
+#'             oneRNA_comp_df$swinsor <- means_and_sds[[1]][(1 +
 #'                 nt_offset):(nrow(oneRNA_comp_df) + nt_offset)]
-#'             oneRNA_comp_df$swinsor.sd <- means_and_sds[[2]][(1 + 
+#'             oneRNA_comp_df$swinsor.sd <- means_and_sds[[2]][(1 +
 #'                 nt_offset):(nrow(oneRNA_comp_df) + nt_offset)]
-#'             return(oneRNA_comp_df[1:(nrow(oneRNA_comp_df) - nt_offset), 
+#'             return(oneRNA_comp_df[1:(nrow(oneRNA_comp_df) - nt_offset),
 #'                 ])
 #'         }
 #'         else {
-#'             print(paste("Check if data was properly sorted by comp() function. Problem with", 
+#'             print(paste("Check if data was properly sorted by comp() function. Problem with",
 #'                 oneRNA_comp_df$RNAid[1]))
 #'             stop()
 #'         }
@@ -82,18 +83,18 @@
 #'     Comp_df <- GR2norm_df(Comp_GR)
 #'     Comp_df[is.na(Comp_df)] <- 0
 #'     Comp_df <- Comp_df[order(Comp_df$RNAid, Comp_df$Pos), ]
-#'     Comp_df_by_RNA <- split(Comp_df, f = Comp_df$RNAid, drop = T)
+#'     Comp_df_by_RNA <- split(Comp_df, f = Comp_df$RNAid, drop = TRUE)
 #'     normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN = swinsor_oneRNA))
-#'     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos, 
+#'     normalized <- data.frame(RNAid = normalized$RNAid, Pos = normalized$Pos,
 #'         nt = normalized$nt, swinsor = normalized$swinsor, swinsor.sd = normalized$swinsor.sd)
 #'     normalized$swinsor[is.nan(normalized$swinsor)] <- NA
 #'     normalized$swinsor.sd[is.nan(normalized$swinsor.sd)] <- NA
 #'     if (!missing(add_to)) {
 #'         add_to_df <- GR2norm_df(add_to)
-#'         normalized <- merge(add_to_df, normalized, by = c("RNAid", 
+#'         normalized <- merge(add_to_df, normalized, by = c("RNAid",
 #'             "Pos", "nt"), suffixes = c(".old", ".new"))
 #'     }
-#'     normalized <- normalized[order(normalized$RNAid, normalized$Pos), 
+#'     normalized <- normalized[order(normalized$RNAid, normalized$Pos),
 #'         ]
 #'     normalized_GR <- norm_df2GR(normalized)
 #'     normalized_GR
@@ -101,49 +102,49 @@
 #' 
 #' @import GenomicRanges
 #' @export swinsor
-swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top=F, nt_offset=1, add_to){
+swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top= FALSE, nt_offset=1, add_to){
 
 ###Check conditions:
-	if(nt_offset < 0){
-	print("error: nt_offset must be >= 0")
-	stop()
-	}
+    if(nt_offset < 0){
+    print("error: nt_offset must be >= 0")
+    stop()
+    }
 ###Define functions:
 #Process single RNA:
 swinsor_oneRNA <- function(oneRNA_comp_df){
-	if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){ #Checks if data is properly sorted.
-		means_and_sds <- swinsor_vector(oneRNA_comp_df$TC, window_size=window_size, winsor_level=winsor_level, only_top=only_top)
-		oneRNA_comp_df$swinsor <- means_and_sds[[1]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
-		oneRNA_comp_df$swinsor.sd <- means_and_sds[[2]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
-		return(oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),])}else{
-	print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_comp_df$RNAid[1]))
-	stop()
-	}
-	}
+    if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){ #Checks if data is properly sorted.
+        means_and_sds <- swinsor_vector(oneRNA_comp_df$TC, window_size=window_size, winsor_level=winsor_level, only_top=only_top)
+        oneRNA_comp_df$swinsor <- means_and_sds[[1]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
+        oneRNA_comp_df$swinsor.sd <- means_and_sds[[2]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
+        return(oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),])}else{
+    print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_comp_df$RNAid[1]))
+    stop()
+    }
+    }
 
-###Function body:
-Comp_df <- GR2norm_df(Comp_GR)
+    ###Function body:
+    Comp_df <- GR2norm_df(Comp_GR)
 
-Comp_df[is.na(Comp_df)] <- 0 #Changes NA to 0 - treat no events as 0 events.
+    Comp_df[is.na(Comp_df)] <- 0 #Changes NA to 0 - treat no events as 0 events.
 
-Comp_df <- Comp_df[order(Comp_df$RNAid, Comp_df$Pos),]
-Comp_df_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=T)
+    Comp_df <- Comp_df[order(Comp_df$RNAid, Comp_df$Pos),]
+    Comp_df_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=TRUE)
 
-normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN=swinsor_oneRNA)) #Do processing (smooth, offset, p-values)
-normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, swinsor=normalized$swinsor, swinsor.sd=normalized$swinsor.sd) #Keep only relevant columns
+    normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN=swinsor_oneRNA)) #Do processing (smooth, offset, p-values)
+    normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, swinsor=normalized$swinsor, swinsor.sd=normalized$swinsor.sd) #Keep only relevant columns
 
-normalized$swinsor[is.nan(normalized$swinsor)] <- NA #Change NaN to NA, for consistency
-normalized$swinsor.sd[is.nan(normalized$swinsor.sd)] <- NA #Change NaN to NA, for consistency
+    normalized$swinsor[is.nan(normalized$swinsor)] <- NA #Change NaN to NA, for consistency
+    normalized$swinsor.sd[is.nan(normalized$swinsor.sd)] <- NA #Change NaN to NA, for consistency
 
-#If add_to specified, merge with existing normalized data frame:
-if(!missing(add_to)){
-add_to_df <- GR2norm_df(add_to)
-normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
-}
-###
+    #If add_to specified, merge with existing normalized data frame:
+    if(!missing(add_to)){
+    add_to_df <- GR2norm_df(add_to)
+    normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
+    }
+    ###
 
-normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-normalized_GR <- norm_df2GR(normalized)
+    normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
+    normalized_GR <- norm_df2GR(normalized)
 
-normalized_GR
+    normalized_GR
 }
