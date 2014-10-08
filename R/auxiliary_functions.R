@@ -13,6 +13,12 @@
 #' 
 
 
+
+
+#' Auxiliary functions for package RNAstr
+#' 
+#' Auxiliary functions for package RNAstr
+#' 
 #' Make smoothing matrix
 #' 
 #' Auxiliary function speeding up calculations in functions operating on
@@ -35,10 +41,10 @@
 #' construct_smoothing_matrix(1:10, 3)
 #' 
 #' ## The function is currently defined as
-#' function (input_vector, window_size) 
+#' function (input_vector, window_size)
 #' {
 #'     vector_length <- length(input_vector)
-#'     my_mat <- matrix(nrow = window_size, ncol = (vector_length + 
+#'     my_mat <- matrix(nrow = window_size, ncol = (vector_length +
 #'         window_size - 1))
 #'     for (i in 1:(window_size)) {
 #'         my_mat[i, i:(vector_length + i - 1)] <- input_vector
@@ -46,7 +52,7 @@
 #'     return(my_mat)
 #'   }
 #' 
-#' @export
+#' @export construct_smoothing_matrix
 construct_smoothing_matrix <- function(input_vector, window_size){
 	vector_length <- length(input_vector)
 	my_mat <- matrix(nrow=window_size, ncol=(vector_length+window_size-1)) #Create empty matrix.
@@ -55,6 +61,8 @@ construct_smoothing_matrix <- function(input_vector, window_size){
 }
 
 #calculating moving average of a vector:
+
+
 
 
 
@@ -80,15 +88,14 @@ construct_smoothing_matrix <- function(input_vector, window_size){
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #' 
-#' 
 #' moving_average(1:10, 5)
 #' 
 #' ## The function is currently defined as
-#' function (input_vector, window_size) 
+#' function (input_vector, window_size)
 #' {
 #'     window_side <- window_size/2 - 0.5
-#'     return(colMeans(construct_smoothing_matrix(input_vector, 
-#'         window_size), na.rm = T)[(window_side + 1):(length(input_vector) + 
+#'     return(colMeans(construct_smoothing_matrix(input_vector,
+#'         window_size), na.rm = T)[(window_side + 1):(length(input_vector) +
 #'         window_side)])
 #'   }
 #' 
@@ -99,6 +106,8 @@ moving_average <- function(input_vector, window_size){
 }
 
 #Winsorize a vector:
+
+
 
 
 
@@ -128,18 +137,17 @@ moving_average <- function(input_vector, window_size){
 #' Charles P. Low Moments for Small Samples: A Comparative Study of Order
 #' Statistics. The Annals of Mathematical Statistics 18 (1947), no. 3,
 #' 413--426.
-#' @keywords ~kwd1 winsorising ~kwd2
+#' @keywords winsorising ~kwd1 ~kwd2
 #' @examples
-#' 
 #' 
 #' data_set <- runif(1:100)*100
 #' plot(winsor(data_set, winsor_level=0.8) ~ data_set)
 #' 
 #' 
 #' ## The function is currently defined as
-#' function (input_vector, winsor_level = 0.9, only_top = F) 
+#' function (input_vector, winsor_level = 0.9, only_top = F)
 #' {
-#'     bounds <- quantile(input_vector, c((1 - winsor_level)/2, 
+#'     bounds <- quantile(input_vector, c((1 - winsor_level)/2,
 #'         1 - (1 - winsor_level)/2), names = F, na.rm = T)
 #'     if (only_top) {
 #'         bounds[1] <- 0
@@ -147,7 +155,7 @@ moving_average <- function(input_vector, window_size){
 #'     input_vector[input_vector < bounds[1]] <- bounds[1]
 #'     input_vector[input_vector > bounds[2]] <- bounds[2]
 #'     if ((bounds[2] - bounds[1]) > 0) {
-#'         input_vector <- (input_vector - bounds[1])/(bounds[2] - 
+#'         input_vector <- (input_vector - bounds[1])/(bounds[2] -
 #'             bounds[1])
 #'     }
 #'     else {
@@ -175,6 +183,8 @@ winsor <- function(input_vector, winsor_level=0.9, only_top=F){ #!!! Function ch
 
 
 
+
+
 #' Smooth Winsor Normalization
 #' 
 #' Function performs Winsor normalization (see winsor() function) of each
@@ -191,9 +201,9 @@ winsor <- function(input_vector, winsor_level=0.9, only_top=F){ #!!! Function ch
 #' (1-winsor_level)/2 quantile and top outliers to (1+winsor_level)/2 quantile.
 #' @param only_top If TRUE then bottom values are not Winsorized and are set to
 #' 0.
-#' @return \item{comp1}{Vector with mean Winsorized values for each input_vector position}
-#' \item{comp2 }{Vector with standard deviation of Winsorized values for each
-#' input_vector position}
+#' @return \item{comp1}{Vector with mean Winsorized values for each
+#' input_vector position} \item{comp2 }{Vector with standard deviation of
+#' Winsorized values for each input_vector position}
 #' 
 #' %% ...
 #' @note %% ~~further notes~~
@@ -209,26 +219,26 @@ winsor <- function(input_vector, winsor_level=0.9, only_top=F){ #!!! Function ch
 #' 
 #' 
 #' ## The function is currently defined as
-#' function (input_vector, window_size, winsor_level = 0.9, only_top = F) 
+#' function (input_vector, window_size, winsor_level = 0.9, only_top = F)
 #' {
 #'     align_smoothing_matrix <- function(input_matrix) {
-#'         vector_length <- ncol(input_matrix) - nrow(input_matrix) + 
+#'         vector_length <- ncol(input_matrix) - nrow(input_matrix) +
 #'             1
 #'         my_mat <- matrix(nrow = nrow(input_matrix), ncol = vector_length)
 #'         for (i in 1:nrow(input_matrix)) {
-#'             my_mat[i, ] <- input_matrix[i, i:(vector_length + 
+#'             my_mat[i, ] <- input_matrix[i, i:(vector_length +
 #'                 i - 1)]
 #'         }
 #'         return(my_mat)
 #'     }
 #'     my_matrix <- construct_smoothing_matrix(input_vector, window_size)
-#'     winsorized_matrix <- apply(my_matrix, 2, winsor, winsor_level = winsor_level, 
+#'     winsorized_matrix <- apply(my_matrix, 2, winsor, winsor_level = winsor_level,
 #'         only_top = only_top)
-#'     winsorized_matrix[, c(1:(window_size - 1), (length(input_vector) + 
+#'     winsorized_matrix[, c(1:(window_size - 1), (length(input_vector) +
 #'         1):ncol(winsorized_matrix))] <- NA
 #'     aligned_winsorized_matrix <- align_smoothing_matrix(winsorized_matrix)
 #'     means_vector <- colMeans(aligned_winsorized_matrix, na.rm = T)
-#'     sds_vector <- apply(aligned_winsorized_matrix, 2, FUN = sd, 
+#'     sds_vector <- apply(aligned_winsorized_matrix, 2, FUN = sd,
 #'         na.rm = T)
 #'     return(list(means_vector, sds_vector))
 #'   }
@@ -261,25 +271,29 @@ swinsor_vector <- function(input_vector, window_size, winsor_level=0.9, only_top
 
 
 
+
+
 #' Function to make data frame out of GRanges output of normalizing functions
-#' (dtcr(), slograt(), swinsor(), compdata())
+#' (dtcr(), slograt(), swinsor(), compdata()) for all or a set of chosen
+#' transcripts in the file.
 #' 
-#' Simple convenience function. Similar to RNA2df() but prints all the
-#' information in the GRanges.
+#' Simple convenience function.
 #' 
 #' %% ~~ If necessary, more details than the description above ~~
 #' 
 #' @param norm_GR GRanges object made by other normalization function (dtcr(),
 #' slograt(), swinsor(), compdata()) from which data is to be extracted
+#' @param RNAid Transcript identifiers of transcripts that are to be extracted
+#' @param norm_methods Names of the columns to be extracted.
 #' @return Data frame object with columns: RNAid, Pos and desired metadata
 #' columns (e.g. nt, dtcr)
 #' @note %% ~~further notes~~
-#' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
+#' @seealso \code{\link{norm_df2GR}}, \code{\link{dtcr}},
+#' \code{\link{swinsor}}, \code{\link{slograt}}, \code{\link{compdata}}
 #' @references %% ~put references to the literature/web site here ~
 #' @keywords ~kwd1 ~kwd2
 #' @examples
-#' 
 #' 
 #' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 #' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
@@ -288,18 +302,38 @@ swinsor_vector <- function(input_vector, window_size, winsor_level=0.9, only_top
 #' 
 #' 
 #' ## The function is currently defined as
-#' function (norm_GR) 
+#' function (norm_GR, RNAid="all", norm_methods="all")
 #' {
-#'     data.frame(RNAid = as.character(seqnames(norm_GR)), Pos = as.integer(start(norm_GR)), 
+#'     if(norm_methods=="all" || missing(norm_methods))
+#'     {
+#'         norm_methods <- names(mcols(norm_GR))
+#'     }
+#' 
+#'     if(RNAid=="all" || missing(RNAid))
+#'     {
+#'         RNAid <- levels(seqnames(norm_GR))
+#'     }
+#' 
+#'     norm_GR <- norm_GR[seqnames(norm_GR) %in% RNAid, norm_methods]
+#'     data.frame(RNAid = as.character(seqnames(norm_GR)), Pos = as.integer(start(norm_GR)),
 #'         mcols(norm_GR))
 #'   }
 #' 
 #' @export GR2norm_df
-GR2norm_df <- function(norm_GR){
+GR2norm_df <- function(norm_GR, RNAid="all", norm_methods="all"){
+  
+  if(norm_methods=="all" || missing(norm_methods)){norm_methods <- names(mcols(norm_GR))}
+  if(RNAid=="all" || missing(RNAid)){RNAid <- levels(seqnames(norm_GR))}
+  
+  # Parsing normalized file based on the selected RNAid(s) and normalization method(s).
+  norm_GR <- norm_GR[seqnames(norm_GR) %in% RNAid, norm_methods]
 	data.frame(RNAid=as.character(seqnames(norm_GR)), Pos=as.integer(start(norm_GR)), mcols(norm_GR))
 }
 
+
 #Convert norm data frame to GRanges:
+
+
 
 
 
@@ -330,10 +364,10 @@ GR2norm_df <- function(norm_GR){
 #' norm_df2GR(dummy_norm_df)
 #' 
 #' ## The function is currently defined as
-#' function (norm_df) 
+#' function (norm_df)
 #' {
-#'     GRanges(seqnames = norm_df$RNAid, IRanges(start = norm_df$Pos, 
-#'         width = 1), strand = "+", norm_df[names(norm_df) != 
+#'     GRanges(seqnames = norm_df$RNAid, IRanges(start = norm_df$Pos,
+#'         width = 1), strand = "+", norm_df[names(norm_df) !=
 #'         "RNAid" & names(norm_df) != "Pos"])
 #'   }
 #' 

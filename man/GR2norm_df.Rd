@@ -2,21 +2,25 @@
 \name{GR2norm_df}
 \alias{GR2norm_df}
 \title{Function to make data frame out of GRanges output of normalizing functions
-(dtcr(), slograt(), swinsor(), compdata())}
+(dtcr(), slograt(), swinsor(), compdata()) for all or a set of chosen transcripts
+in the file.}
 \usage{
-GR2norm_df(norm_GR)
+GR2norm_df(norm_GR, RNAid = "all", norm_methods = "all")
 }
 \arguments{
 \item{norm_GR}{GRanges object made by other normalization function (dtcr(),
 slograt(), swinsor(), compdata()) from which data is to be extracted}
+
+\item{RNAid}{Transcript identifiers of transcripts that are to be extracted}
+
+\item{norm_methods}{Names of the columns to be extracted.}
 }
 \value{
 Data frame object with columns: RNAid, Pos and desired metadata
 columns (e.g. nt, dtcr)
 }
 \description{
-Simple convenience function. Similar to RNA2df() but prints all the
-information in the GRanges.
+Simple convenience function.
 }
 \details{
 %% ~~ If necessary, more details than the description above ~~
@@ -32,20 +36,31 @@ GR2norm_df(dummy_swinsor)
 
 
 ## The function is currently defined as
-function (norm_GR)
+function (norm_GR, RNAid="all", norm_methods="all")
 {
+    if(norm_methods=="all" || missing(norm_methods))
+    {
+        norm_methods <- names(mcols(norm_GR))
+    }
+
+    if(RNAid=="all" || missing(RNAid))
+    {
+        RNAid <- levels(seqnames(norm_GR))
+    }
+
+    norm_GR <- norm_GR[seqnames(norm_GR) \%in\% RNAid, norm_methods]
     data.frame(RNAid = as.character(seqnames(norm_GR)), Pos = as.integer(start(norm_GR)),
         mcols(norm_GR))
   }
 }
 \author{
-Lukasz Jan Kielpinski
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{norm_df2GR}}, \code{\link{dtcr}}, \code{\link{swinsor}}, \code{\link{slograt}}, \code{\link{compdata}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}
