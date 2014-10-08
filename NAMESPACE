@@ -2,7 +2,6 @@
 
 export(BED2txDb)
 export(GR2norm_df)
-export(RNA2df)
 export(bedgraph2norm)
 export(comp)
 export(compdata)
