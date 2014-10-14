@@ -2,25 +2,27 @@ Package: RNAstr
 Title: Data analysis of high-throughput sequencing based methods of RNA
     structure probing.
 Version: 0.99.0
-Authors@R: c(person("Lukasz Jan", "Kielpinski", role=c("aut", "cre"),
-    email="kielpinski@bio.ku.dk"), person("Nikos", "Sidiropoulos", role="ctb",
-    email="nikos.sidiro@gmail.com"), person("Jeppe", "Vinther", role="ctb",
-    email="jvinther@bio.ku.dk"))
-Description: This package facilitates analysis of Net Generation Sequencing data
-    for which positional information with a single nucleotide resolution
+Authors@R: c(person("Lukasz Jan", "Kielpinski", role=c("aut"),
+    email="kielpinski@bio.ku.dk"), person("Nikos", "Sidiropoulos",
+    role=c("cre", "ctb"), email="nikos.sidiro@gmail.com"), person("Jeppe",
+    "Vinther", role="ctb", email="jvinther@bio.ku.dk"))
+Description: This package facilitates analysis of Next Generation Sequencing
+    data for which positional information with a single nucleotide resolution
     is a key. It allows for applying different types of relevant
     normalizations, data visualization and export in a table or UCSC
     compatible bedgraph file.
 Depends:
     R (>= 3.1.1),
-    Biobase (>= 2.14),
-    BiocGenerics(>= 0.10.0),
-    GenomicRanges(>= 1.16.4)
+    GenomicFeatures(>= 1.16.3),
+    plyr(>= 1.8.1)
 Imports:
-    Rsamtools,
-    GenomicFeatures,
-    plyr,
-    Biostrings,
-    rtracklayer
+    Biostrings(>= 2.32.1),
+    GenomicRanges(>= 1.16.4),
+    Rsamtools(>= 1.16.1),
+    rtracklayer(>= 1.24.2)
 License: MIT
 LazyData: true
+biocViews: Coverage, Normalization
+Suggests:
+    knitr
+VignetteBuilder: knitr
