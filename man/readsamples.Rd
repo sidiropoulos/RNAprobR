@@ -35,52 +35,9 @@ path to a precomputed k2n file is required (generate using EUC() function)
 (default: "counts")
 }
 \examples{
-function (samples, euc = "counts", m = "", k2n_files = "")
-{
- if (euc == "Fu" & (is.na(as.integer(m)) | length(m) != 1)) {
-   print("Error: wrong m")
-   stop()
- }
- if (euc == "HRF-Seq") {
-   k2n_values <- lapply(k2n_files, scan)
- }
- ubar <- function(rdf_list) {
-   rdf <- do.call("rbind", rdf_list)
-   print("Reporting unique barcodes count, no EUC calculation")
-   return(rdf)
- }
- Fu <- function(rdf_list, m) {
-   rdf <- do.call("rbind", rdf_list)
-   m <- as.integer(m)
-   if (max(rdf[, 4]) > m) {
-     print("Error: provided 'm' is smaller than the highest observed unique barcode count. Revise 'm'")
-     stop()
-   }
-   rdf[, 4] <- round(log((m - rdf[, 4])/m)/log((m - 1)/m))
-   print("Reporting estimated unique counts according to Fu et al.")
-   return(rdf)
- }
- HRF_EUC <- function(rdf_list, k2n_values) {
-   for (input_count in 1:length(rdf_list)) {
-     rdf_list[[input_count]][, 4] <- k2n_values[[((input_count -
-                                                     1)\\\%\\\%length(k2n_values) + 1)]][rdf_list[[input_count]][,
-                                                                                                             4]]
-   }
-   rdf <- do.call("rbind", rdf_list)
-   print("Reporting estimated unique counts according to HRF-Seq method")
-   return(rdf)
- }
- raw_data <- lapply(samples, read.table)
- processed_data <- switch(which(euc == c("counts", "Fu", "HRF-Seq")),
-                          ubar(raw_data), Fu(raw_data, m), HRF_EUC(raw_data, k2n_values))
- no_end_info <- is.na(processed_data[, 3])
- processed_data[no_end_info, 3] <- processed_data[no_end_info,
-                                                  2]
- processed_data <- GRanges(seqnames = processed_data[, 1],
-                           IRanges(start = processed_data[, 2], end = processed_data[,
-                                                                                     3]), strand = "+", EUC = processed_data[, 4])
- sort(processed_data)
-}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##-- or do  help(data=index)  for the standard data sets.
 }
 \author{
 Lukasz Jan Kielpinski

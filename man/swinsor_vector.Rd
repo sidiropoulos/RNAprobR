@@ -40,32 +40,6 @@ overlapping window) and (2) standard deviation of those Winsorized values.
 \examples{
 data_set <- runif(1:100)*100
 plot(swinsor_vector(data_set, window_size=71, winsor_level=0.8)[[1]] ~ data_set)
-
-
-## The function is currently defined as
-function (input_vector, window_size, winsor_level = 0.9, only_top = FALSE)
-{
-    align_smoothing_matrix <- function(input_matrix) {
-        vector_length <- ncol(input_matrix) - nrow(input_matrix) +
-            1
-        my_mat <- matrix(nrow = nrow(input_matrix), ncol = vector_length)
-        for (i in 1:nrow(input_matrix)) {
-            my_mat[i, ] <- input_matrix[i, i:(vector_length +
-                i - 1)]
-        }
-        return(my_mat)
-    }
-    my_matrix <- construct_smoothing_matrix(input_vector, window_size)
-    winsorized_matrix <- apply(my_matrix, 2, winsor, winsor_level = winsor_level,
-        only_top = only_top)
-    winsorized_matrix[, c(1:(window_size - 1), (length(input_vector) +
-        1):ncol(winsorized_matrix))] <- NA
-    aligned_winsorized_matrix <- align_smoothing_matrix(winsorized_matrix)
-    means_vector <- colMeans(aligned_winsorized_matrix, na.rm = TRUE)
-    sds_vector <- apply(aligned_winsorized_matrix, 2, FUN = sd,
-        na.rm = TRUE)
-    return(list(means_vector, sds_vector))
-  }
 }
 \author{
 Lukasz Jan Kielpinski

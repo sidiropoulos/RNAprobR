@@ -31,27 +31,6 @@ Function performs Winsor normalization of a supplied vector, sets bottom
 \examples{
 data_set <- runif(1:100)*100
 plot(winsor(data_set, winsor_level=0.8) ~ data_set)
-
-
-## The function is currently defined as
-function (input_vector, winsor_level = 0.9, only_top = FALSE)
-{
-    bounds <- quantile(input_vector, c((1 - winsor_level)/2,
-        1 - (1 - winsor_level)/2), names = FALSE, na.rm = TRUE)
-    if (only_top) {
-        bounds[1] <- 0
-    }
-    input_vector[input_vector < bounds[1]] <- bounds[1]
-    input_vector[input_vector > bounds[2]] <- bounds[2]
-    if ((bounds[2] - bounds[1]) > 0) {
-        input_vector <- (input_vector - bounds[1])/(bounds[2] -
-            bounds[1])
-    }
-    else {
-        input_vector[1:length(input_vector)] <- NA
-    }
-    return(input_vector)
-  }
 }
 \author{
 Lukasz Jan Kielpinski

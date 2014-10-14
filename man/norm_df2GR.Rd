@@ -26,14 +26,6 @@ Function to convert norm_df data frame (product of GR2norm_df()) to GRanges.
 \examples{
 dummy_norm_df <- data.frame(RNAid="dummyRNA", Pos=1:100, my_data1=runif(1:100))
 norm_df2GR(dummy_norm_df)
-
-## The function is currently defined as
-function (norm_df)
-{
-    GRanges(seqnames = norm_df$RNAid, IRanges(start = norm_df$Pos,
-        width = 1), strand = "+", norm_df[names(norm_df) !=
-        "RNAid" & names(norm_df) != "Pos"])
-  }
 }
 \author{
 Lukasz Jan Kielpinski

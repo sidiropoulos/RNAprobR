@@ -35,18 +35,6 @@ sliding windows.
 }
 \examples{
 construct_smoothing_matrix(1:10, 3)
-
-## The function is currently defined as
-function (input_vector, window_size)
-{
-    vector_length <- length(input_vector)
-    my_mat <- matrix(nrow = window_size, ncol = (vector_length +
-        window_size - 1))
-    for (i in 1:(window_size)) {
-        my_mat[i, i:(vector_length + i - 1)] <- input_vector
-    }
-    return(my_mat)
-  }
 }
 \author{
 Lukasz Jan Kielpinski

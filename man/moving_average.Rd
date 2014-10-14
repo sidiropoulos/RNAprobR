@@ -25,15 +25,6 @@ Moving average calculation. NA values ignored.
 }
 \examples{
 moving_average(1:10, 5)
-
-## The function is currently defined as
-function (input_vector, window_size)
-{
-    window_side <- window_size/2 - 0.5
-    return(colMeans(construct_smoothing_matrix(input_vector,
-        window_size), na.rm = TRUE)[(window_side + 1):(length(input_vector) +
-        window_side)])
-  }
 }
 \author{
 Lukasz Jan Kielpinski

@@ -33,25 +33,6 @@ dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(1
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 GR2norm_df(dummy_swinsor)
-
-
-## The function is currently defined as
-function (norm_GR, RNAid="all", norm_methods="all")
-{
-    if(norm_methods=="all" || missing(norm_methods))
-    {
-        norm_methods <- names(mcols(norm_GR))
-    }
-
-    if(RNAid=="all" || missing(RNAid))
-    {
-        RNAid <- levels(seqnames(norm_GR))
-    }
-
-    norm_GR <- norm_GR[seqnames(norm_GR) \%in\% RNAid, norm_methods]
-    data.frame(RNAid = as.character(seqnames(norm_GR)), Pos = as.integer(start(norm_GR)),
-        mcols(norm_GR))
-  }
 }
 \author{
 Lukasz Jan Kielpinski, Nikos Sidiropoulos
