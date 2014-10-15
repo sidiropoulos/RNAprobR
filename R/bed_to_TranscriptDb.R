@@ -91,11 +91,13 @@ BED2txDb <- function(input_bed_path)
     #Calculate exon starts in genome coordinates, and change to 1-counted
     #notation.
     exon_start_genome_list <- mapply(FUN=function(x,y){x+y+1},
-                                     exon_start_tx_list, input_bed[,2], SIMPLIFY = FALSE)
+                                     exon_start_tx_list, input_bed[,2],
+                                     SIMPLIFY = FALSE)
     #Calculate exon ends in genome coordinates, and change to 1-counted
     #notation.
     exon_end_genome_list <- mapply(FUN=function(x,y){x+y-1},
-                                   exon_start_genome_list, exon_size_tx_list, SIMPLIFY = FALSE)
+                                   exon_start_genome_list, exon_size_tx_list,
+                                   SIMPLIFY = FALSE)
 
     #Calcualte exon rank: ordering within transcript
     exon_rank_list <- mapply(FUN=rank_fun, input_bed[,10], input_bed[,6],
@@ -111,8 +113,8 @@ BED2txDb <- function(input_bed_path)
                             exon_end=unlist(exon_end_genome_list))
 
     ##Make TranscriptDb object:
-    txDb_from_BED <- makeTranscriptDb(transcripts=transcripts,
-                                      splicings=splicings)
+    txDb_from_BED <- suppressWarnings(makeTranscriptDb(transcripts=transcripts,
+                                      splicings=splicings))
     txDb_from_BED
 }
 
