@@ -17,7 +17,7 @@
 #' @param genome_build character specifying which UCSC genome build should data
 #' be displayed in, e.g. "mm9"
 #' @param bedgraph_out_file character specifying prefix of output file.
-#' Generated file name is: prefix.bedgraph
+#' Generated file name is: prefix.bedgraph; if file with such a name already exists new tracks will be appended.
 #' @param track_name character specifying track name
 #' @param track_description character specifying track description
 #' @return Function writes bedgraph file.
@@ -32,7 +32,6 @@
 #' ##---- Should be DIRECTLY executable !! ----
 #' ##-- ==>  Define data, use random,
 #' ##-- or do  help(data=index)  for the standard data sets.
-#'
 #'
 #' @import GenomicFeatures
 #' @export norm2bedgraph
@@ -107,15 +106,20 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
             }
 
             if(sum(seq_start_and_end)==  0){
-                if(min(which(seq_start_and_end==1)) < min(which(seq_start_and_end==-1)))
+                if(min(seq_start_and_end, na.rm = TRUE) == max(seq_start_and_end,
+                                                               na.rm = TRUE))
                 {
                     repeat_info <- data.frame(one_chrom, c(F, cons_identical),
-                                              my_delta=c(0, diff(cons_identical), 0))
-                }
-                if(min(which(seq_start_and_end==1)) > min(which(seq_start_and_end==-1)))
-                {
-                    repeat_info <- data.frame(one_chrom, c(F, cons_identical),
-                                              my_delta=c(1, diff(cons_identical), -1))
+                                              my_delta=c(0, diff(cons_identical),  0))
+                }else{
+                    if(min(which(seq_start_and_end==1)) < min(which(seq_start_and_end==-1)))
+                    {
+                        repeat_info <- data.frame(one_chrom, c(F, cons_identical),
+                                                  my_delta=c(0, diff(cons_identical),  0))
+                    }else{
+                        repeat_info <- data.frame(one_chrom, c(F, cons_identical),
+                                                  my_delta=c(1, diff(cons_identical),  -1))
+                    }
                 }
             }
 
@@ -232,9 +236,10 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     df_plus <- compress_bedgraph(df_plus)
     df_minus <- compress_bedgraph(df_minus)
 
+    bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
+
     #End of compression
     if(!is.null(df_plus)){
-        bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
                                  '(plus)" description="',track_description,
                                  '-plus_strand" visibility=full color=0,0,100 altColor=0,0,0 priority=100 autoScale=on alwaysZero=on gridDefault=off maxHeightPixels=128:128:11 graphType=bar yLineMark=0 yLineOnOff=on smoothingWindow=off ',
