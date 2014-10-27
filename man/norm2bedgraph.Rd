@@ -25,7 +25,7 @@ matching dtcr, slograt or swinsor is transformed.}
 be displayed in, e.g. "mm9"}
 
 \item{bedgraph_out_file}{character specifying prefix of output file.
-Generated file name is: prefix.bedgraph}
+Generated file name is: prefix.bedgraph; if file with such a name already exists new tracks will be appended.}
 
 \item{track_name}{character specifying track name}
 
