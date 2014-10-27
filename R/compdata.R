@@ -1,10 +1,9 @@
-#' Function creating norm_GR GRanges from Comp_GR GRanges which contains
-#' termination count (TC), termination-coverage ratio (TCR), coverage (Cover)
-#' and priming count (PC) metadata
+#' Create or extend norm_GR GRanges using Comp_GR GRanges 
 #'
-#' Main use is to add metadata present in GRanges made by comp() function to
-#' GRanges made by normalizing functions (dtcr(), slograt(), swinsor(),
-#' compdata())
+#' Add metadata present in GRanges made by comp() function
+#' (termination count (TC), termination-coverage ratio (TCR), coverage (Cover)
+#' and priming count (PC)) to GRanges made by normalizing functions (dtcr(),
+#' slograt(), swinsor(), compdata()).
 #'
 #' %% ~~ If necessary, more details than the description above ~~
 #'
@@ -13,8 +12,7 @@
 #' transcription terminates (default: 1)
 #' @param add_to normalized data frame with already performed normalization of
 #' another kind. Results will be merged
-#' @return \item{comp1 }{Description of 'comp1'} \item{comp2 }{Description of
-#' comp2'}
+#' @return \item{norm_GR}{norm_GR GRanges extended by metadata from Comp_GR}
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},

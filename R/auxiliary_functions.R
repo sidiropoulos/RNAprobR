@@ -105,9 +105,12 @@ moving_average <- function(input_vector, window_size)
 
 #' Winsor normalization with fitting to <0,1> range.
 #'
-#' Function performs Winsor normalization of a supplied vector, sets bottom
-#' (winsorized) value to 0, top 1 and linearly transforms all the values to the
-#' <0,1> range.
+#' Function performs Winsor normalization of a supplied vector. Steps:
+#' 1. Calcualate top winsor value [(1+winsor_level)/2 quantile], and bottom 
+#' winsor value ((1-winsor_level)/2 quantile)
+#' 2. Each value below bottom winsor value set to bottom winsor value; each 
+#' value above top winsor value set to top winsor value
+#' 3. Transform linearly all the values to [0,1] range
 #'
 #' %% ~~ If necessary, more details than the description above ~~
 #'
@@ -177,15 +180,16 @@ winsor <- function(input_vector, winsor_level=0.9, only_top= FALSE)
 #' @param only_top If TRUE then bottom values are not Winsorized and are set to
 #' 0.
 #' @return \item{comp1}{Vector with mean Winsorized values for each
-#' input_vector position} \item{comp2 }{Vector with standard deviation of
+#' input_vector position} \item{comp2}{Vector with standard deviation of
 #' Winsorized values for each input_vector position}
 #'
 #' %% ...
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
-#' @references SHAPES publication. Poulsen, Kielpinski, Salama, Krogh, Vinther.
-#' In review as for 2nd Oct 2014.
+#' @references "Analysis of sequencing based RNA structure probing data" 
+#' Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology" 
+#' (in preparation)
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
@@ -236,12 +240,11 @@ swinsor_vector <- function(input_vector, window_size, winsor_level=0.9,
 
 
 
-
+#' Export normalized GRanges object to data frame
+#'
 #' Function to make data frame out of GRanges output of normalizing functions
 #' (dtcr(), slograt(), swinsor(), compdata()) for all or a set of chosen
 #' transcripts in the file.
-#'
-#' Simple convenience function.
 #'
 #' %% ~~ If necessary, more details than the description above ~~
 #'

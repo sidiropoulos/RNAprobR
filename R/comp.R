@@ -1,8 +1,8 @@
-#' Function to arrange information from GRanges produced by readsamples() on
-#' per position basis.
+#' Arranging information from GRanges produced by readsamples() on
+#' per position (nucleotide) basis.
 #'
-#' Function comp() takes as input EUC_GR produced by readsamples() and produces
-#' Comp_GR GRanges.
+#' comp() takes as input euc_GR GRanges object produced by readsamples()
+#' and produces Comp_GR GRanges. 
 #'
 #' %% ~~ If necessary, more details than the description above ~~
 #'

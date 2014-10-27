@@ -20,9 +20,9 @@
 #'
 #' %% ~~ If necessary, more details than the description above ~~
 #'
-#' @param input_bed_path Path to 12 column BED file
-#' @return \item{comp1 }{Description of 'comp1'} \item{comp2 }{Description of
-#' 'comp2'}
+#' @param input_bed_path Path to BED file. If 12 column BED provided, function
+#' is splice aware. If 6 column BED provided, function assumes no splicing.
+#' @return TranscriptDb object
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~

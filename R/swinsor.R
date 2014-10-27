@@ -42,12 +42,14 @@
 #' @return GRanges object with "swinsor" (mean smooth-Winsor values) and
 #' "swinsor.sd" (standard deviation of smooth-Winsor values) metadata.
 #' @note %% ~~further notes~~
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Jeppe Vinther
 #' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 #' \code{\link{compdata}}, \code{\link{GR2norm_df}},
-#' \code{\link{plotRNA}}, \code{\link{norm2bedgraph}}
-#' @references SHAPES publication. Poulsen, Kielpinski, Salama, Krogh, Vinther.
-#' In review as for 2nd Oct 2014.
+#' \code{\link{plotRNA}}, \code{\link{norm2bedgraph}}, \code{\link{winsor}}, 
+#' \code{\link{swinsor_vector}}
+#' @references "Analysis of sequencing based RNA structure probing data" 
+#' Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology" 
+#' (in preparation)
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'

@@ -1,4 +1,4 @@
-#' Function to calculate number of Estimated Unique Counts (EUC's)
+#' Calculate number of Estimated Unique Counts (EUC's)
 #' corresponding to given number of observed unique barcodes.
 #'
 #' Function calculates EUC's for each number of observed barcodes accounting

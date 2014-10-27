@@ -1,4 +1,4 @@
-#' Function exporting data in norm_df data frame (product of dtcr, slograt and
+#' Exporting data in norm_df data frame (product of dtcr, slograt and
 #' swinsor) to bedgraph format compatible with UCSC Genome Browser
 #'
 #' Function converts annotation from transcript to genomic coordinates and
@@ -11,8 +11,8 @@
 #' match those in norm_df
 #' @param bed_file character containing file path to BED file with transcript
 #' definitions. Supply txDb XOR bedfile
-#' @param norm_method character specifying which normalized values that norm_df
-#' contains should be processed into bedgraph. If not provided first column
+#' @param norm_method character specifying which normalized column
+#' should be processed into bedgraph. If not provided, the first column
 #' matching dtcr, slograt or swinsor is transformed.
 #' @param genome_build character specifying which UCSC genome build should data
 #' be displayed in, e.g. "mm9"
