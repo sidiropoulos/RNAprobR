@@ -23,6 +23,3 @@ Imports:
 License: MIT
 LazyData: true
 biocViews: Coverage, Normalization
-Suggests:
-    knitr
-VignetteBuilder: knitr
