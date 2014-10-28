@@ -238,6 +238,8 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 
     bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
 
+    options(scipen=999)
+
     #End of compression
     if(!is.null(df_plus)){
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
