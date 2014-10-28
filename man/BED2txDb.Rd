@@ -6,11 +6,11 @@
 BED2txDb(input_bed_path)
 }
 \arguments{
-\item{input_bed_path}{Path to 12 column BED file}
+\item{input_bed_path}{Path to BED file. If 12 column BED provided, function
+is splice aware. If 6 column BED provided, function assumes no splicing.}
 }
 \value{
-\item{comp1 }{Description of 'comp1'} \item{comp2 }{Description of
-'comp2'}
+TranscriptDb object
 }
 \description{
 Function to transform BED format file to Bioconductor TranscriptDb object

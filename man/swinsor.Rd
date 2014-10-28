@@ -42,21 +42,24 @@ winsorized value for each nucleotide (as well as standard deviation).
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+  width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 dummy_comp_GR <- comp(dummy_euc_GR)
 swinsor(dummy_comp_GR)
 }
 \author{
-Lukasz Jan Kielpinski
+Lukasz Jan Kielpinski, Jeppe Vinther
 }
 \references{
-SHAPES publication. Poulsen, Kielpinski, Salama, Krogh, Vinther.
-In review as for 2nd Oct 2014.
+"Analysis of sequencing based RNA structure probing data"
+Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
+(in preparation)
 }
 \seealso{
 \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 \code{\link{compdata}}, \code{\link{GR2norm_df}},
-\code{\link{plotRNA}}, \code{\link{norm2bedgraph}}
+\code{\link{plotRNA}}, \code{\link{norm2bedgraph}}, \code{\link{winsor}},
+\code{\link{swinsor_vector}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

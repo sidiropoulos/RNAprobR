@@ -19,7 +19,7 @@ swinsor_vector(input_vector, window_size, winsor_level = 0.9,
 }
 \value{
 \item{comp1}{Vector with mean Winsorized values for each
-input_vector position} \item{comp2 }{Vector with standard deviation of
+input_vector position} \item{comp2}{Vector with standard deviation of
 Winsorized values for each input_vector position}
 
 %% ...
@@ -45,8 +45,9 @@ plot(swinsor_vector(data_set, window_size=71, winsor_level=0.8)[[1]] ~ data_set)
 Lukasz Jan Kielpinski
 }
 \references{
-SHAPES publication. Poulsen, Kielpinski, Salama, Krogh, Vinther.
-In review as for 2nd Oct 2014.
+"Analysis of sequencing based RNA structure probing data"
+Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
+(in preparation)
 }
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~

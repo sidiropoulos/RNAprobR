@@ -17,22 +17,22 @@ in samples (required if and only if euc="HRF-Seq"; order important!).
 Recycled if necessary}
 }
 \value{
-EUC_GR GRanges containing information: 1) seqnames (sequence name;
-RNAid) 2) Start, 3) End, 4) EUC
+euc_GR GRanges containing information: 1) seqnames (sequence name;
+RNAid) 2) Start, 3) End, 4) EUC value of a given fragment
 }
 \description{
 Function readsamples() reads the output of read processing and mapping
 workflow which has to consist of 4 columns 1) RNAid, 2)Insert start,
-3)Insert end, 4)Unique barcode count It combines separate files coming from
-the same treatment (usually control and treated) and calculates estimated
+3)Insert end, 4)Unique barcode count. It combines separate files coming from
+the same treatment (e.g. controls) and calculates estimated
 unique counts (EUCs) by either (a) keeping unique counts (euc="counts"), (b)
 using formula from Fu GK et al. PNAS 2011 (binomial distribution
 calculation) (euc="Fu") or (c) using method described in Kielpinski and
 Vinther, NAR 2014 (euc="HRF-Seq") If euc="Fu" then the count of all possible
 barcodes is required (m), e.g. if you use 7 nucleotide, fully degenerate
 random barcodes (NNNNNNN) then m=16384 (m=4**7) If euc="HRF-Seq" then the
-path to a precomputed k2n file is required (generate using EUC() function)
-(default: "counts")
+path to a precomputed k2n file is required (generate using k2n_calc()
+function)(default: "counts")
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
@@ -45,8 +45,9 @@ Lukasz Jan Kielpinski
 \references{
 Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting
 individual DNA molecules by the stochastic attachment of diverse labels.
-Proc Natl Acad Sci U S A 108, 9026-9031. Kielpinski, L.J., and Vinther, J.
-(2014). Massive parallel-sequencing-based hydroxyl radical probing of RNA
+Proc Natl Acad Sci U S A 108, 9026-9031.
+Kielpinski, L.J., and Vinther, J. (2014).
+Massive parallel-sequencing-based hydroxyl radical probing of RNA
 accessibility. Nucleic Acids Res.
 }
 \seealso{

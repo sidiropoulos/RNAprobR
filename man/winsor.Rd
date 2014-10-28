@@ -18,9 +18,12 @@ is set to 0.}
 Vector of numerics within <0,1>.
 }
 \description{
-Function performs Winsor normalization of a supplied vector, sets bottom
-(winsorized) value to 0, top 1 and linearly transforms all the values to the
-<0,1> range.
+Function performs Winsor normalization of a supplied vector. Steps:
+1. Calcualate top winsor value [(1+winsor_level)/2 quantile], and bottom
+winsor value ((1-winsor_level)/2 quantile)
+2. Each value below bottom winsor value set to bottom winsor value; each
+value above top winsor value set to top winsor value
+3. Transform linearly all the values to [0,1] range
 }
 \details{
 %% ~~ If necessary, more details than the description above ~~
