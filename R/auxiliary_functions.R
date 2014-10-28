@@ -6,18 +6,7 @@
 
 
 
-#' Auxiliary functions for package RNAstr
-#'
-#' Auxiliary functions for package RNAstr
-#'
-#'
-
-
-
-
-#' Auxiliary functions for package RNAstr
-#'
-#' Auxiliary functions for package RNAstr
+#' Auxiliary functions for package RNAprobS
 #'
 #' Make smoothing matrix
 #'
@@ -106,9 +95,9 @@ moving_average <- function(input_vector, window_size)
 #' Winsor normalization with fitting to <0,1> range.
 #'
 #' Function performs Winsor normalization of a supplied vector. Steps:
-#' 1. Calcualate top winsor value [(1+winsor_level)/2 quantile], and bottom 
+#' 1. Calcualate top winsor value [(1+winsor_level)/2 quantile], and bottom
 #' winsor value ((1-winsor_level)/2 quantile)
-#' 2. Each value below bottom winsor value set to bottom winsor value; each 
+#' 2. Each value below bottom winsor value set to bottom winsor value; each
 #' value above top winsor value set to top winsor value
 #' 3. Transform linearly all the values to [0,1] range
 #'
@@ -187,8 +176,8 @@ winsor <- function(input_vector, winsor_level=0.9, only_top= FALSE)
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
-#' @references "Analysis of sequencing based RNA structure probing data" 
-#' Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology" 
+#' @references "Analysis of sequencing based RNA structure probing data"
+#' Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
 #' (in preparation)
 #' @keywords ~kwd1 ~kwd2
 #' @examples

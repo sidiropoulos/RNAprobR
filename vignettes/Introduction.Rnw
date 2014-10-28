@@ -22,7 +22,7 @@ BiocStyle::latex()
 \tableofcontents
 
 <<preliminaries>>=
-library(RNAstr)
+library(RNAprobS)
 @
 
 \section{Introduction}
@@ -55,15 +55,15 @@ The first step in data processing is reading in the Unique Barcodes files, combi
 Start with specifying paths to different Unique Barcodes files and their respective k2n files (order matters!), followed by reading-in the data and calculating EUCs according to HRF-Seq method:
 
 <<readsamples>>=
-treated <- c(system.file("extdata", "unique_barcodes14.gz", package="RNAstr"),
-             system.file("extdata", "unique_barcodes22.gz", package="RNAstr"))
-control <- c(system.file("extdata", "unique_barcodes16.gz", package="RNAstr"),
-             system.file("extdata", "unique_barcodes24.gz", package="RNAstr"))
+treated <- c(system.file("extdata", "unique_barcodes14.gz", package="RNAprobS"),
+             system.file("extdata", "unique_barcodes22.gz", package="RNAprobS"))
+control <- c(system.file("extdata", "unique_barcodes16.gz", package="RNAprobS"),
+             system.file("extdata", "unique_barcodes24.gz", package="RNAprobS"))
 
-k2n_treated <- c(system.file("extdata", "k2n_14", package="RNAstr"),
-                 system.file("extdata", "k2n_22", package="RNAstr"))
-k2n_control <- c(system.file("extdata", "k2n_16", package="RNAstr"),
-                 system.file("extdata", "k2n_24", package="RNAstr"))
+k2n_treated <- c(system.file("extdata", "k2n_14", package="RNAprobS"),
+                 system.file("extdata", "k2n_22", package="RNAprobS"))
+k2n_control <- c(system.file("extdata", "k2n_16", package="RNAprobS"),
+                 system.file("extdata", "k2n_24", package="RNAprobS"))
 
 control_euc <- readsamples(control, euc="HRF-Seq", k2n_files=k2n_control)
 treated_euc <- readsamples(treated, euc="HRF-Seq", k2n_files=k2n_treated)
@@ -86,9 +86,9 @@ Usage:
 
 <<comp>>=
 treated_comp <- comp(treated_euc, cutoff=101, fasta_file =
-                         system.file("extdata", "hrfseq.fa", package="RNAstr"))
+                         system.file("extdata", "hrfseq.fa", package="RNAprobS"))
 control_comp <- comp(control_euc, cutoff=101, fasta_file =
-                         system.file("extdata", "hrfseq.fa", package="RNAstr"))
+                         system.file("extdata", "hrfseq.fa", package="RNAprobS"))
 @
 \Rcode{treated\_comp} and \Rcode{control\_comp} are \Rpackage{GRanges} objects with each range being of length 1.
 
@@ -130,7 +130,7 @@ plotRNA(norm_GR=hrfseq_norm, RNAid="16S_rRNA_E.coli", norm_method="dtcr")
 
 At last, if we want to visualize the data in UCSC Genome Browser we can generate the BedGraph file:
 <<norm2bedgraph>>=
-RNase_P_BED <- system.file("extdata", "RNaseP.bed", package="RNAstr")
+RNase_P_BED <- system.file("extdata", "RNaseP.bed", package="RNAprobS")
 norm2bedgraph(hrfseq_norm, bed_file = RNase_P_BED, norm_method = "dtcr",
               genome_build = "baciSubt2", bedgraph_out_file = "RNaseP_dtcr",
               track_name = "dtcr", track_description = "deltaTCR Normalization")
