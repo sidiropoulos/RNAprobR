@@ -10,7 +10,7 @@
 #' Vinther, NAR 2014 (euc="HRF-Seq") If euc="Fu" then the count of all possible
 #' barcodes is required (m), e.g. if you use 7 nucleotide, fully degenerate
 #' random barcodes (NNNNNNN) then m=16384 (m=4**7) If euc="HRF-Seq" then the
-#' path to a precomputed k2n file is required (generate using k2n_calc() 
+#' path to a precomputed k2n file is required (generate using k2n_calc()
 #' function)(default: "counts")
 #'
 #'
@@ -26,8 +26,8 @@
 #' @seealso \code{\link{comp}}, \code{\link{plotReads}}, \code{\link{k2n_calc}}
 #' @references Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting
 #' individual DNA molecules by the stochastic attachment of diverse labels.
-#' Proc Natl Acad Sci U S A 108, 9026-9031. 
-#' Kielpinski, L.J., and Vinther, J. (2014). 
+#' Proc Natl Acad Sci U S A 108, 9026-9031.
+#' Kielpinski, L.J., and Vinther, J. (2014).
 #' Massive parallel-sequencing-based hydroxyl radical probing of RNA
 #' accessibility. Nucleic Acids Res.
 #' @examples

@@ -1,4 +1,4 @@
-#' Create or extend norm_GR GRanges using Comp_GR GRanges 
+#' Create or extend norm_GR GRanges using Comp_GR GRanges
 #'
 #' Add metadata present in GRanges made by comp() function
 #' (termination count (TC), termination-coverage ratio (TCR), coverage (Cover)

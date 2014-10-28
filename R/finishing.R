@@ -31,11 +31,11 @@
 #' @param norm_method Which normalization method should be to be used for
 #' plotting (column name).
 #' @param stat_method Name of a column to be used for adding significance
-#' asterisks. If stat_method not provided, function tries to match with "norm_method", 
+#' asterisks. If stat_method not provided, function tries to match with "norm_method",
 #' if no guess - empty vector.
 #' @param stat_cutoff below what value of statistics (from stat_method, p-value
 #' or standard deviation) report significance. If not provided - minimal value
-#' from stat_method used. To suppress reporting significant sites provide 
+#' from stat_method used. To suppress reporting significant sites provide
 #' negative value
 #' @return Plotting function.
 #' @note %% ~~further notes~~

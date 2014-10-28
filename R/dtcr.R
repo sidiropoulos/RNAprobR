@@ -38,7 +38,7 @@
 #' added.
 #' @return GRanges object with "dtcr" (deltaTCR) and "dtcr.p" (p.value of
 #' comparing control and treated calcualted with pooled two-proportion Z-test)
-#' metadata. 
+#' metadata.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso \code{\link{comp}}, \code{\link{slograt}}, \code{\link{swinsor}},

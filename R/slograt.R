@@ -36,9 +36,9 @@
 #' offset to account for the fact that reverse transcription termination occurs
 #' before site of modification.
 #' @param depth_correction One of three values: "no" - counts are used as
-#' given, "all" - counts from sample with higher total sum of EUCs are 
+#' given, "all" - counts from sample with higher total sum of EUCs are
 #' multiplied by sum of EUCs from sample with lower total sum of EUCs and
-#' divided by sum of EUCs from sample with higher EUC count (default), 
+#' divided by sum of EUCs from sample with higher EUC count (default),
 #' "RNA" as in "all" but on per RNA basis
 #' @param pseudocount What pseudocount should be added to each nucleotide prior
 #' to calculating log2 ratio (default: 5)

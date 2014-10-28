@@ -2,7 +2,7 @@
 #' per position (nucleotide) basis.
 #'
 #' comp() takes as input euc_GR GRanges object produced by readsamples()
-#' and produces Comp_GR GRanges. 
+#' and produces Comp_GR GRanges.
 #'
 #' %% ~~ If necessary, more details than the description above ~~
 #'
