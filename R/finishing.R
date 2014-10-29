@@ -37,6 +37,12 @@
 #' or standard deviation) report significance. If not provided - minimal value
 #' from stat_method used. To suppress reporting significant sites provide
 #' negative value
+#' @param main an overall title for the plot: see \code{\link{title}}.
+#' @param type what type of plot should be drawn. See \code{\link{plot}} for possible types.
+#' @param xlab a title for the x axis: see \code{\link{title}}.
+#' @param ylab a title for the y axis: see \code{\link{title}}.
+#' @param ... Arguments to be passed to methods, such as \code{\link{graphical parameters}}
+#' (see \code{\link{par}}).
 #' @return Plotting function.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
@@ -46,7 +52,9 @@
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#'                                 width=round(runif(100)*100+1)), strand="+",
+#'                                 EUC=round(runif(100)*100))
 #' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 #' dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 #' plotRNA(dummy_swinsor, RNAid="DummyRNA")
@@ -102,6 +110,12 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' @param order_by how displayed reads in plotReads function should be sorted.
 #' 1 - for sorting by termination location, 2 for sorting by reverse
 #' transcription start site
+#' @param xlab a title for the x axis: see \code{\link{title}}.
+#' @param ylab a title for the y axis: see \code{\link{title}}.
+#' @param main an overall title for the plot: see \code{\link{title}}.
+#' @param xlim,ylim numeric vectors of length 2, giving the x and y coordinates ranges.
+#' @param ... Arguments to be passed to methods, such as \code{\link{graphical parameters}}
+#' (see \code{\link{par}}).
 #' @return Plotting function.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
@@ -112,7 +126,8 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+#' dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#'                         width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 #' plotReads(dummy_euc_GR, RNAid="DummyRNA")
 #'
 #' @export plotReads

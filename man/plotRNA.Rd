@@ -23,6 +23,17 @@ if no guess - empty vector.}
 or standard deviation) report significance. If not provided - minimal value
 from stat_method used. To suppress reporting significant sites provide
 negative value}
+
+\item{main}{an overall title for the plot: see \code{\link{title}}.}
+
+\item{type}{what type of plot should be drawn. See \code{\link{plot}} for possible types.}
+
+\item{ylab}{a title for the y axis: see \code{\link{title}}.}
+
+\item{xlab}{a title for the x axis: see \code{\link{title}}.}
+
+\item{...}{Arguments to be passed to methods, such as \code{\link{graphical parameters}}
+(see \code{\link{par}}).}
 }
 \value{
 Plotting function.
@@ -37,7 +48,9 @@ Function plotting normalized values over transcript positions.
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+                                width=round(runif(100)*100+1)), strand="+",
+                                EUC=round(runif(100)*100))
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 plotRNA(dummy_swinsor, RNAid="DummyRNA")

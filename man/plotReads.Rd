@@ -18,6 +18,17 @@ will be used for processing (default: 1)}
 \item{order_by}{how displayed reads in plotReads function should be sorted.
 1 - for sorting by termination location, 2 for sorting by reverse
 transcription start site}
+
+\item{ylab}{a title for the y axis: see \code{\link{title}}.}
+
+\item{xlab}{a title for the x axis: see \code{\link{title}}.}
+
+\item{main}{an overall title for the plot: see \code{\link{title}}.}
+
+\item{xlim,ylim}{numeric vectors of length 2, giving the x and y coordinates ranges.}
+
+\item{...}{Arguments to be passed to methods, such as \code{\link{graphical parameters}}
+(see \code{\link{par}}).}
 }
 \value{
 Plotting function.
@@ -33,7 +44,8 @@ function. Similar to Figure 4A in HRF-Seq paper (see References).
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+                        width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 plotReads(dummy_euc_GR, RNAid="DummyRNA")
 }
 \author{

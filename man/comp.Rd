@@ -32,7 +32,8 @@ and produces Comp_GR GRanges.
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+                        width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
 comp(dummy_euc_GR)
 }
 \author{

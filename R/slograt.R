@@ -59,8 +59,12 @@
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR_control <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
-#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+#' dummy_euc_GR_control <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#'                                 width=round(runif(100)*100+1)), strand="+",
+#'                                 EUC=round(runif(100)*100))
+#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#'                                 width=round(runif(100)*100+1)), strand="+",
+#'                                 EUC=round(runif(100)*100))
 #' dummy_comp_GR_control <- comp(dummy_euc_GR_control)
 #' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 #' slograt(control_GR=dummy_comp_GR_control, treated_GR=dummy_comp_GR_treated)

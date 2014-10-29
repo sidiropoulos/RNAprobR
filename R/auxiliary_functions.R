@@ -6,7 +6,7 @@
 
 
 
-#' Auxiliary functions for package RNAprobS
+#' Auxiliary functions for package RNAprobR
 #'
 #' Make smoothing matrix
 #'
@@ -251,7 +251,9 @@ swinsor_vector <- function(input_vector, window_size, winsor_level=0.9,
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#'                                 width=round(runif(100)*100+1)), strand="+",
+#'                                 EUC=round(runif(100)*100))
 #' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 #' dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 #' GR2norm_df(dummy_swinsor)

@@ -1,4 +1,4 @@
-Package: RNAprobS
+Package: RNAprobR
 Title: Data analysis of high-throughput sequencing based methods of RNA
     structure probing.
 Version: 0.99.0
@@ -14,7 +14,8 @@ Description: This package facilitates analysis of Next Generation Sequencing
 Depends:
     R (>= 3.1.1),
     GenomicFeatures(>= 1.16.3),
-    plyr(>= 1.8.1)
+    plyr(>= 1.8.1),
+    BiocGenerics(>= 0.10.0)
 Imports:
     Biostrings(>= 2.32.1),
     GenomicRanges(>= 1.16.4),

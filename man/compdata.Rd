@@ -30,7 +30,9 @@ slograt(), swinsor(), compdata()).
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100), width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+                                width=round(runif(100)*100+1)), strand="+",
+                                EUC=round(runif(100)*100))
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 dummy_swinsor <- compdata(Comp_GR=dummy_comp_GR_treated, add_to=dummy_swinsor)
