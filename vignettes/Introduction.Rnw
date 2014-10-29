@@ -5,6 +5,9 @@
 %\usepackage[utf8]{inputenc}
 \documentclass{article}
 
+\usepackage{chngcntr}
+\counterwithout{figure}{section}
+
 <<style, echo=FALSE, results=tex>>=
 BiocStyle::latex()
 @
@@ -37,9 +40,10 @@ RNA structure probing is more and more often conducted with the use of high-thro
 
 The package was designed with a specific processing workflow in mind (Fig.~\ref{fig:workflow}). It reads-in the Unique Barcodes files and calculates EUCs (\Rfunction{readsamples()}), compiles positional information based on sequenced fragments (\Rfunction{comp()}), performs data normalization (\Rfunction{dtcr()}, \Rfunction{slograt()}, \Rfunction{swinsor()}) and exports data in various formats (\Rfunction{GR2norm\_df()}, \Rfunction{plotRNA()}, \Rfunction{norm2bedgraph()})
 
-\begin{figure}
+\begin{figure}[h!]
 \centering
     \includegraphics[width=0.75\textwidth]{workflow.pdf}
+  \caption{RNAprobR workflow}
   \label{fig:workflow}
 \end{figure}
 
