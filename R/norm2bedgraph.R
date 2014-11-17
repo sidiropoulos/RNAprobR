@@ -49,13 +49,12 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     if(missing(norm_method)){
         norm_method <- names(norm_df)[names(norm_df) %in% c("dtcr","slograt",
                                                             "swinsor")][1]
-        print(paste("Warning: normalization method to convert not specified.",
+        message(paste("Warning: normalization method to convert not specified.",
                     norm_method,"chosen."))
     }
-    if(missing(txDb) & missing(bed_file)){
-        print("Error: specify gene annotation")
-        stop()
-    }
+    if(missing(txDb) & missing(bed_file))
+        stop("Error: specify gene annotation")
+
     #Define functions:
 
     #Function which removes transcripts for which there is no genomic info
@@ -69,7 +68,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         discarded_transcripts <- as.character(unique(norm_df[,1])[!(unique(norm_df[,1]) %in% unique(norm_max_length[,1]))])
         if(length(discarded_transcripts) > 0)
         {
-            print(paste("Warning: transcript",discarded_transcripts,
+            message(paste("Warning: transcript",discarded_transcripts,
                         "discarded. Genomic location not provided."))
         }
 
@@ -166,7 +165,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     my_dup_discarded <- unique(norm_df$RNAid[norm_df$RNAid %in% dup_txs])
     if(length(my_dup_discarded) > 0)
     {
-        print(paste("Warning: transcript",my_dup_discarded,
+        message(paste("Warning: transcript",my_dup_discarded,
                     "discarded. Provided more than one genomic location."))
     }
     ###
@@ -221,8 +220,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     dup_count <- sum(dups)
     if(dup_count > 0){
         df_for_bedgraph <- df_for_bedgraph[!dups,]
-        print(paste("Warning:",dup_count,"lines were removed from dataset due
-                    to duplication. Your transcript annotations overlap."))
+        message(paste("Warning:",dup_count,"lines were removed from dataset due to duplication. Your transcript annotations overlap."))
     }
 
     #Remove NA values:

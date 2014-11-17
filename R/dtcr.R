@@ -106,8 +106,7 @@ dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1, bring_to_ze
             oneRNA_compmerg$dtcr.p <- compare_prop(T_ctrl=oneRNA_compmerg$TC.control, C_ctrl=oneRNA_compmerg$Cover.control, T_tr=oneRNA_compmerg$TC.treated, C_tr=oneRNA_compmerg$Cover.treated, window_size=window_size)[(1+nt_offset):(nrow(oneRNA_compmerg)+nt_offset)]
             return(oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),])
         }else{
-            print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
-            stop()
+            stop(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_compmerg$RNAid[1]))
         }
     }
 

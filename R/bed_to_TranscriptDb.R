@@ -63,10 +63,7 @@ BED2txDb <- function(input_bed_path)
     # This condition should never be fulfilled, just in case if someone tampers
     # with BED file.
     if(is.element("tx_id", names(input_bed)))
-    {
-        print("ERROR: BED file not allowed to contain column named tx_id")
-        stop()
-    }
+        stop("ERROR: BED file not allowed to contain column named tx_id")
 
     #Add internal transcript ID (required for making TranscriptDb)
     input_bed$tx_id <- (1:nrow(input_bed))

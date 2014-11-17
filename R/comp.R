@@ -35,13 +35,12 @@ comp <- function(euc_GR, cutoff=1, fasta_file){
 
 #Check conditions:
     #Check if cutoff is >= 1. If it is not this leads to erroneous coverage calculation:
-    if(cutoff < 1){
-        print("Cutoff must be >= 1")
-        stop()}
+    if(cutoff < 1)
+        stop("Cutoff must be >= 1")
 
     #Check if fasta_file is specified, if the file exists - read it in, if it doesn't - print info:
     if(missing(fasta_file)){
-        print("Fasta file not specified.")
+        message("Fasta file not specified.")
         fasta_exists <- FALSE
         }else{
             if(file.exists(fasta_file)){
@@ -49,7 +48,7 @@ comp <- function(euc_GR, cutoff=1, fasta_file){
                 fasta_ref <- FaFile(fasta_file)
                 fasta_exists <- TRUE
             }else{
-                print("Warning: Fasta file not found.")
+                message("Warning: Fasta file not found.")
                 fasta_exists <- FALSE
                 }
         }
@@ -114,7 +113,7 @@ comp <- function(euc_GR, cutoff=1, fasta_file){
 
     #Print info on fraction of removed EUC's:
     percent_removed <- sum(removed_GR$EUC)/(sum(removed_GR$EUC) + sum(euc_GR_good$EUC))*100
-    print(paste(round(percent_removed,2), "% of EUCs removed due to cutoff"))
+    message(paste(round(percent_removed,2), "% of EUCs removed due to cutoff"))
 
     #Return GRanges:
     Comp_GR

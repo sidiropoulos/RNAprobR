@@ -64,12 +64,14 @@
 bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file, column_name="bedgraph_score", add_to){
 
 ###Check conditions:
-if(missing(txDb) & missing(bed_file)){
-    print("Error: specify gene annotation")
-    stop()
-}
-if(missing(fasta_file)){stop("Specify fasta file")}
-if(!file.exists(fasta_file)){stop("Fasta file not found")}
+if(missing(txDb) & missing(bed_file))
+    stop("Error: specify gene annotation")
+
+if(missing(fasta_file))
+    stop("Specify fasta file")
+
+if(!file.exists(fasta_file))
+    stop("Fasta file not found")
 
 ###Define functions:
     #Function to import the sequence from fasta file, if no sequence - fill in with N's:
@@ -77,7 +79,7 @@ if(!file.exists(fasta_file)){stop("Fasta file not found")}
         if(max(oneRNA_norm$Pos) > length(txs[[as.character(oneRNA_norm$RNAid[1])]])){
             unexpected_length_difference <- max(oneRNA_norm$Pos) - length(txs[[as.character(oneRNA_norm$RNAid[1])]])
             one_gene_sequence <- unlist(strsplit(as.character(c(txs[[as.character(oneRNA_norm$RNAid[1])]], DNAString(paste(rep("N",unexpected_length_difference), collapse="")))[oneRNA_norm$Pos]), ""))
-            print(paste("For RNA ", oneRNA_euc[1,1], "positions outside FASTA annotation exist. N's added"))
+            message(paste("For RNA ", oneRNA_euc[1,1], "positions outside FASTA annotation exist. N's added"))
         }else{
             one_gene_sequence <- unlist(strsplit(as.character(txs[[as.character(oneRNA_norm$RNAid[1])]][oneRNA_norm$Pos]), ""))
             }
@@ -102,7 +104,7 @@ my_exons <- all_exons[names(all_exons) %in% names(txs)] #keep in GRangesList onl
 #Print warning if transcripts overlap:
 overlapping_transcripts <- which(countOverlaps(my_exons) > 1)
 if(length(overlapping_transcripts) > 0){
-    print(paste("Warning: transcript",names(my_exons)[overlapping_transcripts], "overlaps with another transcript. Score is added to more than one RNA."))
+    message(paste("Warning: transcript",names(my_exons)[overlapping_transcripts], "overlaps with another transcript. Score is added to more than one RNA."))
     }
 
 #Map bedgraph positions to annotated transcripts and format to norm_df:

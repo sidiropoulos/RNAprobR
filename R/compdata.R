@@ -35,10 +35,9 @@
 compdata <- function(Comp_GR, nt_offset=1, add_to){
 
     ###Check conditions:
-    if(nt_offset < 0){
-        print("error: nt_offset must be >= 0")
-        stop()
-    }
+    if(nt_offset < 0)
+        stop("error: nt_offset must be >= 0")
+
     ###Define functions:
     offset_oneRNA <- function(oneRNA_comp_df){
         if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){ #Checks if data is properly sorted.

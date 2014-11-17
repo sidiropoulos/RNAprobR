@@ -41,21 +41,21 @@
 readsamples <- function(samples, euc="counts", m="", k2n_files=""){
 
 ###Check conditions:
-    if(euc=="Fu" & (is.na(as.integer(m)) | length(m)!=1)){
-        print("Error: wrong m")
-        stop()
-    }
-    if(euc=="HRF-Seq"){
+    if(euc=="Fu" & (is.na(as.integer(m)) | length(m)!=1))
+        stop("Error: wrong m")
+
+    if(euc=="HRF-Seq")
         k2n_values <- lapply(k2n_files, scan, quiet=TRUE)
-        } #if no file: error here
 
 #########Define functions:
     ###euc functions:
-        #if euc=="counts" - function merging and returning merged data frames, if no EUC calculation requested:
+        #if euc=="counts" - function merging and returning merged data frames,
+        #if no EUC calculation requested:
         ubar <- function(rdf_list){
             rdf <- do.call("rbind", rdf_list)
-            print("Reporting unique barcodes count, no EUC calculation")
-            return(rdf)
+            message("Reporting unique barcodes count, no EUC calculation")
+
+            rdf
         }
 
         #if euc=="Fu" - Function calculating EUC based on number of observed barcodes following the formula:
@@ -65,12 +65,14 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
             rdf <- do.call("rbind", rdf_list)
             m <- as.integer(m)
             #Stop if any record has more observed barcodes than possible (m):
-            if(max(rdf[,4]) > m){print("Error: provided 'm' is smaller than the highest observed unique barcode count. Revise 'm'")
-                stop()
-            }
+            if(max(rdf[,4]) > m)
+                stop("Error: provided 'm' is smaller than the highest observed unique barcode count. Revise 'm'")
+
+
             rdf[,4] <- round(log((m-rdf[,4])/m)/log((m-1)/m))
-            print("Reporting estimated unique counts according to Fu et al.")
-            return(rdf)
+            message("Reporting estimated unique counts according to Fu et al.")
+
+            rdf
         }
 
         #if euc=="HRF-Seq" - Function calculating EUC based on number of observed barcodes following method described in Kielpinski and Vinther, NAR 2014
@@ -80,8 +82,9 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
                 rdf_list[[input_count]][,4] <- k2n_values[[((input_count-1)%%length(k2n_values)+1)]][rdf_list[[input_count]][,4]]
                 }
             rdf <- do.call("rbind", rdf_list)
-            print("Reporting estimated unique counts according to HRF-Seq method")
-            return(rdf)
+            message("Reporting estimated unique counts according to HRF-Seq method")
+
+            rdf
         }
 ##########End of defining functions.
 
@@ -92,14 +95,19 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
 
 
     #Run proper function depending on euc setting:
-    processed_data <- switch(which(euc==c("counts","Fu","HRF-Seq")), ubar(raw_data), Fu(raw_data, m), HRF_EUC(raw_data, k2n_values))
+    processed_data <- switch(which(euc==c("counts","Fu","HRF-Seq")),
+                             ubar(raw_data), Fu(raw_data, m),
+                             HRF_EUC(raw_data, k2n_values))
 
     #Lines without end position info - make it equal to start position:
     no_end_info <- is.na(processed_data[,3])
     processed_data[no_end_info,3] <- processed_data[no_end_info,2]
 
     #Modify into GRanges:
-    processed_data <- GRanges(seqnames=processed_data[,1], IRanges(start=processed_data[,2], end=processed_data[,3]), strand="+", EUC=processed_data[,4])
+    processed_data <- GRanges(seqnames=processed_data[,1],
+                              IRanges(start=processed_data[,2],
+                                      end=processed_data[,3]),
+                              strand="+", EUC=processed_data[,4])
 
     sort(processed_data)
 }

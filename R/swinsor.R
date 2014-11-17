@@ -60,25 +60,31 @@
 #'
 #' @import GenomicRanges
 #' @export swinsor
-swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top= FALSE, nt_offset=1, add_to){
+swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top= FALSE,
+                    nt_offset=1, add_to){
 
 ###Check conditions:
-    if(nt_offset < 0){
-    print("error: nt_offset must be >= 0")
-    stop()
-    }
+    if(nt_offset < 0)
+        stop("ERROR: nt_offset must be >= 0")
+
 ###Define functions:
 #Process single RNA:
 swinsor_oneRNA <- function(oneRNA_comp_df){
-    if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){ #Checks if data is properly sorted.
-        means_and_sds <- swinsor_vector(oneRNA_comp_df$TC, window_size=window_size, winsor_level=winsor_level, only_top=only_top)
+    #Check if data is properly sorted
+    if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){
+        means_and_sds <- swinsor_vector(oneRNA_comp_df$TC,
+                                        window_size=window_size,
+                                        winsor_level=winsor_level,
+                                        only_top=only_top)
         oneRNA_comp_df$swinsor <- means_and_sds[[1]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
         oneRNA_comp_df$swinsor.sd <- means_and_sds[[2]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
-        return(oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),])}else{
-    print(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_comp_df$RNAid[1]))
-    stop()
+
+        oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),]
     }
-    }
+    else
+        stop(paste("Check if data was properly sorted by comp() function. Problem with",
+                   oneRNA_comp_df$RNAid[1]))
+}
 
     ###Function body:
     Comp_df <- GR2norm_df(Comp_GR)
@@ -88,16 +94,23 @@ swinsor_oneRNA <- function(oneRNA_comp_df){
     Comp_df <- Comp_df[order(Comp_df$RNAid, Comp_df$Pos),]
     Comp_df_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=TRUE)
 
-    normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN=swinsor_oneRNA)) #Do processing (smooth, offset, p-values)
-    normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos, nt=normalized$nt, swinsor=normalized$swinsor, swinsor.sd=normalized$swinsor.sd) #Keep only relevant columns
+    #Do processing (smooth, offset, p-values)
+    normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN=swinsor_oneRNA))
+    #Keep only relevant columns
+    normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos,
+                             nt=normalized$nt, swinsor=normalized$swinsor,
+                             swinsor.sd=normalized$swinsor.sd)
 
-    normalized$swinsor[is.nan(normalized$swinsor)] <- NA #Change NaN to NA, for consistency
-    normalized$swinsor.sd[is.nan(normalized$swinsor.sd)] <- NA #Change NaN to NA, for consistency
+    #Change NaN to NA, for consistency
+    normalized$swinsor[is.nan(normalized$swinsor)] <- NA
+    normalized$swinsor.sd[is.nan(normalized$swinsor.sd)] <- NA
 
     #If add_to specified, merge with existing normalized data frame:
     if(!missing(add_to)){
-    add_to_df <- GR2norm_df(add_to)
-    normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
+        add_to_df <- GR2norm_df(add_to)
+        normalized <- merge(add_to_df, normalized,
+                            by=c("RNAid", "Pos", "nt"),
+                            suffixes=c(".old",".new"))
     }
     ###
 
