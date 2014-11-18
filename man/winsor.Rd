@@ -25,12 +25,6 @@ winsor value ((1-winsor_level)/2 quantile)
 value above top winsor value set to top winsor value
 3. Transform linearly all the values to [0,1] range
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
 data_set <- runif(1:100)*100
 plot(winsor(data_set, winsor_level=0.8) ~ data_set)
@@ -44,10 +38,5 @@ Charles P. Low Moments for Small Samples: A Comparative Study of Order
 Statistics. The Annals of Mathematical Statistics 18 (1947), no. 3,
 413--426.
 }
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\keyword{winsorising}
-\keyword{~kwd1}
-\keyword{~kwd2}
+\keyword{~winsorising}
 

@@ -22,14 +22,9 @@ Function to make data frame out of GRanges output of normalizing functions
 (dtcr(), slograt(), swinsor(), compdata()) for all or a set of chosen
 transcripts in the file.
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
-dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
+                                IRanges(start=round(runif(100)*100),
                                 width=round(runif(100)*100+1)), strand="+",
                                 EUC=round(runif(100)*100))
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
@@ -39,13 +34,8 @@ GR2norm_df(dummy_swinsor)
 \author{
 Lukasz Jan Kielpinski, Nikos Sidiropoulos
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
 \seealso{
 \code{\link{norm_df2GR}}, \code{\link{dtcr}},
 \code{\link{swinsor}}, \code{\link{slograt}}, \code{\link{compdata}}
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
 

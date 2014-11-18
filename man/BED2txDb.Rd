@@ -15,12 +15,6 @@ TranscriptDb object
 \description{
 Function to transform BED format file to Bioconductor TranscriptDb object
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
 write("chr1\\t134212702\\t134229870\\tENSMUST00000072177\\t0\\t+\\t134212806\\t134228958\\t0\\t8\\t347,121,24,152,66,120,133,1973,\\t0,8827,10080,11571,12005,13832,14433,15195,",
       file="dummy.bed")
@@ -29,12 +23,4 @@ BED2txDb("dummy.bed")
 \author{
 Lukasz Jan Kielpinski
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\keyword{~kwd1}
-\keyword{~kwd2}
 

@@ -25,15 +25,11 @@ within each RNA.
 comp() takes as input euc_GR GRanges object produced by readsamples()
 and produces Comp_GR GRanges.
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
-dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
-                        width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR <- GRanges(seqnames="DummyRNA",
+                        IRanges(start=round(runif(100)*100),
+                        width=round(runif(100)*100+1)), strand="+",
+                        EUC=round(runif(100)*100))
 comp(dummy_euc_GR)
 }
 \author{
@@ -45,9 +41,8 @@ parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 Nucleic Acids Res.
 }
 \seealso{
-\code{\link{readsamples}}, \code{\link{dtcr}}, \code{\link{slograt}},
-\code{\link{swinsor}}, \code{\link{compdata}}, \code{\link{comp}}
+\code{\link{readsamples}}, \code{\link{dtcr}},
+\code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}},
+\code{\link{comp}}
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
 

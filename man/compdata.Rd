@@ -23,32 +23,23 @@ Add metadata present in GRanges made by comp() function
 and priming count (PC)) to GRanges made by normalizing functions (dtcr(),
 slograt(), swinsor(), compdata()).
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
-dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
+                                IRanges(start=round(runif(100)*100),
                                 width=round(runif(100)*100+1)), strand="+",
                                 EUC=round(runif(100)*100))
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 dummy_swinsor <- swinsor(dummy_comp_GR_treated)
-dummy_swinsor <- compdata(Comp_GR=dummy_comp_GR_treated, add_to=dummy_swinsor)
+dummy_swinsor <- compdata(Comp_GR=dummy_comp_GR_treated,
+                          add_to=dummy_swinsor)
 dummy_swinsor
 }
 \author{
 Lukasz Jan Kielpinski
-}
-\references{
-%% ~put references to the literature/web site here ~
 }
 \seealso{
 \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
 \code{\link{norm2bedgraph}}
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
 

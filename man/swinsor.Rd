@@ -42,8 +42,10 @@ winsorized value for each nucleotide (as well as standard deviation).
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
-  width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR <- GRanges(seqnames="DummyRNA",
+                        IRanges(start=round(runif(100)*100),
+                        width=round(runif(100)*100+1)), strand="+",
+                        EUC=round(runif(100)*100))
 dummy_comp_GR <- comp(dummy_euc_GR)
 swinsor(dummy_comp_GR)
 }

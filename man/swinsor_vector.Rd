@@ -21,8 +21,6 @@ swinsor_vector(input_vector, window_size, winsor_level = 0.9,
 \item{comp1}{Vector with mean Winsorized values for each
 input_vector position} \item{comp2}{Vector with standard deviation of
 Winsorized values for each input_vector position}
-
-%% ...
 }
 \description{
 Function performs Winsor normalization (see winsor() function) of each
@@ -31,15 +29,10 @@ and reports a list of (1) mean Winsorized values for each vector position
 (mean of Winsorized value for a given position as calculated within each
 overlapping window) and (2) standard deviation of those Winsorized values.
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
 data_set <- runif(1:100)*100
-plot(swinsor_vector(data_set, window_size=71, winsor_level=0.8)[[1]] ~ data_set)
+plot(swinsor_vector(data_set, window_size=71,
+                    winsor_level=0.8)[[1]] ~ data_set)
 }
 \author{
 Lukasz Jan Kielpinski
@@ -49,9 +42,4 @@ Lukasz Jan Kielpinski
 Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
 (in preparation)
 }
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\keyword{~kwd1}
-\keyword{~kwd2}
 

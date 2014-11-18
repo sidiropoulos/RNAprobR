@@ -25,10 +25,11 @@ transcription start site}
 
 \item{main}{an overall title for the plot: see \code{\link{title}}.}
 
-\item{xlim,ylim}{numeric vectors of length 2, giving the x and y coordinates ranges.}
+\item{xlim,ylim}{numeric vectors of length 2, giving the x and y coordinates
+ranges.}
 
-\item{...}{Arguments to be passed to methods, such as \code{\link{graphical parameters}}
-(see \code{\link{par}}).}
+\item{...}{Arguments to be passed to methods, such as
+\code{\link{graphical parameters}} (see \code{\link{par}}).}
 }
 \value{
 Plotting function.
@@ -37,15 +38,14 @@ Plotting function.
 Function plots cDNA inserts from GRanges created by readsamples()
 function. Similar to Figure 4A in HRF-Seq paper (see References).
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
 \note{
 %% ~~further notes~~
 }
 \examples{
-dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
-                        width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+dummy_euc_GR <- GRanges(seqnames="DummyRNA",
+                        IRanges(start=round(runif(100)*100),
+                        width=round(runif(100)*100+1)), strand="+",
+                        EUC=round(runif(100)*100))
 plotReads(dummy_euc_GR, RNAid="DummyRNA")
 }
 \author{
@@ -57,7 +57,8 @@ parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 Nucleic Acids Res.
 }
 \seealso{
-\code{\link{plot}}, \code{\link{plot.default}}, \code{\link{readsamples}}
+\code{\link{plot}}, \code{\link{plot.default}},
+\code{\link{readsamples}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}

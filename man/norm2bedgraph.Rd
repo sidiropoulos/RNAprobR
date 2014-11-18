@@ -25,7 +25,8 @@ matching dtcr, slograt or swinsor is transformed.}
 be displayed in, e.g. "mm9"}
 
 \item{bedgraph_out_file}{character specifying prefix of output file.
-Generated file name is: prefix.bedgraph; if file with such a name already exists new tracks will be appended.}
+Generated file name is: prefix.bedgraph; if file with such a name already
+exists new tracks will be appended.}
 
 \item{track_name}{character specifying track name}
 
@@ -56,8 +57,9 @@ Lukasz Jan Kielpinski
 %% ~put references to the literature/web site here ~
 }
 \seealso{
-\code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}}, \code{\link{dtcr}},
-\code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
+\code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}},
+\code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
+\code{\link{compdata}}
 }
 \keyword{~kwd1}
 \keyword{~kwd2}
