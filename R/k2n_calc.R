@@ -34,7 +34,6 @@
 #' @export k2n_calc
 k2n_calc <- function(merged_file, unique_barcode_file, output_file){
 
-
     # Read in inputs:
     merged <- read.table( merged_file )
     barcode_length <- max(nchar(as.character(merged[,4])))
@@ -42,14 +41,18 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
     max_observed <- max(read.table(unique_barcode_file)[,4])
 
     # Remove top-quartile of reads:
-    barcodes_nt <- merged[ do.call( paste, as.list( merged[ ,1:3 ] ) ) %in% do.call( paste, as.list( read_counts[ ( read_counts[ , 4 ] ) <= summary( read_counts[ , 4 ] )[ 5 ], 1:3 ] ) ) , 4 ]
+    barcodes_nt <- merged[ do.call( paste, as.list( merged[ ,1:3 ] ) ) %in%
+                               do.call( paste, as.list( read_counts[ (
+                                   read_counts[ , 4 ] ) <= summary(read_counts[
+                                       , 4 ] )[ 5 ], 1:3 ] ) ) , 4 ]
 
     # make the matrix with the nucleotide freqs per position:
     nt_counts <- matrix( nrow = 4, ncol = barcode_length )
     for( h in 1:ncol( nt_counts ) ){
         j <- 1
         for( nt_local in c( "A","C","G","T" ) ) {
-            nt_counts[ j, h ] <- sum( substr( as.character( barcodes_nt ), h, h) == nt_local )
+            nt_counts[ j, h ] <- sum( substr( as.character( barcodes_nt ), h,
+                                              h) == nt_local )
         j <- j+1
         }
     }
@@ -81,8 +84,14 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
     k2n <- c()
     for( i in 1:floor( max( results ) ) ) {
         abs( results - i ) -> difference
-        k2n[ i ] <- which( difference == min( difference ) ) #if you want to know how many molecules underlie n unique barcodes ask k2n[n]
+
+        #if you want to know how many molecules underlie n unique barcodes
+        #ask k2n[n]
+        k2n[ i ] <- which( difference == min( difference ) )
     }
 
-    if(!missing(output_file)){write(k2n, file = output_file )}else{return(k2n)}
+    if(!missing(output_file))
+        write(k2n, file = output_file )
+    else
+        k2n
 }

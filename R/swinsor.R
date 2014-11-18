@@ -53,8 +53,10 @@
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
-#'   width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+#' dummy_euc_GR <- GRanges(seqnames="DummyRNA",
+#'                         IRanges(start=round(runif(100)*100),
+#'                         width=round(runif(100)*100+1)), strand="+",
+#'                         EUC=round(runif(100)*100))
 #' dummy_comp_GR <- comp(dummy_euc_GR)
 #' swinsor(dummy_comp_GR)
 #'
@@ -67,25 +69,6 @@ swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top= FALSE,
     if(nt_offset < 0)
         stop("ERROR: nt_offset must be >= 0")
 
-###Define functions:
-#Process single RNA:
-swinsor_oneRNA <- function(oneRNA_comp_df){
-    #Check if data is properly sorted
-    if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){
-        means_and_sds <- swinsor_vector(oneRNA_comp_df$TC,
-                                        window_size=window_size,
-                                        winsor_level=winsor_level,
-                                        only_top=only_top)
-        oneRNA_comp_df$swinsor <- means_and_sds[[1]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
-        oneRNA_comp_df$swinsor.sd <- means_and_sds[[2]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
-
-        oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),]
-    }
-    else
-        stop(paste("Check if data was properly sorted by comp() function. Problem with",
-                   oneRNA_comp_df$RNAid[1]))
-}
-
     ###Function body:
     Comp_df <- GR2norm_df(Comp_GR)
 
@@ -95,7 +78,9 @@ swinsor_oneRNA <- function(oneRNA_comp_df){
     Comp_df_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=TRUE)
 
     #Do processing (smooth, offset, p-values)
-    normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN=swinsor_oneRNA))
+    normalized <- do.call(rbind, lapply(Comp_df_by_RNA, FUN=.swinsor_oneRNA,
+                                        winsor_level, window_size, only_top,
+                                        nt_offset))
     #Keep only relevant columns
     normalized <- data.frame(RNAid=normalized$RNAid, Pos=normalized$Pos,
                              nt=normalized$nt, swinsor=normalized$swinsor,
@@ -119,3 +104,28 @@ swinsor_oneRNA <- function(oneRNA_comp_df){
 
     normalized_GR
 }
+
+###Auxiliary functions:
+
+#Process single RNA:
+.swinsor_oneRNA <- function(oneRNA_comp_df, winsor_level, window_size, only_top,
+                            nt_offset){
+    #Check if data is properly sorted
+    if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){
+        means_and_sds <- swinsor_vector(oneRNA_comp_df$TC,
+                                        window_size=window_size,
+                                        winsor_level=winsor_level,
+                                        only_top=only_top)
+        oneRNA_comp_df$swinsor <-
+            means_and_sds[[1]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
+        oneRNA_comp_df$swinsor.sd <-
+            means_and_sds[[2]][(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset)]
+
+        oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),]
+    }
+    else
+        stop(paste("Check if data was properly sorted by comp() function. Problem with",
+                   oneRNA_comp_df$RNAid[1]))
+}
+
+

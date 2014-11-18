@@ -1,33 +1,11 @@
-###Function to transform BED format file to Bioconductor TranscriptDb object
-# Description of options:
-# input_bed_path - path to BED file (12 column BED needed)
-# Value: TranscriptDb object
-
-
-
-
-
-
-
-
-
-
-
-
 #' Bedgraph to TranscriptDb object
 #'
 #' Function to transform BED format file to Bioconductor TranscriptDb object
 #'
-#' %% ~~ If necessary, more details than the description above ~~
-#'
 #' @param input_bed_path Path to BED file. If 12 column BED provided, function
 #' is splice aware. If 6 column BED provided, function assumes no splicing.
 #' @return TranscriptDb object
-#' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso %% ~~objects to See Also as \code{\link{help}}, ~~~
-#' @references %% ~put references to the literature/web site here ~
-#' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
 #' write("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+\t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,\t0,8827,10080,11571,12005,13832,14433,15195,",
@@ -38,14 +16,6 @@
 #' @export BED2txDb
 BED2txDb <- function(input_bed_path)
 {
-
-    #Define functions:
-    rank_fun <- function(exon_count, strandness){
-        ranks <- 1:exon_count
-        if(strandness=="-"){ranks <- rev(ranks)}
-        ranks
-    }
-    #End of define functions
 
     ##Read in BED file and add unique IDs:
     input_bed <- read.table(input_bed_path)
@@ -98,7 +68,7 @@ BED2txDb <- function(input_bed_path)
                                    SIMPLIFY = FALSE)
 
     #Calcualte exon rank: ordering within transcript
-    exon_rank_list <- mapply(FUN=rank_fun, input_bed[,10], input_bed[,6],
+    exon_rank_list <- mapply(FUN=.rank_fun, input_bed[,10], input_bed[,6],
                              SIMPLIFY = FALSE)
 
     #transcript ID
@@ -116,3 +86,12 @@ BED2txDb <- function(input_bed_path)
     txDb_from_BED
 }
 
+###Auxiliary functions
+
+.rank_fun <- function(exon_count, strandness){
+    ranks <- 1:exon_count
+    if(strandness=="-")
+        ranks <- rev(ranks)
+
+    ranks
+}

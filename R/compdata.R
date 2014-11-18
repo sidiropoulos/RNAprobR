@@ -5,29 +5,26 @@
 #' and priming count (PC)) to GRanges made by normalizing functions (dtcr(),
 #' slograt(), swinsor(), compdata()).
 #'
-#' %% ~~ If necessary, more details than the description above ~~
-#'
 #' @param Comp_GR GRanges object made by comp() function.
 #' @param nt_offset how many nucleotides before modification the reverse
 #' transcription terminates (default: 1)
 #' @param add_to normalized data frame with already performed normalization of
 #' another kind. Results will be merged
 #' @return \item{norm_GR}{norm_GR GRanges extended by metadata from Comp_GR}
-#' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 #' \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
 #' \code{\link{norm2bedgraph}}
-#' @references %% ~put references to the literature/web site here ~
-#' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
+#'                                 IRanges(start=round(runif(100)*100),
 #'                                 width=round(runif(100)*100+1)), strand="+",
 #'                                 EUC=round(runif(100)*100))
 #' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 #' dummy_swinsor <- swinsor(dummy_comp_GR_treated)
-#' dummy_swinsor <- compdata(Comp_GR=dummy_comp_GR_treated, add_to=dummy_swinsor)
+#' dummy_swinsor <- compdata(Comp_GR=dummy_comp_GR_treated,
+#'                           add_to=dummy_swinsor)
 #' dummy_swinsor
 #'
 #' @import GenomicRanges
@@ -38,14 +35,6 @@ compdata <- function(Comp_GR, nt_offset=1, add_to){
     if(nt_offset < 0)
         stop("error: nt_offset must be >= 0")
 
-    ###Define functions:
-    offset_oneRNA <- function(oneRNA_comp_df){
-        if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){ #Checks if data is properly sorted.
-            oneRNA_comp_df[,columns_to_extract] <- oneRNA_comp_df[(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset), columns_to_extract]
-            return(oneRNA_comp_df)}else{
-            stop(paste("Check if data was properly sorted by comp() function. Problem with",oneRNA_comp_df$RNAid[1]))
-        }
-    }
     ###Function body:
     Comp_df <- GR2norm_df(Comp_GR)
 
@@ -57,19 +46,37 @@ compdata <- function(Comp_GR, nt_offset=1, add_to){
 
     Comp_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=TRUE)
 
-    normalized <- do.call(rbind, lapply(Comp_by_RNA, FUN=offset_oneRNA))
+    normalized <- do.call(rbind, lapply(Comp_by_RNA, FUN=.offset_oneRNA,
+                                        nt_offset = nt_offset,
+                                        cols = columns_to_extract))
 
     normalized[is.na(normalized)] <- 0
 
     #If add_to specified, merge with existing normalized data frame:
     if(!missing(add_to)){
         add_to_df <- GR2norm_df(add_to)
-        normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"), suffixes=c(".old",".new"))
+        normalized <- merge(add_to_df, normalized, by=c("RNAid", "Pos", "nt"),
+                            suffixes=c(".old",".new"))
     }
-    ###
 
     normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
     normalized_GR <- norm_df2GR(normalized)
 
-    return(normalized_GR)
+    normalized_GR
+}
+
+###Auxiliary functions:
+
+.offset_oneRNA <- function(oneRNA_comp_df, nt_offset, cols){
+
+    #Check if data is properly sorted
+    if(prod(diff(oneRNA_comp_df$Pos)==rep(1, nrow(oneRNA_comp_df)-1))==1){
+        oneRNA_comp_df[,cols] <-
+            oneRNA_comp_df[(1+nt_offset):(nrow(oneRNA_comp_df)+nt_offset),
+                           cols]
+        oneRNA_comp_df
+    }
+    else
+        stop(paste("Check if data was properly sorted by comp() function. Problem with",
+                   oneRNA_comp_df$RNAid[1]))
 }

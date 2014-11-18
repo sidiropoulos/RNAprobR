@@ -1,29 +1,8 @@
 # Finishing functions.
-# norm_GR - GRanges with normalized values
-# RNAid - for which RNA molecule report
-# norm_method - which normalization method to be used (only 1 allowed)
-# norm_methods - which normalization method to be used (multiple allowed)
-# stat_method - which statistics calculation to use for printing asterisks
-# stat_cutoff - below what value of statistics (from stat_method) report significance. If not provided - minimal value from stat_method used
-# order_by - how displayed reads in plotReads function should be sorted. 1 - for sorting by termination location, 2 for sorting by reverse transcription start site
-# Plot for one RNA:
-
-
-
-
-
-
-
-
-
-
-
 
 #' Plot normalized values over transcript positions
 #'
 #' Function plotting normalized values over transcript positions.
-#'
-#' %% ~~ If necessary, more details than the description above ~~
 #'
 #' @param norm_GR norm_GR GRanges with data to be exported, required
 #' @param RNAid Transcript identifier, for which transcript plot should be
@@ -31,28 +10,28 @@
 #' @param norm_method Which normalization method should be to be used for
 #' plotting (column name).
 #' @param stat_method Name of a column to be used for adding significance
-#' asterisks. If stat_method not provided, function tries to match with "norm_method",
-#' if no guess - empty vector.
+#' asterisks. If stat_method not provided, function tries to match with
+#' "norm_method", if no guess - empty vector.
 #' @param stat_cutoff below what value of statistics (from stat_method, p-value
 #' or standard deviation) report significance. If not provided - minimal value
 #' from stat_method used. To suppress reporting significant sites provide
 #' negative value
 #' @param main an overall title for the plot: see \code{\link{title}}.
-#' @param type what type of plot should be drawn. See \code{\link{plot}} for possible types.
+#' @param type what type of plot should be drawn. See \code{\link{plot}} for
+#' possible types.
 #' @param xlab a title for the x axis: see \code{\link{title}}.
 #' @param ylab a title for the y axis: see \code{\link{title}}.
-#' @param ... Arguments to be passed to methods, such as \code{\link{graphical parameters}}
-#' (see \code{\link{par}}).
+#' @param ... Arguments to be passed to methods, such as
+#' \code{\link{graphical parameters}} (see \code{\link{par}}).
 #' @return Plotting function.
-#' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{dtcr}}, \code{\link{slograt}}
-#' \code{\link{swinsor}}, \code{\link{compdata}},
-#' @references %% ~put references to the literature/web site here ~
+#' @seealso \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{dtcr}},
+#' \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
+#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
+#'                                 IRanges(start=round(runif(100)*100),
 #'                                 width=round(runif(100)*100+1)), strand="+",
 #'                                 EUC=round(runif(100)*100))
 #' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
@@ -60,27 +39,45 @@
 #' plotRNA(dummy_swinsor, RNAid="DummyRNA")
 #'
 #' @export plotRNA
-plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main, type, ylab, xlab, ...){
-    if(missing(norm_method)){norm_method <- names(mcols(norm_GR))[which(names(mcols(norm_GR)) %in% c("dtcr","slograt","swinsor"))[1]]}
+plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
+                    type, ylab, xlab, ...){
+    if(missing(norm_method))
+        norm_method <- names(mcols(norm_GR))[
+            which(names(mcols(norm_GR))%in% c("dtcr","slograt","swinsor"))[1]]
 
-    if(length(norm_method)!=1){stop("Specify 1 method")} #Run only if specified exactly one column to plot
+    #Run only if specified exactly one column to plot
+    if(length(norm_method)!=1)
+        stop("Specify 1 method")
 
-    if(missing(stat_method)){stat_method <- switch(norm_method,dtcr="dtcr.p",slograt="slograt.p",swinsor="swinsor.sd", character(0))} #If stat_method not provided, try to guess it, if no guess - empty vector.
+    #Run only if specified exactly one column to plot
+    if(missing(stat_method))
+        stat_method <- switch(norm_method,dtcr="dtcr.p",slograt="slograt.p",
+                              swinsor="swinsor.sd", character(0))
 
-    oneRNA_GR <- norm_GR[seqnames(norm_GR)==RNAid, c(norm_method, stat_method)] #Subset GRanges - chosen transcript, chosen norm_method and stat_method
+    #Subset GRanges - chosen transcript, chosen norm_method and stat_method
+    oneRNA_GR <- norm_GR[seqnames(norm_GR)==RNAid, c(norm_method, stat_method)]
 
     if(missing(main)){main <- RNAid}
     if(missing(type)){type <- "l"}
     if(missing(ylab)){ylab <- norm_method}
     if(missing(xlab)){xlab <- "Position"}
 
-    plot(mcols(oneRNA_GR)[,1] ~ start(oneRNA_GR), main=main, type=type, ylab=ylab, xlab=xlab, ...) #Plot
+    plot(mcols(oneRNA_GR)[,1] ~ start(oneRNA_GR), main=main, type=type,
+         ylab=ylab, xlab=xlab, ...)
 
     #If stat_method provided, add asterisks:
     if(length(stat_method)==1){
-    if(missing(stat_cutoff)){stat_cutoff <- min(mcols(oneRNA_GR)[,2], na.rm=TRUE)} #If stat_cutoff not provided, choose minimum
+
+        #If stat_cutoff not provided, choose minimum
+        if(missing(stat_cutoff))
+            stat_cutoff <- min(mcols(oneRNA_GR)[,2], na.rm=TRUE)
+
         stat_values <- rep(NA, length(oneRNA_GR))
-        stat_values[mcols(oneRNA_GR)[,2] <= stat_cutoff] <- max(mcols(oneRNA_GR)[,1], na.rm=TRUE)*1.01 #For plotting: plot asterisks 1% over the height of the max value
+
+        #For plotting: plot asterisks 1% over the height of the max value
+        stat_values[mcols(oneRNA_GR)[,2] <= stat_cutoff] <-
+            max(mcols(oneRNA_GR)[,1], na.rm=TRUE)*1.01
+
         points(stat_values ~ start(oneRNA_GR), col="red", pch="*")
     }
 }
@@ -100,8 +97,6 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' Function plots cDNA inserts from GRanges created by readsamples()
 #' function. Similar to Figure 4A in HRF-Seq paper (see References).
 #'
-#' %% ~~ If necessary, more details than the description above ~~
-#'
 #' @param euc_GR GRanges generated by readsamples() function
 #' @param RNAid Transcript identifier, for which transcript plot should be
 #' generated.
@@ -113,25 +108,31 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' @param xlab a title for the x axis: see \code{\link{title}}.
 #' @param ylab a title for the y axis: see \code{\link{title}}.
 #' @param main an overall title for the plot: see \code{\link{title}}.
-#' @param xlim,ylim numeric vectors of length 2, giving the x and y coordinates ranges.
-#' @param ... Arguments to be passed to methods, such as \code{\link{graphical parameters}}
-#' (see \code{\link{par}}).
+#' @param xlim,ylim numeric vectors of length 2, giving the x and y coordinates
+#' ranges.
+#' @param ... Arguments to be passed to methods, such as
+#' \code{\link{graphical parameters}} (see \code{\link{par}}).
 #' @return Plotting function.
 #' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
-#' @seealso \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{readsamples}}
+#' @seealso \code{\link{plot}}, \code{\link{plot.default}},
+#' \code{\link{readsamples}}
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' dummy_euc_GR <- GRanges(seqnames="DummyRNA", IRanges(start=round(runif(100)*100),
-#'                         width=round(runif(100)*100+1)), strand="+", EUC=round(runif(100)*100))
+#' dummy_euc_GR <- GRanges(seqnames="DummyRNA",
+#'                         IRanges(start=round(runif(100)*100),
+#'                         width=round(runif(100)*100+1)), strand="+",
+#'                         EUC=round(runif(100)*100))
 #' plotReads(dummy_euc_GR, RNAid="DummyRNA")
 #'
 #' @export plotReads
-plotReads <- function(euc_GR, RNAid, cutoff=1, order_by=1, ylab, xlab, main, ylim, xlim, ...){
+plotReads <- function(euc_GR, RNAid, cutoff=1, order_by=1, ylab, xlab, main,
+                      ylim, xlim, ...){
+
     oneRNA_GR <- euc_GR[seqnames(euc_GR)==RNAid]
     oneRNA_GR <- oneRNA_GR[width(oneRNA_GR) >= cutoff]
     # seq <- seq.temp[order(seq.temp[,1], seq.temp[,3]),c(1,3)]
@@ -144,7 +145,8 @@ plotReads <- function(euc_GR, RNAid, cutoff=1, order_by=1, ylab, xlab, main, yli
 
     plot(NA, main=main, ylab=ylab, xlab=xlab, xlim=xlim, ylim=ylim, ...)
 
-    fragments <- matrix(c(start(oneRNA_GR), end(oneRNA_GR), oneRNA_GR$EUC), ncol=3, byrow= FALSE)
+    fragments <- matrix(c(start(oneRNA_GR), end(oneRNA_GR), oneRNA_GR$EUC),
+                        ncol=3, byrow= FALSE)
     frags <- fragments[,1:2][rep(1:nrow(fragments), fragments[,3]),]
     frags <- frags[order(frags[,order_by]),]
 
