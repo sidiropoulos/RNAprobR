@@ -25,4 +25,4 @@ Suggests:
     BiocStyle
 License: MIT
 LazyData: true
-biocViews: Coverage, Normalization
+biocViews: Coverage, Normalization, Sequencing, GenomeAnnotation
