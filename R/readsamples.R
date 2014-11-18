@@ -13,7 +13,6 @@
 #' path to a precomputed k2n file is required (generate using k2n_calc()
 #' function)(default: "counts")
 #'
-#'
 #' @param samples vector with paths to unique_barcodes files to be combined
 #' @param euc method of calculating estimated unique counts (default: "counts")
 #' @param m random barcode complexity (required if and only if euc="Fu")

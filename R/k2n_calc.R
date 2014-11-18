@@ -6,8 +6,6 @@
 #' k2n_calc() writes file with a vector in which an i-th element is an
 #' estimated unique count given observing i unique barcodes.
 #'
-#' %% ~~ If necessary, more details than the description above ~~
-#'
 #' @param merged_file path to merged_temp file containing 4 column: 1) RNAid,
 #' 2) Start, 3) End, 4) Barcode sequence (required)
 #' @param unique_barcode_file character with path to unique_barcode file
@@ -17,18 +15,11 @@
 #' vector)
 #' @return If output_file specified function writes a file, if not - returns a
 #' vector.
-#' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{readsamples}}
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.
-#' @keywords ~kwd1 ~kwd2
-#' @examples
-#'
-#' ##---- Should be DIRECTLY executable !! ----
-#' ##-- ==>  Define data, use random,
-#' ##-- or do  help(data=index)  for the standard data sets.
 #'
 #' @import plyr
 #' @export k2n_calc

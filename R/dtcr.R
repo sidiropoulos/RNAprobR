@@ -1,3 +1,5 @@
+###Function in the normalizing functions family.
+
 #' Calculate deltaTCR.
 #'
 #' Performs deltaTCR (dtcr) normalization given control and treated GRanges

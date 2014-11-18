@@ -4,8 +4,6 @@
 #' Function converts annotation from transcript to genomic coordinates and
 #' creates two-track bedgraph file (one track for each strand)
 #'
-#' %% ~~ If necessary, more details than the description above ~~
-#'
 #' @param norm_GR norm_GR GRanges with data to be exported, required
 #' @param txDb TranscriptDb object with transcript definitions. Names must
 #' match those in norm_df
@@ -22,13 +20,10 @@
 #' @param track_name character specifying track name
 #' @param track_description character specifying track description
 #' @return Function writes bedgraph file.
-#' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso \code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}},
 #' \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
 #' \code{\link{compdata}}
-#' @references %% ~put references to the literature/web site here ~
-#' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
 #' ##---- Should be DIRECTLY executable !! ----
@@ -254,7 +249,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     #If sum==-1, then there is no repeated sequence start -
     #must be at the beginning
     if(sum(seq_start_and_end)== -1)
-        repeat_info <- data.frame(one_chrom, c(F, cons_identical),
+        repeat_info <- data.frame(one_chrom, c(FALSE, cons_identical),
                                   my_delta=c(1, diff(cons_identical), 0))
 
     #Remove repeated, except first and last
