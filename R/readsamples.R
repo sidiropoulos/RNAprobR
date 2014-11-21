@@ -13,6 +13,7 @@
 #' path to a precomputed k2n file is required (generate using k2n_calc()
 #' function)(default: "counts")
 #'
+#'
 #' @param samples vector with paths to unique_barcodes files to be combined
 #' @param euc method of calculating estimated unique counts (default: "counts")
 #' @param m random barcode complexity (required if and only if euc="Fu")
@@ -63,6 +64,9 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
                               IRanges(start=processed_data[,2],
                                       end=processed_data[,3]),
                               strand="+", EUC=processed_data[,4])
+							  
+    if(is.element(Inf, processed_data$EUC))
+        message("Barcodes oversaturated. Inf returned. Running correct_oversaturation() strongly recommended.")
 
     sort(processed_data)
 }

@@ -20,6 +20,11 @@
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.
+#' @examples
+#'
+#' ##---- Should be DIRECTLY executable !! ----
+#' ##-- ==>  Define data, use random,
+#' ##-- or do  help(data=index)  for the standard data sets.
 #'
 #' @import plyr
 #' @export k2n_calc
@@ -30,6 +35,13 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
     barcode_length <- max(nchar(as.character(merged[,4])))
     read_counts <- count(merged[1:3])
     max_observed <- max(read.table(unique_barcode_file)[,4])
+
+    #Check if max_observed equals max possible complexity. If yes - subtract 1
+    #(otherwise 'while' loop below never ends)
+    if( max_observed == 4**barcode_length ) {
+        max_observed <- max_observed - 1
+        barcodes_saturated <- T
+		} else { barcodes_saturated <- F }
 
     # Remove top-quartile of reads:
     barcodes_nt <- merged[ do.call( paste, as.list( merged[ ,1:3 ] ) ) %in%
@@ -80,6 +92,10 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
         #ask k2n[n]
         k2n[ i ] <- which( difference == min( difference ) )
     }
+
+    #Assign +Inf for fragments which have saturated the barcodes
+    #(see correct_oversaturation function):
+    if( barcodes_saturated ) {k2n[max_observed+1] <- Inf}
 
     if(!missing(output_file))
         write(k2n, file = output_file )
