@@ -27,12 +27,6 @@ for differential ligation probability of different barcodes. Function
 k2n_calc() writes file with a vector in which an i-th element is an
 estimated unique count given observing i unique barcodes.
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
@@ -49,6 +43,4 @@ Nucleic Acids Res.
 \seealso{
 \code{\link{readsamples}}
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
 

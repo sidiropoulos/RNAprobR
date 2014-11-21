@@ -35,12 +35,6 @@ comp() function. It winsorizes values in windows (of a size specified by
 window_size) sliding by 1 nt over whole transcript length and reports mean
 winsorized value for each nucleotide (as well as standard deviation).
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
 dummy_euc_GR <- GRanges(seqnames="DummyRNA",
                         IRanges(start=round(runif(100)*100),
@@ -63,6 +57,4 @@ Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
 \code{\link{plotRNA}}, \code{\link{norm2bedgraph}}, \code{\link{winsor}},
 \code{\link{swinsor_vector}}
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
 

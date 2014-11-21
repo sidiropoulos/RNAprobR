@@ -39,12 +39,6 @@ Function writes bedgraph file.
 Function converts annotation from transcript to genomic coordinates and
 creates two-track bedgraph file (one track for each strand)
 }
-\details{
-%% ~~ If necessary, more details than the description above ~~
-}
-\note{
-%% ~~further notes~~
-}
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
@@ -53,14 +47,9 @@ creates two-track bedgraph file (one track for each strand)
 \author{
 Lukasz Jan Kielpinski
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
 \seealso{
 \code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}},
 \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
 \code{\link{compdata}}
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
 
