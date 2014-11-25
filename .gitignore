@@ -4,3 +4,4 @@
 .Rbuildignore
 .DS_Store
 inst/doc
+auxiliary_files
