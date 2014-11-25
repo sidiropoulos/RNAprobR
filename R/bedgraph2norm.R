@@ -112,7 +112,7 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
             txs[[as.character(oneRNA_norm$RNAid[1])]],
             DNAString(paste(rep("N",unexpected_length_difference),
                             collapse="")))[oneRNA_norm$Pos]), ""))
-        message(paste("For RNA ", oneRNA_euc[1,1],
+        message(paste("For RNA ", oneRNA_norm$RNAid[1],
                       "positions outside FASTA annotation exist. N's added"))
     }
     else{

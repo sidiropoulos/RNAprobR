@@ -119,7 +119,8 @@ dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1,
 ###Auxiliary functions
 
 #Function to calculate p-values for dtcr, it uses test for comparing Two
-#Population Proportions: (z-test, as e.g. shown on http://www.socscistatistics.com/tests/ztest/
+#Population Proportions: (z-test, as e.g. shown on
+#http://www.socscistatistics.com/tests/ztest/
 #or https://onlinecourses.science.psu.edu/stat414/node/268)
 
 #T_ctrl - terminations control, C_ctrl - coverage control,

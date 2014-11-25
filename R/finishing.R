@@ -62,21 +62,21 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
     if(missing(ylab)){ylab <- norm_method}
     if(missing(xlab)){xlab <- "Position"}
 
-    plot(mcols(oneRNA_GR)[,1] ~ start(oneRNA_GR), main=main, type=type,
-         ylab=ylab, xlab=xlab, ...)
+    plot(mcols(oneRNA_GR)[, norm_method] ~ start(oneRNA_GR), main=main,
+         type=type, ylab=ylab, xlab=xlab, ...)
 
     #If stat_method provided, add asterisks:
     if(length(stat_method)==1){
 
         #If stat_cutoff not provided, choose minimum
         if(missing(stat_cutoff))
-            stat_cutoff <- min(mcols(oneRNA_GR)[,2], na.rm=TRUE)
+            stat_cutoff <- min(mcols(oneRNA_GR)[, stat_method], na.rm=TRUE)
 
         stat_values <- rep(NA, length(oneRNA_GR))
 
         #For plotting: plot asterisks 1% over the height of the max value
-        stat_values[mcols(oneRNA_GR)[,2] <= stat_cutoff] <-
-            max(mcols(oneRNA_GR)[,1], na.rm=TRUE)*1.01
+        stat_values[mcols(oneRNA_GR)[, stat_method] <= stat_cutoff] <-
+            max(mcols(oneRNA_GR)[, norm_method], na.rm=TRUE)*1.01
 
         points(stat_values ~ start(oneRNA_GR), col="red", pch="*")
     }

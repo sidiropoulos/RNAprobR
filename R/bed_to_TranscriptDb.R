@@ -22,13 +22,21 @@ BED2txDb <- function(input_bed_path)
 
     #Extend BED to 12 columns if only 6 provided:
     if(ncol(input_bed)==6){
-        input_bed[,7] <- input_bed[,2]
-        input_bed[,8] <- input_bed[,2]
-        input_bed[,9] <- 0
-        input_bed[,10] <- 1
-        input_bed[,11] <- input_bed[,3] - input_bed[,2]
-        input_bed[,12] <- 0
-    }
+
+        colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name", "score",
+                                 "strand")
+
+        input_bed$thickStart <- input_bed$chromStart
+        input_bed$thickEnd <- input_bed$chromStart
+        input_bed$itemRgb <- 0
+        input_bed$blockCount <- 1
+        input_bed$blockSizes <- input_bed$chromEnd - input_bed$chromStart
+        input_bed$blockStarts <- 0
+    } else
+        colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name",
+                                 "score", "strand", "thickStart, thickEnd",
+                                 "itemRgb", "blockCount", "blockSizes",
+                                 "blockStarts")
 
     # This condition should never be fulfilled, just in case if someone tampers
     # with BED file.
@@ -40,39 +48,42 @@ BED2txDb <- function(input_bed_path)
 
     ##create first data frame required for makeTranscriptDb function
     #(transcripts):
-    transcripts <- data.frame(tx_id=input_bed$tx_id, tx_name=input_bed[,4],
-                              tx_chrom=input_bed[,1], tx_strand=input_bed[,6],
-                              tx_start=input_bed[,2]+1, tx_end=input_bed[,3])
+    transcripts <- data.frame(tx_id=input_bed$tx_id, tx_name=input_bed$name,
+                              tx_chrom=input_bed$chrom,
+                              tx_strand=input_bed$strand,
+                              tx_start=input_bed$chromStart + 1,
+                              tx_end=input_bed$chromEnd)
 
     ##create second data frame required for makeTranscriptDb function
     #(splicing):
     #column 11 of BED file - exon sizes;  change factor to character
-    input_bed[,11] <- as.character(input_bed[,11])
+    input_bed$blockSizes <- as.character(input_bed$blockSizes)
     #column 12 of BED file - exon starts; change factor to character
-    input_bed[,12] <- as.character(input_bed[,12])
+    input_bed$blockStarts <- as.character(input_bed$blockStarts)
 
     #Split strings into list of integers
-    exon_size_tx_list <- lapply(strsplit(input_bed[,11],","), as.integer)
+    exon_size_tx_list <- lapply(strsplit(input_bed$blockSizes,","), as.integer)
     #Split strings into list of integers
-    exon_start_tx_list <- lapply(strsplit(input_bed[,12],","), as.integer)
+    exon_start_tx_list <- lapply(strsplit(input_bed$blockStarts,","),
+                                 as.integer)
 
     #Calculate exon starts in genome coordinates, and change to 1-counted
     #notation.
-    exon_start_genome_list <- mapply(FUN=function(x,y){x+y+1},
-                                     exon_start_tx_list, input_bed[,2],
+    exon_start_genome_list <- mapply(FUN=function(x,y){x + y + 1},
+                                     exon_start_tx_list, input_bed$chromStart,
                                      SIMPLIFY = FALSE)
     #Calculate exon ends in genome coordinates, and change to 1-counted
     #notation.
-    exon_end_genome_list <- mapply(FUN=function(x,y){x+y-1},
+    exon_end_genome_list <- mapply(FUN=function(x,y){x + y - 1},
                                    exon_start_genome_list, exon_size_tx_list,
                                    SIMPLIFY = FALSE)
 
     #Calcualte exon rank: ordering within transcript
-    exon_rank_list <- mapply(FUN=.rank_fun, input_bed[,10], input_bed[,6],
-                             SIMPLIFY = FALSE)
+    exon_rank_list <- mapply(FUN=.rank_fun, input_bed$blockCount,
+                             input_bed$strand, SIMPLIFY = FALSE)
 
     #transcript ID
-    tx_id_list <- mapply(FUN=rep, input_bed$tx_id, input_bed[,10],
+    tx_id_list <- mapply(FUN=rep, input_bed$tx_id, input_bed$blockCount,
                          SIMPLIFY = FALSE)
 
     splicings <- data.frame(tx_id=unlist(tx_id_list),

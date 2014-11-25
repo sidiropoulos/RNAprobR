@@ -55,16 +55,19 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
                              .ubar(raw_data), .Fu(raw_data, m),
                              .HRF_EUC(raw_data, k2n_values))
 
+    colnames(processed_data) <- c("RNAid", "Start", "End",
+                                  "Count")
+
     #Lines without end position info - make it equal to start position:
-    no_end_info <- is.na(processed_data[,3])
-    processed_data[no_end_info,3] <- processed_data[no_end_info,2]
+    no_end_info <- is.na(processed_data$End)
+    processed_data$End[no_end_info] <- processed_data$Start[no_end_info]
 
     #Modify into GRanges:
-    processed_data <- GRanges(seqnames=processed_data[,1],
-                              IRanges(start=processed_data[,2],
-                                      end=processed_data[,3]),
-                              strand="+", EUC=processed_data[,4])
-							  
+    processed_data <- GRanges(seqnames=processed_data$RNAid,
+                              IRanges(start=processed_data$Start,
+                                      end=processed_data$End),
+                              strand="+", EUC=processed_data$Count)
+
     if(is.element(Inf, processed_data$EUC))
         message("Barcodes oversaturated. Inf returned. Running correct_oversaturation() strongly recommended.")
 

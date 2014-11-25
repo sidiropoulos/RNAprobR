@@ -117,7 +117,7 @@ swinsor_vector <- function(input_vector, window_size, winsor_level=0.9,
 
     aligned_winsorized_matrix <- .align_smoothing_matrix(winsorized_matrix)
     means_vector <- colMeans(aligned_winsorized_matrix, na.rm=TRUE)
-    sds_vector <- apply(aligned_winsorized_matrix,2, FUN=sd, na.rm=TRUE)
+    sds_vector <- apply(aligned_winsorized_matrix, 2, FUN=sd, na.rm=TRUE)
 
     list(means_vector, sds_vector)
 }
@@ -134,7 +134,7 @@ swinsor_vector <- function(input_vector, window_size, winsor_level=0.9,
 
     #Fill the matrix, offseting by -1 in each cycle.
     for(i in 1:nrow(input_matrix))
-        my_mat[i,] <- input_matrix[i,i:(vector_length+i-1)]
+        my_mat[i,] <- input_matrix[i, i:(vector_length + i - 1)]
 
     my_mat
 }

@@ -32,22 +32,25 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
 
     # Read in inputs:
     merged <- read.table( merged_file )
-    barcode_length <- max(nchar(as.character(merged[,4])))
-    read_counts <- count(merged[1:3])
+    colnames(merged) <- c("RNAid", "Start", "End", "Barcodes")
+    barcode_length <- max(nchar(as.character(merged$Barcodes)))
+    read_counts <- count(subset(merged, select = - Barcodes))
     max_observed <- max(read.table(unique_barcode_file)[,4])
 
     #Check if max_observed equals max possible complexity. If yes - subtract 1
     #(otherwise 'while' loop below never ends)
     if( max_observed == 4**barcode_length ) {
         max_observed <- max_observed - 1
-        barcodes_saturated <- T
-		} else { barcodes_saturated <- F }
+        barcodes_saturated <- TRUE
+	} else
+        barcodes_saturated <- FALSE
 
     # Remove top-quartile of reads:
-    barcodes_nt <- merged[ do.call( paste, as.list( merged[ ,1:3 ] ) ) %in%
-                               do.call( paste, as.list( read_counts[ (
-                                   read_counts[ , 4 ] ) <= summary(read_counts[
-                                       , 4 ] )[ 5 ], 1:3 ] ) ) , 4 ]
+    barcodes_nt <- merged[ do.call(
+        paste, as.list(subset(merged, select = - Barcodes))) %in%
+            do.call(paste, as.list(read_counts[(
+                read_counts$freq ) <= summary(read_counts$freq)[5],
+                c("RNAid", "Start", "End") ] ) ) , "Barcodes" ]
 
     # make the matrix with the nucleotide freqs per position:
     nt_counts <- matrix( nrow = 4, ncol = barcode_length )
@@ -95,7 +98,8 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
 
     #Assign +Inf for fragments which have saturated the barcodes
     #(see correct_oversaturation function):
-    if( barcodes_saturated ) {k2n[max_observed+1] <- Inf}
+    if( barcodes_saturated )
+        k2n[max_observed + 1] <- Inf
 
     if(!missing(output_file))
         write(k2n, file = output_file )

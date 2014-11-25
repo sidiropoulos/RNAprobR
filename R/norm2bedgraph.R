@@ -44,8 +44,9 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         genome_build <- paste("db=", genome_build, sep="")
     }
     if(missing(norm_method)){
-        norm_method <- names(norm_df)[names(norm_df) %in% c("dtcr","slograt",
-                                                            "swinsor")][1]
+
+        methods <- names(mcols(norm_GR))
+        norm_method <- methods[methods %in% c("dtcr","slograt", "swinsor")][1]
         message(paste("Warning: normalization method to convert not specified.",
                     norm_method,"chosen."))
     }
@@ -99,8 +100,8 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
                                     i=1:length(exons_of_interest))
     ordering_merged <- merge(ordering_df_Pos, ordering_df_exons, by=1,
                              all=TRUE, suffixes=c(".Pos",".ex"), sort= FALSE)
-    ordering_merged <- ordering_merged[order(ordering_merged[,2]),]
-    exons_of_interest <- exons_of_interest[ordering_merged[,3]]
+    ordering_merged <- ordering_merged[order(ordering_merged$i.Pos),]
+    exons_of_interest <- exons_of_interest[ordering_merged$i.ex]
     ##End of ordering
 
     #Vector with chromosome names (mathes to Pos_list)
@@ -126,8 +127,10 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     df_for_bedgraph <- do.call(rbind, df_list) #then merge data frames.
 
     #Look for duplicates:
-    dups <- duplicated(df_for_bedgraph[,c(1:3,5)]) |
-        duplicated(df_for_bedgraph[,c(1:3,5)], fromLast=TRUE)
+    dups <- duplicated(df_for_bedgraph[,c("seqname", "position_off", "position",
+                                          "strand")]) |
+        duplicated(df_for_bedgraph[,c("seqname", "position_off", "position",
+                                      "strand")], fromLast=TRUE)
     dup_count <- sum(dups)
     if(dup_count > 0){
         df_for_bedgraph <- df_for_bedgraph[!dups,]
@@ -140,8 +143,12 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     df_for_bedgraph <- df_for_bedgraph[!is.na(df_for_bedgraph$value),]
 
     #And finally split and export two tracks (one for each strand) to a file:
-    df_plus <- df_for_bedgraph[df_for_bedgraph[,5]=="+",1:4]
-    df_minus <- df_for_bedgraph[df_for_bedgraph[,5]=="-",1:4]
+    df_plus <- df_for_bedgraph[df_for_bedgraph$strand == "+",
+                               c("seqname", "position_off", "position",
+                                 "strand")]
+    df_minus <- df_for_bedgraph[df_for_bedgraph$strand == "-",
+                                c("seqname", "position_off", "position",
+                                  "strand")]
 
     #Compress bedgraph:
     df_plus <- .compress_bedgraph(df_plus)
@@ -183,8 +190,8 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     max_lengths <- sum(width(exons_GR))
     tx_lengths <- data.frame(RNAid=names(max_lengths), max_lengths)
     norm_max_length <- merge(norm_df, tx_lengths, by="RNAid", sort= FALSE)
-    discarded_transcripts <- as.character(unique(norm_df[,1])[!(
-        unique(norm_df[,1]) %in% unique(norm_max_length[,1]))])
+    discarded_transcripts <- as.character(unique(norm_df$RNAid)[!(
+        unique(norm_df$RNAid) %in% unique(norm_max_length$RNAid))])
 
     if(length(discarded_transcripts) > 0)
         message(paste("Warning: transcript",discarded_transcripts,
@@ -201,7 +208,8 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 #Compress bedgraph by reducing equi-valued runs.
 .compress_bedgraph <- function(bedgraph_dataframe){
 
-    df_list <- split(bedgraph_dataframe, f=bedgraph_dataframe[,1], drop=TRUE)
+    df_list <- split(bedgraph_dataframe, f=bedgraph_dataframe$seqname,
+                     drop=TRUE)
 
     do.call(rbind, lapply(df_list, FUN=.compress_one_chromosome))
 }
@@ -210,11 +218,12 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 .compress_one_chromosome <- function(one_chrom){
 
     #Order by position within chromosome
-    one_chrom <- one_chrom[order(one_chrom[,2]),]
+    one_chrom <- one_chrom[order(one_chrom$position_off), ]
 
     #Calculate differences between consecutive positions.
     #delta(position) and delta(value)
-    diff_matrix <- matrix(c(diff(one_chrom[,2]), diff(one_chrom[,4])), ncol=2)
+    diff_matrix <- matrix(c(diff(one_chrom$position_off),
+                            diff(one_chrom$strand)), ncol=2)
 
     #Is repeated? or which consecutive (delta(position)==1) positions
     #have the same value (delta(value)==0)
@@ -225,22 +234,28 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 
     #If sum==1, then there is no repeated sequence end - must be at the end
     if(sum(seq_start_and_end)==  1)
-        repeat_info <- data.frame(one_chrom, c(FALSE, cons_identical),
+        repeat_info <- data.frame(one_chrom,
+                                  cons_identical = c(FALSE, cons_identical),
                                   my_delta=c(0, diff(cons_identical), -1))
 
     if(sum(seq_start_and_end)==  0){
         if(min(seq_start_and_end, na.rm = TRUE) == max(seq_start_and_end,
                                                        na.rm = TRUE))
-            repeat_info <- data.frame(one_chrom, c(FALSE, cons_identical),
+            repeat_info <- data.frame(one_chrom,
+                                      cons_identical = c(FALSE, cons_identical),
                                       my_delta=c(0, diff(cons_identical), 0))
         else{
             if(min(which(seq_start_and_end==1)) <
                    min(which(seq_start_and_end==-1)))
-                repeat_info <- data.frame(one_chrom, c(FALSE, cons_identical),
+                repeat_info <- data.frame(one_chrom,
+                                          cons_identical = c(FALSE,
+                                                            cons_identical),
                                           my_delta=c(0, diff(cons_identical),
                                                      0))
             else
-                repeat_info <- data.frame(one_chrom, c(FALSE, cons_identical),
+                repeat_info <- data.frame(one_chrom,
+                                          cons_identical = c(FALSE,
+                                                             cons_identical),
                                           my_delta=c(1, diff(cons_identical),
                                                      -1))
         }
@@ -249,17 +264,21 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     #If sum==-1, then there is no repeated sequence start -
     #must be at the beginning
     if(sum(seq_start_and_end)== -1)
-        repeat_info <- data.frame(one_chrom, c(FALSE, cons_identical),
+        repeat_info <- data.frame(one_chrom, cons_identical = c(FALSE,
+                                                                cons_identical),
                                   my_delta=c(1, diff(cons_identical), 0))
 
     #Remove repeated, except first and last
-    repeat_info <- repeat_info[repeat_info[,5]== FALSE | repeat_info[,6]==-1,]
+    repeat_info <- repeat_info[repeat_info$cons_identical == FALSE |
+                                   repeat_info$my_delta == -1,]
 
     #Move end position (column 3) of last repeated to end position
     #(column 3) of first repeated
-    repeat_info[repeat_info[,6]==1,3] <- repeat_info[repeat_info[,6]== -1,3]
-    repeat_info <- repeat_info[repeat_info[,6]!= -1,] #Remove last repeated
+    repeat_info[repeat_info$my_delta == 1, "position"] <-
+        repeat_info[repeat_info$my_delta == -1, "position"]
+    #Remove last repeated
+    repeat_info <- repeat_info[repeat_info$my_delta != -1,]
 
     #Return first 4 columns
-    repeat_info[,1:4]
+    repeat_info[c("seqname", "position_off", "position", "strand")]
 }
