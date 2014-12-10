@@ -76,7 +76,9 @@ compdata <- function(Comp_GR, nt_offset=1, add_to){
                            cols]
         oneRNA_comp_df
     }
-    else
-        stop(paste("Check if data was properly sorted by comp() function. Problem with",
-                   oneRNA_comp_df$RNAid[1]))
+    else {
+        Message <- "Check if data was properly sorted by comp() function.
+                    Problem with"
+        stop(paste(strwrap(Message), oneRNA_comp_df$RNAid[1]))
+    }
 }

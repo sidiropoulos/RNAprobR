@@ -68,8 +68,11 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
                                       end=processed_data$End),
                               strand="+", EUC=processed_data$Count)
 
-    if(is.element(Inf, processed_data$EUC))
-        message("Barcodes oversaturated. Inf returned. Running correct_oversaturation() strongly recommended.")
+    if(is.element(Inf, processed_data$EUC)) {
+        Message <- "Barcodes oversaturated. Inf returned.
+                    Running correct_oversaturation() strongly recommended."
+        message(strwrap(Message))
+    }
 
     sort(processed_data)
 }
@@ -98,9 +101,11 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
     m <- as.integer(m)
 
     #Stop if any record has more observed barcodes than possible (m):
-    if(max(rdf[,4]) > m)
-        stop("Error: provided 'm' is smaller than the highest observed unique barcode count. Revise 'm'")
-
+    if(max(rdf[,4]) > m) {
+        Message <- "Error: provided 'm' is smaller than the highest observed
+                    unique barcode count. Revise 'm'"
+        stop(strwrap(Message))
+    }
 
     rdf[,4] <- round(log((m - rdf[,4])/m)/log((m - 1)/m))
     message("Reporting estimated unique counts according to Fu et al.")
@@ -108,8 +113,10 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
     rdf
 }
 
-#if euc=="HRF-Seq" - Function calculating EUC based on number of observed barcodes following method described in Kielpinski and Vinther, NAR 2014
-#(similar to Fu et al. but allows for different barcodes to have different attachment probability)
+#if euc=="HRF-Seq" - Function calculating EUC based on number of observed
+#barcodes following method described in Kielpinski and Vinther, NAR 2014
+#(similar to Fu et al. but allows for different barcodes to have different
+#attachment probability)
 .HRF_EUC <- function(rdf_list, k2n_values){
     for(input_count in 1:length(rdf_list)){
         rdf_list[[input_count]][,4] <-

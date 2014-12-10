@@ -8,7 +8,9 @@
 #' @author Lukasz Jan Kielpinski
 #' @examples
 #'
-#' write("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+\t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,\t0,8827,10080,11571,12005,13832,14433,15195,",
+#' write(strwrap("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+
+#'              \t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,
+#'              \t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
 #'       file="dummy.bed")
 #' BED2txDb("dummy.bed")
 #'
@@ -23,8 +25,8 @@ BED2txDb <- function(input_bed_path)
     #Extend BED to 12 columns if only 6 provided:
     if(ncol(input_bed)==6){
 
-        colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name", "score",
-                                 "strand")
+        colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name",
+                                 "score", "strand")
 
         input_bed$thickStart <- input_bed$chromStart
         input_bed$thickEnd <- input_bed$chromStart
@@ -34,7 +36,7 @@ BED2txDb <- function(input_bed_path)
         input_bed$blockStarts <- 0
     } else
         colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name",
-                                 "score", "strand", "thickStart, thickEnd",
+                                 "score", "strand", "thickStart", "thickEnd",
                                  "itemRgb", "blockCount", "blockSizes",
                                  "blockStarts")
 

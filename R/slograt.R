@@ -128,7 +128,8 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
 ###Auxiliary functions
 
 #Function to calculate p-values for dtcr, it uses test for comparing Two
-#Population Proportions: (z-test, as e.g. shown on http://www.socscistatistics.com/tests/ztest/
+#Population Proportions: (z-test, as e.g. shown on
+#http://www.socscistatistics.com/tests/ztest/
 #or https://onlinecourses.science.psu.edu/stat414/node/268)
 #Comparison done in windows of the same size as smoothing
 
@@ -182,10 +183,11 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
         oneRNA_compmerg[1:(nrow(oneRNA_compmerg) - nt_offset),]
 
     }
-    else
-        stop(paste("Check if data was properly sorted by comp() function. Problem with",
-                   oneRNA_compmerg$RNAid[1]))
-
+    else {
+        Message <- "Check if data was properly sorted by comp() function.
+                    Problem with"
+        stop(strwrap(paste(Message, oneRNA_compmerg$RNAid[1])))
+    }
 }
 
 #Calculate p.values:
@@ -205,9 +207,11 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
 
         oneRNA_compmerg[1:(nrow(oneRNA_compmerg) - nt_offset),]
     }
-    else
-        stop(paste("Check if data was properly sorted by comp() function. Problem with",
-                   oneRNA_compmerg$RNAid[1]))
+    else {
+        Message <- "Check if data was properly sorted by comp() function.
+                    Problem with"
+        stop(strwrap(paste(Message, oneRNA_compmerg$RNAid[1])))
+    }
 }
 
 #Depth correction:

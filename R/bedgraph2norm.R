@@ -24,6 +24,9 @@
 #' @seealso \code{\link{norm2bedgraph}}, \code{\link{GR2norm_df}},
 #' \code{\link{plotRNA}}, \code{\link{BED2txDb}}, \code{\link{dtcr}},
 #' \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
+#' @examples
+#'
+#'
 #' @import rtracklayer Biostrings
 #' @export bedgraph2norm
 bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
@@ -41,8 +44,11 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
 
     #Read in bedgraph file and convert both strands to single UCSCdata entry:
     bedgraph_list <- import.bedGraph(bedgraph_file)
-    if(length(bedgraph_list)!=2)
-        stop("Error: bedgraph file needs to contain 2 tracks, one for each strand.")
+    if(length(bedgraph_list)!=2) {
+        Message <- "Error: bedgraph file needs to contain 2 tracks, one for
+                    each strand."
+        stop(strwrap(Message))
+    }
 
     strand(bedgraph_list[[1]]) <- "+"
     strand(bedgraph_list[[2]]) <- "-"
@@ -65,7 +71,8 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
     if(length(overlapping_transcripts) > 0){
         message(paste("Warning: transcript",
                       names(my_exons)[overlapping_transcripts],
-                      "overlaps with another transcript. Score is added to more than one RNA."))
+                      strwrap("overlaps with another transcript. Score is added
+                              to more than one RNA.")))
         }
 
     #Map bedgraph positions to annotated transcripts and format to norm_df:

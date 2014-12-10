@@ -172,8 +172,10 @@ dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1,
         oneRNA_compmerg[1:(nrow(oneRNA_compmerg)-nt_offset),]
 
     }
-    else
-        stop(paste("Check if data was properly sorted by comp() function. Problem with",
-                   oneRNA_compmerg$RNAid[1]))
+    else {
+        Message <- "Check if data was properly sorted by comp() function.
+                    Problem with"
+        stop(paste(strwrap(Message), oneRNA_compmerg$RNAid[1]))
+    }
 
 }

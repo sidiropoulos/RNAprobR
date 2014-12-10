@@ -26,9 +26,22 @@
 #' \code{\link{compdata}}
 #' @examples
 #'
-#' ##---- Should be DIRECTLY executable !! ----
-#' ##-- ==>  Define data, use random,
-#' ##-- or do  help(data=index)  for the standard data sets.
+#' dummy_euc_GR <- GRanges(seqnames="DummyRNA",
+#'                         IRanges(start=round(runif(100)*100),
+#'                         width=round(runif(100)*100+1)), strand="+",
+#'                         EUC=round(runif(100)*100))
+#' dummy_comp_GR <- comp(dummy_euc_GR)
+#' dummy_norm <- swinsor(dummy_comp_GR)
+#'
+#' write(strwrap("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+
+#'              \t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,
+#'              \t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
+#'       file="dummy.bed")
+#'
+#' norm2bedgraph(dummy_norm, bed_file = dummy.bed, norm_method = "swinsor",
+#'               genome_build = "dummy", bedgraph_out_file = "dummy",
+#'               track_name = "swinsor",
+#'               track_description = "swinsor Normalization")
 #'
 #' @import GenomicFeatures
 #' @export norm2bedgraph
@@ -160,9 +173,14 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 
     #End of compression
     if(!is.null(df_plus)){
+        trackDescription <- '-plus_strand" visibility=full color=0,0,100
+                            altColor=0,0,0 priority=100 autoScale=on
+                            alwaysZero=on gridDefault=off
+                            maxHeightPixels=128:128:11 graphType=bar
+                            yLineMark=0 yLineOnOff=on smoothingWindow=off '
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
                                  '(plus)" description="',track_description,
-                                 '-plus_strand" visibility=full color=0,0,100 altColor=0,0,0 priority=100 autoScale=on alwaysZero=on gridDefault=off maxHeightPixels=128:128:11 graphType=bar yLineMark=0 yLineOnOff=on smoothingWindow=off ',
+                                 strwrap(trackDescription, width = 300),
                                  genome_build, sep="")
         write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
         write.table(df_plus, row.names= FALSE, col.names= FALSE, quote= FALSE,
@@ -170,9 +188,14 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     }
 
     if(!is.null(df_minus)){
+        trackDescription <- '-minus_strand" visibility=full color=0,0,100
+                             altColor=0,0,0 priority=100 autoScale=on
+                             alwaysZero=on gridDefault=off
+                             maxHeightPixels=128:128:11 graphType=bar
+                             yLineMark=0 yLineOnOff=on smoothingWindow=off '
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
                                  '(minus)" description="',track_description,
-                                 '-minus_strand" visibility=full color=0,0,100 altColor=0,0,0 priority=100 autoScale=on alwaysZero=on gridDefault=off maxHeightPixels=128:128:11 graphType=bar yLineMark=0 yLineOnOff=on smoothingWindow=off ',
+                                 strwrap(trackDescription, width = 300),
                                  genome_build, sep="")
         write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
         write.table(df_minus, row.names= FALSE, col.names= FALSE, quote= FALSE,

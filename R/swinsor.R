@@ -101,9 +101,11 @@ swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top= FALSE,
 
         oneRNA_comp_df[1:(nrow(oneRNA_comp_df)-nt_offset),]
     }
-    else
-        stop(paste("Check if data was properly sorted by comp() function. Problem with",
-                   oneRNA_comp_df$RNAid[1]))
+    else {
+        Message <- "Check if data was properly sorted by comp() function.
+                    Problem with"
+        stop(strwrap(paste(Message, oneRNA_comp_df$RNAid[1])))
+    }
 }
 
 

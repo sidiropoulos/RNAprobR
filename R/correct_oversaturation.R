@@ -1,8 +1,14 @@
 #' Correcting EUC of oversaturated fragments.
 #'
-#' If for a given fragment the number of observed unique barcodes is equal to the total barcode complexity (all combinations of barcodes are associated with a given fragment), then the readsamples function assignes infinite EUC.
-#' This can be corrected by the function correct_oversaturation(). By comparing observed read counts with EUCs for other fragments it calculates the correction factor.
-#' Then, for the oversaturated fragments it multiplies the observed read counts by the correction factor to estimate EUC. The assumption behind this correction is that fragments have similar rate of PCR duplicates production.
+#' If for a given fragment the number of observed unique barcodes is equal to
+#' the total barcode complexity (all combinations of barcodes are associated
+#' with a given fragment), then the readsamples function assignes infinite EUC.
+#' This can be corrected by the function correct_oversaturation(). By comparing
+#' observed read counts with EUCs for other fragments it calculates the
+#' correction factor.
+#' Then, for the oversaturated fragments it multiplies the observed read counts
+#' by the correction factor to estimate EUC. The assumption behind this
+#' correction is that fragments have similar rate of PCR duplicates production.
 #'
 #' @param euc_GR GRanges produced by readsamples() function
 #' @param read_counts_file path to a file with observed read counts.
