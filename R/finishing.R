@@ -113,7 +113,6 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' @param ... Arguments to be passed to methods, such as
 #' \code{\link{graphical parameters}} (see \code{\link{par}}).
 #' @return Plotting function.
-#' @note %% ~~further notes~~
 #' @author Lukasz Jan Kielpinski
 #' @seealso \code{\link{plot}}, \code{\link{plot.default}},
 #' \code{\link{readsamples}}
