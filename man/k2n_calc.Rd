@@ -28,9 +28,12 @@ k2n_calc() writes file with a vector in which an i-th element is an
 estimated unique count given observing i unique barcodes.
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##-- or do  help(data=index)  for the standard data sets.
+write(c("DummyRNA\\t1\\t1\\tA", "DummyRNA\\t1\\t1\\tC", "DummyRNA\\t2\\t2\\tG",
+        "DummyRNA\\t2\\t2\\tT"),file="dummy_merged_file")
+write(c("DummyRNA\\t1\\t1\\t2", "DummyRNA\\t2\\t2\\t2"),
+        file="dummy_unique_barcode")
+k2n_calc(merged_file = "dummy_merged_file",
+        unique_barcode_file = "dummy_unique_barcode")
 }
 \author{
 Lukasz Jan Kielpinski, Nikos Sidiropoulos

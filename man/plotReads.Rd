@@ -38,9 +38,6 @@ Plotting function.
 Function plots cDNA inserts from GRanges created by readsamples()
 function. Similar to Figure 4A in HRF-Seq paper (see References).
 }
-\note{
-%% ~~further notes~~
-}
 \examples{
 dummy_euc_GR <- GRanges(seqnames="DummyRNA",
                         IRanges(start=round(runif(100)*100),

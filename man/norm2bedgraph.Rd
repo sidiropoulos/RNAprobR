@@ -40,9 +40,23 @@ Function converts annotation from transcript to genomic coordinates and
 creates two-track bedgraph file (one track for each strand)
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##-- or do  help(data=index)  for the standard data sets.
+dummy_euc_GR_control <- GRanges(seqnames="DummyRNA",
+                                 IRanges(start=round(runif(100)*100),
+                                 width=round(runif(100)*100+1)), strand="+",
+                                 EUC=round(runif(100)*100))
+dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
+                                IRanges(start=round(runif(100)*100),
+                                width=round(runif(100)*100+1)), strand="+",
+                                EUC=round(runif(100)*100))
+dummy_comp_GR_control <- comp(dummy_euc_GR_control)
+dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
+dummy_norm <- dtcr(control_GR=dummy_comp_GR_control,
+                   treated_GR=dummy_comp_GR_treated)
+write(strwrap("chr1\\t134212702\\t134229870\\tDummyRNA\\t0\\t+
+              \\t134212806\\t134228958\\t0\\t8\\t347,121,24,152,66,120,133,1973,
+              \\t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
+              file="dummy.bed")
+norm2bedgraph(norm_GR = dummy_norm, bed_file = "dummy.bed")
 }
 \author{
 Lukasz Jan Kielpinski

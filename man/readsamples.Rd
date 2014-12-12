@@ -35,9 +35,8 @@ path to a precomputed k2n file is required (generate using k2n_calc()
 function)(default: "counts")
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##-- or do  help(data=index)  for the standard data sets.
+write("DummyRNA\\t1\\t2\\t3",file="dummy_unique_barcode")
+readsamples(samples = "dummy_unique_barcode", euc = "counts")
 }
 \author{
 Lukasz Jan Kielpinski

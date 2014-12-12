@@ -16,7 +16,9 @@ TranscriptDb object
 Function to transform BED format file to Bioconductor TranscriptDb object
 }
 \examples{
-write("chr1\\t134212702\\t134229870\\tENSMUST00000072177\\t0\\t+\\t134212806\\t134228958\\t0\\t8\\t347,121,24,152,66,120,133,1973,\\t0,8827,10080,11571,12005,13832,14433,15195,",
+write(strwrap("chr1\\t134212702\\t134229870\\tENSMUST00000072177\\t0\\t+
+             \\t134212806\\t134228958\\t0\\t8\\t347,121,24,152,66,120,133,1973,
+             \\t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
       file="dummy.bed")
 BED2txDb("dummy.bed")
 }
