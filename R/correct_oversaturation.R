@@ -12,6 +12,14 @@
 #'
 #' @param euc_GR GRanges produced by readsamples() function
 #' @param read_counts_file path to a file with observed read counts.
+#' @examples
+#' write(c("DummyRNA\t1\t2\t1000", "DummyRNA\t3\t4\t1024"),
+#'      file="dummy_unique_barcode")
+#' write(c("DummyRNA\t1\t2\t5000", "DummyRNA\t3\t4\t10000"),
+#'       file="dummy_read_counts")
+#' my_EUCs <- readsamples(samples = "dummy_unique_barcode", euc = "Fu", m=1024)
+#' correct_oversaturation(euc_GR = my_EUCs,
+#'                        read_counts_file = "dummy_read_counts")
 #'
 #' @export
 
