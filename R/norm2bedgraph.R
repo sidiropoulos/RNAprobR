@@ -25,23 +25,23 @@
 #' \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
 #' \code{\link{compdata}}
 #' @examples
-#'
-#' dummy_euc_GR <- GRanges(seqnames="DummyRNA",
-#'                         IRanges(start=round(runif(100)*100),
-#'                         width=round(runif(100)*100+1)), strand="+",
-#'                         EUC=round(runif(100)*100))
-#' dummy_comp_GR <- comp(dummy_euc_GR)
-#' dummy_norm <- swinsor(dummy_comp_GR)
-#'
-#' write(strwrap("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+
-#'              \t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,
-#'              \t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
-#'       file="dummy.bed")
-#'
-#' norm2bedgraph(dummy_norm, bed_file = dummy.bed, norm_method = "swinsor",
-#'               genome_build = "dummy", bedgraph_out_file = "dummy",
-#'               track_name = "swinsor",
-#'               track_description = "swinsor Normalization")
+#' dummy_euc_GR_control <- GRanges(seqnames="DummyRNA",
+#'                                  IRanges(start=round(runif(100)*100),
+#'                                  width=round(runif(100)*100+1)), strand="+",
+#'                                  EUC=round(runif(100)*100))
+#' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
+#'                                 IRanges(start=round(runif(100)*100),
+#'                                 width=round(runif(100)*100+1)), strand="+",
+#'                                 EUC=round(runif(100)*100))
+#' dummy_comp_GR_control <- comp(dummy_euc_GR_control)
+#' dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
+#' dummy_norm <- dtcr(control_GR=dummy_comp_GR_control,
+#'                    treated_GR=dummy_comp_GR_treated)
+#' write(strwrap("chr1\t134212702\t134229870\tDummyRNA\t0\t+
+#'               \t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,
+#'               \t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
+#'               file="dummy.bed")
+#' norm2bedgraph(norm_GR = dummy_norm, bed_file = "dummy.bed")
 #'
 #' @import GenomicFeatures
 #' @export norm2bedgraph
@@ -61,7 +61,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         methods <- names(mcols(norm_GR))
         norm_method <- methods[methods %in% c("dtcr","slograt", "swinsor")][1]
         message(paste("Warning: normalization method to convert not specified.",
-                    norm_method,"chosen."))
+                      norm_method,"chosen."))
     }
     if(missing(txDb) & missing(bed_file))
         stop("Error: specify gene annotation")
@@ -89,7 +89,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     if(length(my_dup_discarded) > 0)
     {
         message(paste("Warning: transcript",my_dup_discarded,
-                    "discarded. Provided more than one genomic location."))
+                      "discarded. Provided more than one genomic location."))
     }
     ###
 
@@ -158,10 +158,10 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     #And finally split and export two tracks (one for each strand) to a file:
     df_plus <- df_for_bedgraph[df_for_bedgraph$strand == "+",
                                c("seqname", "position_off", "position",
-                                 "strand")]
+                                 "value")]
     df_minus <- df_for_bedgraph[df_for_bedgraph$strand == "-",
                                 c("seqname", "position_off", "position",
-                                  "strand")]
+                                  "value")]
 
     #Compress bedgraph:
     df_plus <- .compress_bedgraph(df_plus)
@@ -174,10 +174,10 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     #End of compression
     if(!is.null(df_plus)){
         trackDescription <- '-plus_strand" visibility=full color=0,0,100
-                            altColor=0,0,0 priority=100 autoScale=on
-                            alwaysZero=on gridDefault=off
-                            maxHeightPixels=128:128:11 graphType=bar
-                            yLineMark=0 yLineOnOff=on smoothingWindow=off '
+        altColor=0,0,0 priority=100 autoScale=on
+        alwaysZero=on gridDefault=off
+        maxHeightPixels=128:128:11 graphType=bar
+        yLineMark=0 yLineOnOff=on smoothingWindow=off '
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
                                  '(plus)" description="',track_description,
                                  strwrap(trackDescription, width = 300),
@@ -189,10 +189,10 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 
     if(!is.null(df_minus)){
         trackDescription <- '-minus_strand" visibility=full color=0,0,100
-                             altColor=0,0,0 priority=100 autoScale=on
-                             alwaysZero=on gridDefault=off
-                             maxHeightPixels=128:128:11 graphType=bar
-                             yLineMark=0 yLineOnOff=on smoothingWindow=off '
+        altColor=0,0,0 priority=100 autoScale=on
+        alwaysZero=on gridDefault=off
+        maxHeightPixels=128:128:11 graphType=bar
+        yLineMark=0 yLineOnOff=on smoothingWindow=off '
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
                                  '(minus)" description="',track_description,
                                  strwrap(trackDescription, width = 300),
@@ -201,7 +201,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         write.table(df_minus, row.names= FALSE, col.names= FALSE, quote= FALSE,
                     sep="\t", file=bedgraph_out_file, append=TRUE)
     }
-}
+    }
 
 ###Auxiliary functions
 
@@ -246,7 +246,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     #Calculate differences between consecutive positions.
     #delta(position) and delta(value)
     diff_matrix <- matrix(c(diff(one_chrom$position_off),
-                            diff(one_chrom$strand)), ncol=2)
+                            diff(one_chrom$value)), ncol=2)
 
     #Is repeated? or which consecutive (delta(position)==1) positions
     #have the same value (delta(value)==0)
@@ -272,7 +272,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
                    min(which(seq_start_and_end==-1)))
                 repeat_info <- data.frame(one_chrom,
                                           cons_identical = c(FALSE,
-                                                            cons_identical),
+                                                             cons_identical),
                                           my_delta=c(0, diff(cons_identical),
                                                      0))
             else
@@ -303,5 +303,5 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     repeat_info <- repeat_info[repeat_info$my_delta != -1,]
 
     #Return first 4 columns
-    repeat_info[c("seqname", "position_off", "position", "strand")]
+    repeat_info[c("seqname", "position_off", "position", "value")]
 }
