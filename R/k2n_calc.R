@@ -22,9 +22,12 @@
 #' Nucleic Acids Res.
 #' @examples
 #'
-#' ##---- Should be DIRECTLY executable !! ----
-#' ##-- ==>  Define data, use random,
-#' ##-- or do  help(data=index)  for the standard data sets.
+#' write(c("DummyRNA\t1\t1\tA", "DummyRNA\t1\t1\tC", "DummyRNA\t2\t2\tG",
+#'         "DummyRNA\t2\t2\tT"),file="dummy_merged_file")
+#' write(c("DummyRNA\t1\t1\t2", "DummyRNA\t2\t2\t2"),
+#'         file="dummy_unique_barcode")
+#' k2n_calc(merged_file = "dummy_merged_file",
+#'         unique_barcode_file = "dummy_unique_barcode")
 #'
 #' @import plyr
 #' @export k2n_calc
@@ -42,14 +45,14 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
     if( max_observed == 4**barcode_length ) {
         max_observed <- max_observed - 1
         barcodes_saturated <- TRUE
-	} else
+    } else
         barcodes_saturated <- FALSE
 
     # Remove top-quartile of reads:
     barcodes_nt <- merged[ do.call(
         paste, as.list(subset(merged, select = - Barcodes))) %in%
             do.call(paste, as.list(read_counts[(
-                read_counts$freq ) <= summary(read_counts$freq)[5],
+                read_counts$freq ) <= quantile(read_counts$freq, 0.75),
                 c("RNAid", "Start", "End") ] ) ) , "Barcodes" ]
 
     # make the matrix with the nucleotide freqs per position:
@@ -59,7 +62,7 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
         for( nt_local in c( "A","C","G","T" ) ) {
             nt_counts[ j, h ] <- sum( substr( as.character( barcodes_nt ), h,
                                               h) == nt_local )
-        j <- j+1
+            j <- j + 1
         }
     }
 
@@ -80,10 +83,17 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
 
     i <- 1
     results[ i ] <- sum( 1 - ( 1 - probs )**i )
-
+    j <- 1
     while( results[ i ] <= max_observed ) {
         i <- i + 1
         results[ i ] <- sum( 1 - ( 1 - probs )**i )   #Mf to Sf
+        if(results[ i ] == results[ i - 1]){
+            if(j > 2)
+                stop("Too low complexity to estimate k2n distribution")
+            else
+                j <- j + 1
+        }else
+            j <- 1
     }
 
     #assign molecules number to unique barcode number:

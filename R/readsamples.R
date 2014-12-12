@@ -32,9 +32,8 @@
 #' accessibility. Nucleic Acids Res.
 #' @examples
 #'
-#' ##---- Should be DIRECTLY executable !! ----
-#' ##-- ==>  Define data, use random,
-#' ##-- or do  help(data=index)  for the standard data sets.
+#' write("DummyRNA\t1\t2\t3",file="dummy_unique_barcode")
+#' readsamples(samples = "dummy_unique_barcode", euc = "counts")
 #'
 #' @import GenomicRanges
 #' @export readsamples
