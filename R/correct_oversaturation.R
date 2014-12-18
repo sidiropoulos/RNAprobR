@@ -12,6 +12,8 @@
 #'
 #' @param euc_GR GRanges produced by readsamples() function
 #' @param read_counts_file path to a file with observed read counts.
+#' @return euc_GR GRanges analogous to the readsamples() function output,
+#' but with finite EUCs where infinity was present.
 #' @examples
 #' write(c("DummyRNA\t1\t2\t1000", "DummyRNA\t3\t4\t1024"),
 #'      file="dummy_unique_barcode")
