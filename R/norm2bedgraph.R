@@ -54,7 +54,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     if(missing(genome_build)){
         genome_build <- c()
     }else{
-        genome_build <- paste("db=", genome_build, sep="")
+        genome_build <- paste(" db=", genome_build, sep="")
     }
     if(missing(norm_method)){
 
@@ -177,9 +177,9 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         altColor=0,0,0 priority=100 autoScale=on
         alwaysZero=on gridDefault=off
         maxHeightPixels=128:128:11 graphType=bar
-        yLineMark=0 yLineOnOff=on smoothingWindow=off '
+        yLineMark=0 yLineOnOff=on smoothingWindow=off'
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
-                                 '(plus)" description="',track_description,
+                                 '(plus)" description="',
                                  strwrap(trackDescription, width = 300),
                                  genome_build, sep="")
         write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
@@ -192,9 +192,9 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         altColor=0,0,0 priority=100 autoScale=on
         alwaysZero=on gridDefault=off
         maxHeightPixels=128:128:11 graphType=bar
-        yLineMark=0 yLineOnOff=on smoothingWindow=off '
+        yLineMark=0 yLineOnOff=on smoothingWindow=off'
         bedgraph_header <- paste('track type=bedGraph name="',track_name,
-                                 '(minus)" description="',track_description,
+                                 '(minus)" description="',
                                  strwrap(trackDescription, width = 300),
                                  genome_build, sep="")
         write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
