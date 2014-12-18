@@ -55,24 +55,17 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
                 read_counts$freq ) <= quantile(read_counts$freq, 0.75),
                 c("RNAid", "Start", "End") ] ) ) , "Barcodes" ]
 
+    # Convert to array
+    barcodes_nt <- t(laply(seq(1,barcode_length),
+                           function(i) substr(barcodes_nt, i, i)))
+
     # make the matrix with the nucleotide freqs per position:
-    nt_counts <- matrix( nrow = 4, ncol = barcode_length )
-    for( h in 1:ncol( nt_counts ) ){
-        j <- 1
-        for( nt_local in c( "A","C","G","T" ) ) {
-            nt_counts[ j, h ] <- sum( substr( as.character( barcodes_nt ), h,
-                                              h) == nt_local )
-            j <- j + 1
-        }
-    }
+    nt_counts <- apply( barcodes_nt, 2, .count_nt)
 
     # Calculate frequencies
     nt_freqs <- nt_counts / colSums( nt_counts )
 
-    nt_values <- list()
-    for( i in 1:ncol( nt_freqs ) ) {
-        nt_values[[ i ]] <- nt_freqs[ , i ]
-    }
+    nt_values <- split(x, rep(1:ncol(x), each = nrow(x)))
 
     all_posible_comb <- expand.grid( nt_values )
 
@@ -97,22 +90,33 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
     }
 
     #assign molecules number to unique barcode number:
-    k2n <- c()
-    for( i in 1:floor( max( results ) ) ) {
-        abs( results - i ) -> difference
-
-        #if you want to know how many molecules underlie n unique barcodes
-        #ask k2n[n]
-        k2n[ i ] <- which( difference == min( difference ) )
-    }
+    k2n <- laply( 1:floor(max(results)),
+                  function (i) .absolute_difference(results,i))
 
     #Assign +Inf for fragments which have saturated the barcodes
     #(see correct_oversaturation function):
     if( barcodes_saturated )
         k2n[max_observed + 1] <- Inf
 
-    if(!missing(output_file))
+    if(!missing(output_file)) {
         write(k2n, file = output_file )
-    else
+    } else
         k2n
+}
+
+#Count nucleotide occurencies
+.count_nt <- function(nt)
+{
+    nA <- sum(nt=="A")
+    nC <- sum(nt=="C")
+    nG <- sum(nt=="G")
+    nT <- sum(nt=="T")
+
+    c(nA, nC, nG, nT)
+}
+
+.absolute_difference <- function( results, i)
+{
+    difference <- abs( results - i )
+    which( difference == min( difference ) )
 }
