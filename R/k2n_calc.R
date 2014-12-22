@@ -56,8 +56,9 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
                 c("RNAid", "Start", "End") ] ) ) , "Barcodes" ]
 
     # Convert to array
-    barcodes_nt <- t(laply(seq(1,barcode_length),
-                           function(i) substr(barcodes_nt, i, i)))
+    barcodes_nt <- matrix(laply(seq(1,barcode_length),
+                                function(i) substr(barcodes_nt, i, i)),
+                          ncol = barcode_length, byrow = TRUE)
 
     # make the matrix with the nucleotide freqs per position:
     nt_counts <- apply( barcodes_nt, 2, .count_nt)
@@ -65,7 +66,7 @@ k2n_calc <- function(merged_file, unique_barcode_file, output_file){
     # Calculate frequencies
     nt_freqs <- nt_counts / colSums( nt_counts )
 
-    nt_values <- split(x, rep(1:ncol(x), each = nrow(x)))
+    nt_values <- split(nt_freqs, rep(1:ncol(nt_freqs), each = nrow(nt_freqs)))
 
     all_posible_comb <- expand.grid( nt_values )
 
