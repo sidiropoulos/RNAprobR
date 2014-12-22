@@ -18,9 +18,12 @@
 #' @param add_to GRanges object made by other normalization function (dtcr(),
 #' slograt(), swinsor(), compdata()) to which values from bedgraph should be
 #' added.
+#' @param track_strand specifies which genomic strand the supplied bedgraph
+#' describes ("+" or "-"). Used only if the bedgraph file is composed of only
+#' one track.
 #' @return Function creates GRanges object or (if add_to specified) adds
 #' metadata to already existing object
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{norm2bedgraph}}, \code{\link{GR2norm_df}},
 #' \code{\link{plotRNA}}, \code{\link{BED2txDb}}, \code{\link{dtcr}},
 #' \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
@@ -155,20 +158,22 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
 #Function to import the sequence from fasta file, if no sequence -
 #fill in with N's:
 .add_sequence <- function(oneRNA_norm, txs){
-    if(max(oneRNA_norm$Pos) > length(txs[[as.character(oneRNA_norm$RNAid[1])]]))
+
+    maxPos <- max(oneRNA_norm$Pos)
+    refSeq <- txs[[as.character(oneRNA_norm$RNAid[1])]]
+
+    if (maxPos > length(refSeq))
     {
-        unexpected_length_difference <- max(oneRNA_norm$Pos) -
-            length(txs[[as.character(oneRNA_norm$RNAid[1])]])
-        one_gene_sequence <- unlist(strsplit(as.character(c(
-            txs[[as.character(oneRNA_norm$RNAid[1])]],
-            DNAString(paste(rep("N",unexpected_length_difference),
-                            collapse="")))[oneRNA_norm$Pos]), ""))
+        unexpected_length_difference <- maxPos - length(refSeq)
+        dna <- paste(rep("N",unexpected_length_difference), collapse="")
+        one_gene_sequence <- unlist(strsplit(as.character(c(refSeq,
+                                    DNAString(dna))[oneRNA_norm$Pos]), ""))
         message(paste("For RNA ", oneRNA_norm$RNAid[1],
                       "positions outside FASTA annotation exist. N's added"))
     }
     else{
         one_gene_sequence <- unlist(strsplit(as.character(
-            txs[[as.character(oneRNA_norm$RNAid[1])]][oneRNA_norm$Pos]), ""))
+            refSeq[oneRNA_norm$Pos]), ""))
     }
     oneRNA_norm$nt <- one_gene_sequence
     oneRNA_norm
