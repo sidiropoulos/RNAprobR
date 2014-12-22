@@ -21,7 +21,7 @@
 #' added.
 #' @return GRanges object with "swinsor" (mean smooth-Winsor values) and
 #' "swinsor.sd" (standard deviation of smooth-Winsor values) metadata.
-#' @author Lukasz Jan Kielpinski, Jeppe Vinther
+#' @author Lukasz Jan Kielpinski, Jeppe Vinther, Nikos Sidiropoulos
 #' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 #' \code{\link{compdata}}, \code{\link{GR2norm_df}},
 #' \code{\link{plotRNA}}, \code{\link{norm2bedgraph}}, \code{\link{winsor}},

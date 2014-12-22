@@ -13,7 +13,7 @@
 #' RNA), and metadata: 3) TCR (termination coverage ratio), 4) TC (termination
 #' count), 5) Cover (coverage) and 6) PC (priming count) for each position
 #' within each RNA.
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{readsamples}}, \code{\link{dtcr}},
 #' \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}},
 #' \code{\link{comp}}

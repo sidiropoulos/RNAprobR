@@ -20,7 +20,7 @@
 #' @param track_name character specifying track name
 #' @param track_description character specifying track description
 #' @return Function writes bedgraph file.
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}},
 #' \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
 #' \code{\link{compdata}}
@@ -201,7 +201,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
         write.table(df_minus, row.names= FALSE, col.names= FALSE, quote= FALSE,
                     sep="\t", file=bedgraph_out_file, append=TRUE)
     }
-    }
+}
 
 ###Auxiliary functions
 

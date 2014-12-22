@@ -27,7 +27,6 @@
 #' @author Lukasz Jan Kielpinski
 #' @seealso \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{dtcr}},
 #' \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
-#' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
 #' dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
@@ -119,7 +118,6 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #' @references Kielpinski, L.J., and Vinther, J. (2014). Massive
 #' parallel-sequencing-based hydroxyl radical probing of RNA accessibility.
 #' Nucleic Acids Res.
-#' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
 #' dummy_euc_GR <- GRanges(seqnames="DummyRNA",

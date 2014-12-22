@@ -22,7 +22,7 @@
 #' @return GRanges object with "dtcr" (deltaTCR) and "dtcr.p" (p.value of
 #' comparing control and treated calcualted with pooled two-proportion Z-test)
 #' metadata.
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{comp}}, \code{\link{slograt}}, \code{\link{swinsor}},
 #' \code{\link{compdata}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
 #' \code{\link{norm2bedgraph}}
@@ -77,7 +77,10 @@ dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1,
                  comp_merg$TCR.control)/(1 - comp_merg$TCR.control)
     #If bring_to_zero=TRUE, all negative deltaTCRs bring to 0, else change -Inf
     #to NA [possible when treated=0 and control=1]
-    if(bring_to_zero){dtcr[dtcr < 0] <- 0}else{dtcr[dtcr==-Inf] <- NA}
+    if(bring_to_zero){
+        dtcr[dtcr < 0] <- 0
+    } else
+        dtcr[dtcr==-Inf] <- NA
 
     #Import dtcr to merged data frame
     comp_merg$dtcr <- dtcr

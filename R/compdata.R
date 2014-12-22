@@ -11,7 +11,7 @@
 #' @param add_to normalized data frame with already performed normalization of
 #' another kind. Results will be merged
 #' @return \item{norm_GR}{norm_GR GRanges extended by metadata from Comp_GR}
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 #' \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
 #' \code{\link{norm2bedgraph}}

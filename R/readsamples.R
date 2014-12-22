@@ -22,7 +22,7 @@
 #' Recycled if necessary
 #' @return euc_GR GRanges containing information: 1) seqnames (sequence name;
 #' RNAid) 2) Start, 3) End, 4) EUC value of a given fragment
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{comp}}, \code{\link{plotReads}}, \code{\link{k2n_calc}}
 #' @references Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting
 #' individual DNA molecules by the stochastic attachment of diverse labels.
@@ -127,4 +127,3 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
 
     rdf
 }
-

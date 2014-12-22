@@ -5,7 +5,7 @@
 #' @param input_bed_path Path to BED file. If 12 column BED provided, function
 #' is splice aware. If 6 column BED provided, function assumes no splicing.
 #' @return TranscriptDb object
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @examples
 #'
 #' write(strwrap("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+

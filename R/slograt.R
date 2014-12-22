@@ -27,7 +27,7 @@
 #' added.
 #' @return GRanges object with "slograt" (smooth log2 ratio) and "slograt.p"
 #' (p.value of comparing control and treated) metadata.
-#' @author Lukasz Jan Kielpinski
+#' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @seealso \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{compdata}},
 #' \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
 #' \code{\link{norm2bedgraph}}
