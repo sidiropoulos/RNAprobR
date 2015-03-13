@@ -39,15 +39,24 @@
 #' @export readsamples
 readsamples <- function(samples, euc="counts", m="", k2n_files=""){
 
-###Check conditions:
+    ###Check conditions:
+    if (is.element("TRUE", !file.exists(samples)))
+        stop("Input file not found.")
+
     if(euc=="Fu" & (is.na(as.integer(m)) | length(m)!=1))
-        stop("Error: wrong m")
+        stop("wrong m")
+
+    raw_data <- lapply(samples, read.table)
+
+    ncols <- sapply(raw_data, ncol)
+    if (is.element("TRUE", ncols != 4)){
+        stop("All input files should contain exactly 4 columns")
+    }
 
     if(euc=="HRF-Seq")
         k2n_values <- lapply(k2n_files, scan, quiet=TRUE)
 
     ###Function body:
-    raw_data <- lapply(samples, read.table)
 
     #Run proper function depending on euc setting:
     processed_data <- switch(which(euc==c("counts","Fu","HRF-Seq")),
@@ -101,7 +110,7 @@ readsamples <- function(samples, euc="counts", m="", k2n_files=""){
 
     #Stop if any record has more observed barcodes than possible (m):
     if(max(rdf[,4]) > m) {
-        Message <- "Error: provided 'm' is smaller than the highest observed
+        Message <- "provided 'm' is smaller than the highest observed
                     unique barcode count. Revise 'm'"
         stop(strwrap(Message))
     }
