@@ -1,7 +1,6 @@
-CHANGES IN VERSION 1.0.0
+CHANGES IN VERSION 0.99.4
 -----------------------
 
 NEW FEATURES
 
-    o nt_offset in dtcr(), slograt(), swinsor() and compdata() accepts
-    negative values
+   o BED2txDb is now using rtracklayer fucntion import() to load BED files.
