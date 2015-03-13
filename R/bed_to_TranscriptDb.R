@@ -20,72 +20,57 @@ BED2txDb <- function(input_bed_path)
 {
 
     ##Read in BED file and add unique IDs:
-    input_bed <- read.table(input_bed_path)
+    input_bed <- rtracklayer::import(input_bed_path, format="bed")
 
-    #Extend BED to 12 columns if only 6 provided:
-    if(ncol(input_bed)==6){
-
-        colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name",
-                                 "score", "strand")
-
-        input_bed$thickStart <- input_bed$chromStart
-        input_bed$thickEnd <- input_bed$chromStart
-        input_bed$itemRgb <- 0
-        input_bed$blockCount <- 1
-        input_bed$blockSizes <- input_bed$chromEnd - input_bed$chromStart
-        input_bed$blockStarts <- 0
-    } else
-        colnames(input_bed) <- c("chrom", "chromStart", "chromEnd", "name",
-                                 "score", "strand", "thickStart", "thickEnd",
-                                 "itemRgb", "blockCount", "blockSizes",
-                                 "blockStarts")
+    ##Check if blocks are defined. If not - assume no splicing.
+    if(!is.element("blocks", colnames(mcols(input_bed)))){
+        input_bed$blocks <- split(IRanges(start=1, end=width(input_bed)), 1:length(input_bed))
+        warning("BED file do not contain splicing information. No splicing assumed.")
+    }
 
     # This condition should never be fulfilled, just in case if someone tampers
     # with BED file.
-    if(is.element("tx_id", names(input_bed)))
+    if(is.element("tx_id", colnames(mcols(input_bed))))
         stop("ERROR: BED file not allowed to contain column named tx_id")
 
     #Add internal transcript ID (required for making TranscriptDb)
-    input_bed$tx_id <- (1:nrow(input_bed))
+    input_bed$tx_id <- 1:length(input_bed)
 
     ##create first data frame required for makeTranscriptDb function
     #(transcripts):
     transcripts <- data.frame(tx_id=input_bed$tx_id, tx_name=input_bed$name,
-                              tx_chrom=input_bed$chrom,
-                              tx_strand=input_bed$strand,
-                              tx_start=input_bed$chromStart + 1,
-                              tx_end=input_bed$chromEnd)
+                              tx_chrom=seqnames(input_bed),
+                              tx_strand=strand(input_bed),
+                              tx_start=start(input_bed),
+                              tx_end=end(input_bed))
 
     ##create second data frame required for makeTranscriptDb function
     #(splicing):
-    #column 11 of BED file - exon sizes;  change factor to character
-    input_bed$blockSizes <- as.character(input_bed$blockSizes)
-    #column 12 of BED file - exon starts; change factor to character
-    input_bed$blockStarts <- as.character(input_bed$blockStarts)
 
     #Split strings into list of integers
-    exon_size_tx_list <- lapply(strsplit(input_bed$blockSizes,","), as.integer)
+    exon_size_tx_list <- width(input_bed$blocks)
     #Split strings into list of integers
-    exon_start_tx_list <- lapply(strsplit(input_bed$blockStarts,","),
-                                 as.integer)
+    exon_start_tx_list <- start(input_bed$blocks)
+    exon_end_tx_list <- end(input_bed$blocks)
 
     #Calculate exon starts in genome coordinates, and change to 1-counted
     #notation.
-    exon_start_genome_list <- mapply(FUN=function(x,y){x + y + 1},
-                                     exon_start_tx_list, input_bed$chromStart,
+    exon_start_genome_list <- mapply(FUN=function(x,y){x + y - 1},
+                                     exon_start_tx_list, start(input_bed),
                                      SIMPLIFY = FALSE)
     #Calculate exon ends in genome coordinates, and change to 1-counted
     #notation.
     exon_end_genome_list <- mapply(FUN=function(x,y){x + y - 1},
-                                   exon_start_genome_list, exon_size_tx_list,
+                                   exon_end_tx_list, start(input_bed),
                                    SIMPLIFY = FALSE)
 
-    #Calcualte exon rank: ordering within transcript
-    exon_rank_list <- mapply(FUN=.rank_fun, input_bed$blockCount,
-                             input_bed$strand, SIMPLIFY = FALSE)
+    #Calculate exon rank: ordering within transcript
+    blockCount <- unlist(lapply(blocks(input_bed), length))
+    exon_rank_list <- mapply(FUN=.rank_fun, exon_count = blockCount,
+                             strandness = as.character(strand(input_bed)), SIMPLIFY = FALSE)
 
     #transcript ID
-    tx_id_list <- mapply(FUN=rep, input_bed$tx_id, input_bed$blockCount,
+    tx_id_list <- mapply(FUN=rep, input_bed$tx_id, blockCount,
                          SIMPLIFY = FALSE)
 
     splicings <- data.frame(tx_id=unlist(tx_id_list),
@@ -94,17 +79,16 @@ BED2txDb <- function(input_bed_path)
                             exon_end=unlist(exon_end_genome_list))
 
     ##Make TranscriptDb object:
-    txDb_from_BED <- suppressWarnings(makeTranscriptDb(transcripts=transcripts,
+    suppressWarnings(makeTranscriptDb(transcripts=transcripts,
                                       splicings=splicings))
-    txDb_from_BED
 }
 
 ###Auxiliary functions
 
 .rank_fun <- function(exon_count, strandness){
-    ranks <- 1:exon_count
-    if(strandness=="-")
-        ranks <- rev(ranks)
 
-    ranks
+    if(strandness=="-")
+        exon_count:1
+    else
+        1:exon_count
 }
