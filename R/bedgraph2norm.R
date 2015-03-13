@@ -51,7 +51,7 @@
 #' bedgraph2norm(bedgraph_file = "out_file.bedgraph", fasta_file = "dummy.fa",
 #'               bed_file = "dummy.bed")
 #'
-#' @import rtracklayer Biostrings
+#' @import rtracklayer Biostrings GenomicFeatures
 #' @export bedgraph2norm
 bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
                           column_name="bedgraph_score", add_to,
@@ -59,7 +59,7 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
 {
     ###Check conditions:
     if(missing(txDb) & missing(bed_file))
-        stop("Error: specify gene annotation")
+        stop("Specify gene annotation")
 
     if(missing(fasta_file))
         stop("Specify fasta file")
@@ -86,7 +86,7 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
             }
         }
     } else {
-        Message <- "Error: bedgraph file needs to contain 2 tracks, one for
+        Message <- "Bedgraph file needs to contain 2 tracks, one for
         each strand or 1 track with provided strand information."
         stop(strwrap(Message))
     }
@@ -122,9 +122,9 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
                                                         FUN=seq_len)) - 1
     end(bedgraph_merged_expanded) <- start(bedgraph_merged_expanded)
 
-    mapped_to_tx <- mapCoords(bedgraph_merged_expanded, my_exons)
-    hits_in_tx <- mapped_to_tx$subjectHits #Transcripts with signal
-    hits_in_EF <- mapped_to_tx$queryHits #Which signal given transcript has
+    mapped_to_tx <- mapToTranscripts(bedgraph_merged_expanded, my_exons)
+    hits_in_tx <- mapped_to_tx$transcriptsHits #Transcripts with signal
+    hits_in_EF <- mapped_to_tx$xHits #Which signal given transcript has
     #Data frame with results
     normalized <-
         data.frame(RNAid=names(my_exons)[hits_in_tx],
@@ -148,10 +148,8 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
     ###
 
     normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-    normalized_GR <- norm_df2GR(normalized)
-
-    normalized_GR
-    }
+    norm_df2GR(normalized)
+}
 
 ###Auxiliary functions
 
