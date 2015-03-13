@@ -64,7 +64,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
                       norm_method,"chosen."))
     }
     if(missing(txDb) & missing(bed_file))
-        stop("Error: specify gene annotation")
+        stop("Specify gene annotation")
 
     #Define functions:
 

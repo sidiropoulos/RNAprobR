@@ -131,12 +131,12 @@ comp <- function(euc_GR, cutoff=1, fasta_file){
     merged_oneRNA$TCR <- merged_oneRNA$gene_TC/merged_oneRNA$gene_coverage
 
     #And constructing GRanges object for single RNA:
-    GR_oneRNA <- GRanges(seqnames=RNAid,
-                         IRanges(start=merged_oneRNA$Pos, width=1), strand="+",
-                         TC=merged_oneRNA$gene_TC, TCR=merged_oneRNA$TCR,
-                         Cover=merged_oneRNA$gene_coverage,
-                         PC=merged_oneRNA$gene_PC)
-
-    GR_oneRNA
+    GRanges(seqnames=RNAid,
+            IRanges(start=merged_oneRNA$Pos, width=1),
+            strand="+",
+            TC=merged_oneRNA$gene_TC,
+            TCR=merged_oneRNA$TCR,
+            Cover=merged_oneRNA$gene_coverage,
+            PC=merged_oneRNA$gene_PC)
 }
 

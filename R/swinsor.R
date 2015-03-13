@@ -78,9 +78,7 @@ swinsor <- function(Comp_GR, winsor_level=0.9, window_size=71, only_top= FALSE,
     ###
 
     normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-    normalized_GR <- norm_df2GR(normalized)
-
-    normalized_GR
+    norm_df2GR(normalized)
 }
 
 ###Auxiliary functions:

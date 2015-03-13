@@ -56,13 +56,13 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
 
 ###Check conditions:
     if(nt_offset < 0)
-        stop("error: nt_offset must be >= 0")
+        stop("nt_offset must be >= 0")
 
     if(window_size < 1)
-        stop("error: window_size must be >= 0")
+        stop("window_size must be >= 0")
 
     if((window_size%%2)!=1)
-        stop("error: window_size must be odd")
+        stop("window_size must be odd")
 
     ###Function body:
     control <- GR2norm_df(control_GR)
@@ -120,9 +120,7 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
     ###
 
     normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-    normalized_GR <- norm_df2GR(normalized)
-
-    normalized_GR
+    norm_df2GR(normalized)
 }
 
 ###Auxiliary functions
@@ -152,9 +150,8 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
     z <- (Tc/Cc - Tt/Ct)/se
 
     #Transform 'z' to two-tailed p-value:
-    p.values <- pnorm(abs(z), lower.tail= FALSE)*2
+    pnorm(abs(z), lower.tail= FALSE)*2
 
-    p.values
 }
 
 ##one RNA processing:

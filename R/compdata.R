@@ -33,7 +33,7 @@ compdata <- function(Comp_GR, nt_offset=1, add_to){
 
     ###Check conditions:
     if(nt_offset < 0)
-        stop("error: nt_offset must be >= 0")
+        stop("nt_offset must be >= 0")
 
     ###Function body:
     Comp_df <- GR2norm_df(Comp_GR)
@@ -60,9 +60,7 @@ compdata <- function(Comp_GR, nt_offset=1, add_to){
     }
 
     normalized <- normalized[order(normalized$RNAid, normalized$Pos),]
-    normalized_GR <- norm_df2GR(normalized)
-
-    normalized_GR
+    norm_df2GR(normalized)
 }
 
 ###Auxiliary functions:
