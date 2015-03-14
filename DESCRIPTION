@@ -1,25 +1,28 @@
 Package: RNAprobR
-Title: An R package for analysis of massive parallel sequencing based
-        RNA structure probing data
+Title: An R package for analysis of massive parallel sequencing based RNA
+    structure probing data
 Version: 0.99.4
 Authors@R: c(person("Lukasz Jan", "Kielpinski", role=c("aut"),
-        email="kielpinski@bio.ku.dk"), person("Nikos", "Sidiropoulos",
-        role=c("cre", "aut"), email="nikos.sidiro@gmail.com"),
-        person("Jeppe", "Vinther", role="aut",
-        email="jvinther@bio.ku.dk"))
-Description: This package facilitates analysis of Next Generation
-        Sequencing data for which positional information with a single
-        nucleotide resolution is a key. It allows for applying
-        different types of relevant normalizations, data visualization
-        and export in a table or UCSC compatible bedgraph file.
-Depends: R (>= 3.1.1), GenomicFeatures(>= 1.16.3), plyr(>= 1.8.1),
-        BiocGenerics(>= 0.10.0)
-Imports: Biostrings(>= 2.32.1), GenomicRanges(>= 1.16.4), Rsamtools(>=
-        1.16.1), rtracklayer(>= 1.24.2)
-Suggests: BiocStyle
+    email="kielpinski@bio.ku.dk"), person("Nikos", "Sidiropoulos",
+    role=c("cre", "aut"), email="nikos.sidiro@gmail.com"), person("Jeppe",
+    "Vinther", role="aut", email="jvinther@bio.ku.dk"))
+Description: This package facilitates analysis of Next Generation Sequencing
+    data for which positional information with a single nucleotide resolution
+    is a key. It allows for applying different types of relevant
+    normalizations, data visualization and export in a table or UCSC
+    compatible bedgraph file.
+Depends:
+    R (>= 3.1.1),
+    GenomicFeatures(>= 1.16.3),
+    plyr(>= 1.8.1),
+    BiocGenerics(>= 0.10.0)
+Imports:
+    Biostrings(>= 2.32.1),
+    GenomicRanges(>= 1.16.4),
+    Rsamtools(>= 1.16.1),
+    rtracklayer(>= 1.24.2)
+Suggests:
+    BiocStyle
 License: GPL (>=2)
 LazyData: true
 biocViews: Coverage, Normalization, Sequencing, GenomeAnnotation
-Author: Lukasz Jan Kielpinski [aut], Nikos Sidiropoulos [cre, aut],
-        Jeppe Vinther [aut]
-Maintainer: Nikos Sidiropoulos <nikos.sidiro@gmail.com>
