@@ -1,0 +1,6 @@
+CHANGES IN VERSION 0.99.4
+-----------------------
+
+NEW FEATURES
+
+   o BED2txDb is now using rtracklayer fucntion import() to load BED files.
