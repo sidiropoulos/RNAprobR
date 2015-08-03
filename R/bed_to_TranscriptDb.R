@@ -36,7 +36,7 @@ BED2txDb <- function(input_bed_path)
     #Add internal transcript ID (required for making TranscriptDb)
     input_bed$tx_id <- 1:length(input_bed)
 
-    ##create first data frame required for makeTxDb function
+    ##create first data frame required for makeTranscriptDb function
     #(transcripts):
     transcripts <- data.frame(tx_id=input_bed$tx_id, tx_name=input_bed$name,
                               tx_chrom=seqnames(input_bed),
@@ -44,7 +44,7 @@ BED2txDb <- function(input_bed_path)
                               tx_start=start(input_bed),
                               tx_end=end(input_bed))
 
-    ##create second data frame required for makeTxDb function
+    ##create second data frame required for makeTranscriptDb function
     #(splicing):
 
     #Split strings into list of integers
@@ -79,7 +79,8 @@ BED2txDb <- function(input_bed_path)
                             exon_end=unlist(exon_end_genome_list))
 
     ##Make TranscriptDb object:
-    suppressWarnings(makeTxDb(transcripts=transcripts, splicings=splicings))
+    suppressWarnings(makeTranscriptDb(transcripts=transcripts,
+                                      splicings=splicings))
 }
 
 ###Auxiliary functions

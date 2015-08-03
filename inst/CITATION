@@ -1,0 +1,17 @@
+citEntry(
+    entry = "InCollection",
+    title = "Reproducible Analysis of Sequencing-Based RNA Structure Probing Data with User-Friendly Tools",
+    author = personList( as.person("Lukasz Jan Kielpinski"),
+                         as.person("Nikolaos Sidiropoulos"),
+                         as.person("Jeppe Vinther")),
+    booktitle = "Structures of Large RNA Molecules and Their Complexes",
+    publisher = "Academic Press",
+    year = 2015,
+    volume = 558,
+    pages = "153 - 180",
+    series = "Methods in Enzymology",
+    textVersion =
+    strwrap("Kielpinski LJ, Sidiropoulos, N, Vinther J. Reproducible Analysis of
+             Sequencing-Based RNA Structure Probing Data with User-Friendly
+             Tools. Methods in Enzymology, 2015, 558, 153–180")
+)
