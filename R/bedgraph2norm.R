@@ -123,7 +123,7 @@ bedgraph2norm <- function(bedgraph_file, fasta_file, txDb,  bed_file,
     end(bedgraph_merged_expanded) <- start(bedgraph_merged_expanded)
 
     mapped_to_tx <- mapToTranscripts(bedgraph_merged_expanded, my_exons,
-                                     ignore.strand = "FALSE")
+                                     ignore.strand = FALSE)
     hits_in_tx <- mapped_to_tx$transcriptsHits #Transcripts with signal
     hits_in_EF <- mapped_to_tx$xHits #Which signal given transcript has
     #Data frame with results
