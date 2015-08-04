@@ -1,6 +1,19 @@
+CHANGES IN VERSION 1.1.2
+-----------------------
+
+BUG FIXES
+
+    o Fixed a bug in bedgraph2norm() by adding 'ignore.strand = "FALSE"' the
+      absence of which could produce erroneous results.
+
+MISC
+
+    o Added CITATION
+
+
 CHANGES IN VERSION 0.99.4
 -----------------------
 
 NEW FEATURES
 
-   o BED2txDb is now using rtracklayer fucntion import() to load BED files.
+    o BED2txDb is now using rtracklayer fucntion import() to load BED files.

@@ -33,10 +33,10 @@ BED2txDb <- function(input_bed_path)
     if(is.element("tx_id", colnames(mcols(input_bed))))
         stop("ERROR: BED file not allowed to contain column named tx_id")
 
-    #Add internal transcript ID (required for making TranscriptDb)
+    #Add internal transcript ID (required for making TxDb)
     input_bed$tx_id <- 1:length(input_bed)
 
-    ##create first data frame required for makeTranscriptDb function
+    ##create first data frame required for makeTxDb function
     #(transcripts):
     transcripts <- data.frame(tx_id=input_bed$tx_id, tx_name=input_bed$name,
                               tx_chrom=seqnames(input_bed),
@@ -44,7 +44,7 @@ BED2txDb <- function(input_bed_path)
                               tx_start=start(input_bed),
                               tx_end=end(input_bed))
 
-    ##create second data frame required for makeTranscriptDb function
+    ##create second data frame required for makeTxDb function
     #(splicing):
 
     #Split strings into list of integers
@@ -79,8 +79,7 @@ BED2txDb <- function(input_bed_path)
                             exon_end=unlist(exon_end_genome_list))
 
     ##Make TranscriptDb object:
-    suppressWarnings(makeTranscriptDb(transcripts=transcripts,
-                                      splicings=splicings))
+    suppressWarnings(makeTxDb(transcripts=transcripts, splicings=splicings))
 }
 
 ###Auxiliary functions
