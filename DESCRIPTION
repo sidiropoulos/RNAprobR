@@ -21,7 +21,8 @@ Imports:
     Biostrings(>= 2.32.1),
     GenomicRanges(>= 1.16.4),
     Rsamtools(>= 1.16.1),
-    rtracklayer(>= 1.24.2)
+    rtracklayer(>= 1.24.2),
+    GenomicAlignments(>= 1.5.12)
 Suggests:
     BiocStyle
 License: GPL (>=2)
