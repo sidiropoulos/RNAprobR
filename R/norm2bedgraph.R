@@ -51,11 +51,7 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
 {
 
     ###Check conditions:
-    if(missing(genome_build)){
-        genome_build <- c()
-    }else{
-        genome_build <- paste(" db=", genome_build, sep="")
-    }
+
     if(missing(norm_method)){
 
         methods <- names(mcols(norm_GR))
@@ -167,40 +163,10 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     df_plus <- .compress_bedgraph(df_plus)
     df_minus <- .compress_bedgraph(df_minus)
 
-    bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
-
-    options(scipen=999)
-
     #End of compression
-    if(!is.null(df_plus)){
-        trackDescription <- '-plus_strand" visibility=full color=0,0,100
-        altColor=0,0,0 priority=100 autoScale=on
-        alwaysZero=on gridDefault=off
-        maxHeightPixels=128:128:11 graphType=bar
-        yLineMark=0 yLineOnOff=on smoothingWindow=off'
-        bedgraph_header <- paste('track type=bedGraph name="',track_name,
-                                 '(plus)" description="',
-                                 strwrap(trackDescription, width = 300),
-                                 genome_build, sep="")
-        write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
-        write.table(df_plus, row.names= FALSE, col.names= FALSE, quote= FALSE,
-                    sep="\t", file=bedgraph_out_file, append=TRUE)
-    }
+  
+    .save_bedgraph(df_plus = df_plus, df_minus = df_minus, genome_build = genome_build, bedgraph_out_file = bedgraph_out_file, track_name = track_name,  track_description = track_description)
 
-    if(!is.null(df_minus)){
-        trackDescription <- '-minus_strand" visibility=full color=0,0,100
-        altColor=0,0,0 priority=100 autoScale=on
-        alwaysZero=on gridDefault=off
-        maxHeightPixels=128:128:11 graphType=bar
-        yLineMark=0 yLineOnOff=on smoothingWindow=off'
-        bedgraph_header <- paste('track type=bedGraph name="',track_name,
-                                 '(minus)" description="',
-                                 strwrap(trackDescription, width = 300),
-                                 genome_build, sep="")
-        write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
-        write.table(df_minus, row.names= FALSE, col.names= FALSE, quote= FALSE,
-                    sep="\t", file=bedgraph_out_file, append=TRUE)
-    }
 }
 
 ###Auxiliary functions
@@ -305,3 +271,5 @@ norm2bedgraph <- function(norm_GR, txDb, bed_file, norm_method, genome_build,
     #Return first 4 columns
     repeat_info[c("seqname", "position_off", "position", "value")]
 }
+
+

@@ -225,3 +225,52 @@ norm_df2GR <- function(norm_df)
 
     oneRNA_out
 }
+
+#Saving the bedgraph:
+
+.save_bedgraph <- function(df_plus, df_minus, genome_build,
+                           bedgraph_out_file="out_file",track_name="Track_name",
+                           track_description="Track_description"){
+  
+  options(scipen=999)
+  
+  if(missing(genome_build)){
+    genome_build <- c()
+  }else{
+    genome_build <- paste(" db=", genome_build, sep="")
+  }
+  
+  bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
+  
+  if(!is.null(df_plus)){
+    trackDescription <- paste(track_description, '-plus_strand" visibility=full color=0,0,100
+                              altColor=0,0,0 priority=100 autoScale=on
+                              alwaysZero=on gridDefault=off
+                              maxHeightPixels=128:128:11 graphType=bar
+                              yLineMark=0 yLineOnOff=on smoothingWindow=off', sep = "")
+    bedgraph_header <- paste('track type=bedGraph name="',track_name,
+                             '(plus)" description="',
+                             strwrap(trackDescription, width = 300),
+                             genome_build, sep="")
+    write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
+    write.table(df_plus, row.names= FALSE, col.names= FALSE, quote= FALSE,
+                sep="\t", file=bedgraph_out_file, append=TRUE)
+  }
+  
+  if(!is.null(df_minus)){
+    trackDescription <- paste(track_description, '-minus_strand" visibility=full color=0,0,100
+                              altColor=0,0,0 priority=100 autoScale=on
+                              alwaysZero=on gridDefault=off
+                              maxHeightPixels=128:128:11 graphType=bar
+                              yLineMark=0 yLineOnOff=on smoothingWindow=off', sep = "")
+    bedgraph_header <- paste('track type=bedGraph name="',track_name,
+                             '(minus)" description="',
+                             strwrap(trackDescription, width = 300),
+                             genome_build, sep="")
+    write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
+    write.table(df_minus, row.names= FALSE, col.names= FALSE, quote= FALSE,
+                sep="\t", file=bedgraph_out_file, append=TRUE)
+  }
+}
+
+
