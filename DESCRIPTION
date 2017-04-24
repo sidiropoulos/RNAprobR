@@ -1,7 +1,7 @@
 Package: RNAprobR
 Title: An R package for analysis of massive parallel sequencing based RNA
     structure probing data
-Version: 1.8.0
+Version: 1.9.0
 Date: 2015-09-23
 Authors@R: c(person("Lukasz Jan", "Kielpinski", role=c("aut"),
     email="kielpinski@bio.ku.dk"), person("Nikos", "Sidiropoulos",
