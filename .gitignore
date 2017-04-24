@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Rbuildignore
+.DS_Store
+inst/doc
+auxiliary_files
+*.bbl
+*.tex
+*.toc
+*.log
+*.synctex.gz
+vignettes/RNaseP_dtcr.bedgraph
+vignettes/RNAprobR-plotRNA.pdf
