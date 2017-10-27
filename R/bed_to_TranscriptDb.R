@@ -8,13 +8,11 @@
 #' @author Lukasz Jan Kielpinski, Nikos Sidiropoulos
 #' @examples
 #'
-#' write(strwrap("chr1\t134212702\t134229870\tENSMUST00000072177\t0\t+
-#'              \t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,
-#'              \t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
-#'       file="dummy.bed")
-#' BED2txDb("dummy.bed")
+#' txDb <- BED2txDb(system.file("extdata", "dummy.bed", package = "RNAprobR",
+#'                              mustWork = TRUE))
 #'
 #' @import GenomicRanges
+#' @importFrom IRanges IRanges
 #' @export BED2txDb
 BED2txDb <- function(input_bed_path)
 {
@@ -24,7 +22,8 @@ BED2txDb <- function(input_bed_path)
 
     ##Check if blocks are defined. If not - assume no splicing.
     if(!is.element("blocks", colnames(mcols(input_bed)))){
-        input_bed$blocks <- split(IRanges(start=1, end=width(input_bed)), 1:length(input_bed))
+        input_bed$blocks <- split(IRanges(start=1, end=width(input_bed)),
+                                  1:length(input_bed))
         warning("BED file do not contain splicing information. No splicing assumed.")
     }
 
@@ -67,7 +66,8 @@ BED2txDb <- function(input_bed_path)
     #Calculate exon rank: ordering within transcript
     blockCount <- unlist(lapply(blocks(input_bed), length))
     exon_rank_list <- mapply(FUN=.rank_fun, exon_count = blockCount,
-                             strandness = as.character(strand(input_bed)), SIMPLIFY = FALSE)
+                             strandness = as.character(strand(input_bed)),
+                             SIMPLIFY = FALSE)
 
     #transcript ID
     tx_id_list <- mapply(FUN=rep, input_bed$tx_id, blockCount,
