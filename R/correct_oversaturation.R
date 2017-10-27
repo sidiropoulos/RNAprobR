@@ -23,26 +23,26 @@
 #' correct_oversaturation(euc_GR = my_EUCs,
 #'                        read_counts_file = "dummy_read_counts")
 #'
+#' @importFrom stats lm
 #' @export
 
 correct_oversaturation <- function(euc_GR, read_counts_file){
 
-	#Read in read counts file:
+    #Read in read counts file:
     read_counts_euc <- readsamples(read_counts_file, euc="counts")
-	read_counts <- read_counts_euc[match(euc_GR, read_counts_euc)]$EUC
+    read_counts <- read_counts_euc[match(euc_GR, read_counts_euc)]$EUC
 
     #Calculate correction factor using linear model:
     scores_matrix <- matrix(c(euc_GR$EUC, read_counts), ncol=2)
-	#(do not use points with Inf or "sporadic" fragments)
-	scores_matrix[scores_matrix==Inf] <- NA
-	scores_matrix[scores_matrix==1] <- NA
-	cor_fact <- lm(scores_matrix[,1] ~ scores_matrix[,2] + 0)$coefficients
+    #(do not use points with Inf or "sporadic" fragments)
+    scores_matrix[scores_matrix==Inf] <- NA
+    scores_matrix[scores_matrix==1] <- NA
+    cor_fact <- lm(scores_matrix[,1] ~ scores_matrix[,2] + 0)$coefficients
 
     #Which measurements need to be corrected:
     to_correct <- which(euc_GR$EUC == Inf)
 
-	#Correct and return corrected:
+    #Correct and return corrected:
     euc_GR$EUC[to_correct] <- round(read_counts[to_correct] * cor_fact)
-	euc_GR
+    euc_GR
 }
-

@@ -42,6 +42,7 @@ Plotting function.
 Function plotting normalized values over transcript positions.
 }
 \examples{
+
 dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
                                 IRanges(start=round(runif(100)*100),
                                 width=round(runif(100)*100+1)), strand="+",
@@ -49,12 +50,12 @@ dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 plotRNA(dummy_swinsor, RNAid="DummyRNA")
-}
-\author{
-Lukasz Jan Kielpinski
+
 }
 \seealso{
 \code{\link{plot}}, \code{\link{plot.default}}, \code{\link{dtcr}},
 \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
 }
-
+\author{
+Lukasz Jan Kielpinski
+}

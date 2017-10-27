@@ -23,6 +23,7 @@ and priming count (PC)) to GRanges made by normalizing functions (dtcr(),
 slograt(), swinsor(), compdata()).
 }
 \examples{
+
 dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
                                 IRanges(start=round(runif(100)*100),
                                 width=round(runif(100)*100+1)), strand="+",
@@ -32,13 +33,13 @@ dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 dummy_swinsor <- compdata(Comp_GR=dummy_comp_GR_treated,
                           add_to=dummy_swinsor)
 dummy_swinsor
-}
-\author{
-Lukasz Jan Kielpinski, Nikos Sidiropoulos
+
 }
 \seealso{
 \code{\link{comp}}, \code{\link{dtcr}}, \code{\link{slograt}},
 \code{\link{swinsor}}, \code{\link{GR2norm_df}}, \code{\link{plotRNA}},
 \code{\link{norm2bedgraph}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}

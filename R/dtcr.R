@@ -126,6 +126,7 @@ dtcr <- function(control_GR, treated_GR, window_size=3, nt_offset=1,
 
 #T_ctrl - terminations control, C_ctrl - coverage control,
 #T_tr - terminations treated, C_tr - coverage treated
+#' @importFrom stats pnorm
 .compare_prop <- function(T_ctrl, C_ctrl, T_tr, C_tr, window_size){
 
     window_side <- window_size/2-0.5

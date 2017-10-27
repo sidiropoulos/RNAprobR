@@ -35,15 +35,14 @@ window_size) sliding by 1 nt over whole transcript length and reports mean
 winsorized value for each nucleotide (as well as standard deviation).
 }
 \examples{
+
 dummy_euc_GR <- GRanges(seqnames="DummyRNA",
                         IRanges(start=round(runif(100)*100),
                         width=round(runif(100)*100+1)), strand="+",
                         EUC=round(runif(100)*100))
 dummy_comp_GR <- comp(dummy_euc_GR)
 swinsor(dummy_comp_GR)
-}
-\author{
-Lukasz Jan Kielpinski, Jeppe Vinther, Nikos Sidiropoulos
+
 }
 \references{
 "Analysis of sequencing based RNA structure probing data"
@@ -56,4 +55,6 @@ Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
 \code{\link{plotRNA}}, \code{\link{norm2bedgraph}}, \code{\link{winsor}},
 \code{\link{swinsor_vector}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Jeppe Vinther, Nikos Sidiropoulos
+}

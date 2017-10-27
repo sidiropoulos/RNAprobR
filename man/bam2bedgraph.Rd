@@ -1,6 +1,7 @@
 \name{bam2bedgraph}
 \alias{bam2bedgraph}
-\title{Function converts bam file to bedgraph by counting number of reads starting at each position (termination counts)
+\title{Function converts bam file to bedgraph by counting number of reads starting
+at each position (termination counts).
 It creates two-track bedgraph file (one track for each strand).}
 \usage{
 bam2bedgraph(bam_path, allowed_flags = 0:4095, maxMemory = 8000,
@@ -10,7 +11,8 @@ bam2bedgraph(bam_path, allowed_flags = 0:4095, maxMemory = 8000,
 \arguments{
 \item{bam_path}{path to a bam file to be converted}
 
-\item{allowed_flags}{integer vector with SAM flags should be kept, see https://broadinstitute.github.io/picard/explain-flags.html for explanation}
+\item{allowed_flags}{integer vector with SAM flags should be kept, see
+https://broadinstitute.github.io/picard/explain-flags.html for explanation}
 
 \item{maxMemory}{maxMemory of scanBam function used internally}
 
@@ -25,10 +27,14 @@ exists new tracks will be appended.}
 
 \item{track_description}{character specifying track description}
 }
+\value{
+NULL. Creates a two-track bedgraph file (one track for each strand).
+}
 \description{
-#'
+Function converts bam file to bedgraph by counting number of reads starting
+at each position (termination counts).
+It creates two-track bedgraph file (one track for each strand).
 }
 \author{
 Lukasz Jan Kielpinski
 }
-

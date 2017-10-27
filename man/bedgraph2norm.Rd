@@ -62,13 +62,13 @@ write(c(">DummyRNA", paste(sample(c("A","C","G","T"), 100, replace=TRUE),
                            collapse="")), file="dummy.fa")
 bedgraph2norm(bedgraph_file = "out_file.bedgraph", fasta_file = "dummy.fa",
               bed_file = "dummy.bed")
-}
-\author{
-Lukasz Jan Kielpinski, Nikos Sidiropoulos
+
 }
 \seealso{
 \code{\link{norm2bedgraph}}, \code{\link{GR2norm_df}},
 \code{\link{plotRNA}}, \code{\link{BED2txDb}}, \code{\link{dtcr}},
 \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}

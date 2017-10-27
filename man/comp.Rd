@@ -25,14 +25,13 @@ comp() takes as input euc_GR GRanges object produced by readsamples()
 and produces Comp_GR GRanges.
 }
 \examples{
+
 dummy_euc_GR <- GRanges(seqnames="DummyRNA",
                         IRanges(start=round(runif(100)*100),
                         width=round(runif(100)*100+1)), strand="+",
                         EUC=round(runif(100)*100))
 comp(dummy_euc_GR)
-}
-\author{
-Lukasz Jan Kielpinski, Nikos Sidiropoulos
+
 }
 \references{
 Kielpinski, L.J., and Vinther, J. (2014). Massive
@@ -44,4 +43,6 @@ Nucleic Acids Res.
 \code{\link{slograt}}, \code{\link{swinsor}}, \code{\link{compdata}},
 \code{\link{comp}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}

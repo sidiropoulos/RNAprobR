@@ -25,11 +25,10 @@ value above top winsor value set to top winsor value
 3. Transform linearly all the values to [0,1] range
 }
 \examples{
+
 data_set <- runif(1:100)*100
 plot(winsor(data_set, winsor_level=0.8) ~ data_set)
-}
-\author{
-Lukasz Jan Kielpinski
+
 }
 \references{
 Hastings, Cecil; Mosteller, Frederick; Tukey, John W.; Winsor,
@@ -37,5 +36,7 @@ Charles P. Low Moments for Small Samples: A Comparative Study of Order
 Statistics. The Annals of Mathematical Statistics 18 (1947), no. 3,
 413--426.
 }
+\author{
+Lukasz Jan Kielpinski
+}
 \keyword{~winsorising}
-

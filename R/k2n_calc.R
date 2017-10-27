@@ -30,8 +30,12 @@
 #'         unique_barcode_file = "dummy_unique_barcode")
 #'
 #' @import plyr
+#' @importFrom stats quantile
+#' @importFrom utils read.table
 #' @export k2n_calc
 k2n_calc <- function(merged_file, unique_barcode_file, output_file){
+
+    Barcodes <- NULL
 
     # Read in inputs:
     merged <- read.table( merged_file )

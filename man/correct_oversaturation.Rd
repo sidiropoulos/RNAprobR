@@ -32,5 +32,5 @@ write(c("DummyRNA\\t1\\t2\\t5000", "DummyRNA\\t3\\t4\\t10000"),
 my_EUCs <- readsamples(samples = "dummy_unique_barcode", euc = "Fu", m=1024)
 correct_oversaturation(euc_GR = my_EUCs,
                        read_counts_file = "dummy_read_counts")
-}
 
+}

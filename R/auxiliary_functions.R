@@ -56,6 +56,7 @@
 #' data_set <- runif(1:100)*100
 #' plot(winsor(data_set, winsor_level=0.8) ~ data_set)
 #'
+#' @importFrom stats quantile
 #' @export winsor
 winsor <- function(input_vector, winsor_level=0.9, only_top= FALSE)
 {
@@ -103,6 +104,7 @@ winsor <- function(input_vector, winsor_level=0.9, only_top= FALSE)
 #' plot(swinsor_vector(data_set, window_size=71,
 #'                     winsor_level=0.8)[[1]] ~ data_set)
 #'
+#' @importFrom stats sd
 #' @export swinsor_vector
 swinsor_vector <- function(input_vector, window_size, winsor_level=0.9,
     only_top= FALSE)
@@ -201,6 +203,7 @@ GR2norm_df <- function(norm_GR, RNAid="all", norm_methods="all")
 #'                             my_data1=runif(1:100))
 #' norm_df2GR(dummy_norm_df)
 #'
+#' @importFrom IRanges IRanges
 #' @export norm_df2GR
 norm_df2GR <- function(norm_df)
 {
@@ -227,27 +230,27 @@ norm_df2GR <- function(norm_df)
 }
 
 #Saving the bedgraph:
-
+#' @importFrom utils write.table
 .save_bedgraph <- function(df_plus, df_minus, genome_build,
                            bedgraph_out_file="out_file",track_name="Track_name",
                            track_description="Track_description"){
-  
-  options(scipen=999)
-  
-  if(missing(genome_build)){
+
+    options(scipen=999)
+
+    if(missing(genome_build)){
     genome_build <- c()
-  }else{
+    }else{
     genome_build <- paste(" db=", genome_build, sep="")
-  }
-  
-  bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
-  
-  if(!is.null(df_plus)){
-    trackDescription <- paste(track_description, '-plus_strand" visibility=full color=0,0,100
-                              altColor=0,0,0 priority=100 autoScale=on
-                              alwaysZero=on gridDefault=off
-                              maxHeightPixels=128:128:11 graphType=bar
-                              yLineMark=0 yLineOnOff=on smoothingWindow=off', sep = "")
+    }
+
+    bedgraph_out_file <- paste(bedgraph_out_file,".bedgraph", sep="")
+
+    if(!is.null(df_plus)){
+    trackDescription <-
+        paste(track_description, '-plus_strand" visibility=full color=0,0,100
+              altColor=0,0,0 priority=100 autoScale=on alwaysZero=on
+              gridDefault=off maxHeightPixels=128:128:11 graphType=bar
+              yLineMark=0 yLineOnOff=on smoothingWindow=off', sep = "")
     bedgraph_header <- paste('track type=bedGraph name="',track_name,
                              '(plus)" description="',
                              strwrap(trackDescription, width = 300),
@@ -255,14 +258,14 @@ norm_df2GR <- function(norm_df)
     write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
     write.table(df_plus, row.names= FALSE, col.names= FALSE, quote= FALSE,
                 sep="\t", file=bedgraph_out_file, append=TRUE)
-  }
-  
-  if(!is.null(df_minus)){
-    trackDescription <- paste(track_description, '-minus_strand" visibility=full color=0,0,100
-                              altColor=0,0,0 priority=100 autoScale=on
-                              alwaysZero=on gridDefault=off
-                              maxHeightPixels=128:128:11 graphType=bar
-                              yLineMark=0 yLineOnOff=on smoothingWindow=off', sep = "")
+    }
+
+    if(!is.null(df_minus)){
+    trackDescription <-
+        paste(track_description, '-minus_strand" visibility=full color=0,0,100
+              altColor=0,0,0 priority=100 autoScale=on alwaysZero=on
+              gridDefault=off maxHeightPixels=128:128:11 graphType=bar
+              yLineMark=0 yLineOnOff=on smoothingWindow=off', sep = "")
     bedgraph_header <- paste('track type=bedGraph name="',track_name,
                              '(minus)" description="',
                              strwrap(trackDescription, width = 300),
@@ -270,7 +273,7 @@ norm_df2GR <- function(norm_df)
     write(bedgraph_header, file=bedgraph_out_file, append=TRUE)
     write.table(df_minus, row.names= FALSE, col.names= FALSE, quote= FALSE,
                 sep="\t", file=bedgraph_out_file, append=TRUE)
-  }
+    }
 }
 
 

@@ -24,7 +24,7 @@ transcription start site}
 
 \item{main}{an overall title for the plot: see \code{\link{title}}.}
 
-\item{xlim,ylim}{numeric vectors of length 2, giving the x and y coordinates
+\item{xlim, ylim}{numeric vectors of length 2, giving the x and y coordinates
 ranges.}
 
 \item{...}{Arguments to be passed to methods, such as
@@ -38,14 +38,13 @@ Function plots cDNA inserts from GRanges created by readsamples()
 function. Similar to Figure 4A in HRF-Seq paper (see References).
 }
 \examples{
+
 dummy_euc_GR <- GRanges(seqnames="DummyRNA",
                         IRanges(start=round(runif(100)*100),
                         width=round(runif(100)*100+1)), strand="+",
                         EUC=round(runif(100)*100))
 plotReads(dummy_euc_GR, RNAid="DummyRNA")
-}
-\author{
-Lukasz Jan Kielpinski
+
 }
 \references{
 Kielpinski, L.J., and Vinther, J. (2014). Massive
@@ -56,4 +55,6 @@ Nucleic Acids Res.
 \code{\link{plot}}, \code{\link{plot.default}},
 \code{\link{readsamples}}
 }
-
+\author{
+Lukasz Jan Kielpinski
+}

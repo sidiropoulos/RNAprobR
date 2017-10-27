@@ -29,16 +29,17 @@ and reports a list of (1) mean Winsorized values for each vector position
 overlapping window) and (2) standard deviation of those Winsorized values.
 }
 \examples{
+
 data_set <- runif(1:100)*100
 plot(swinsor_vector(data_set, window_size=71,
                     winsor_level=0.8)[[1]] ~ data_set)
-}
-\author{
-Lukasz Jan Kielpinski
+
 }
 \references{
 "Analysis of sequencing based RNA structure probing data"
 Kielpinski, Sidiropoulos, Vinther. Chapter in "Methods in Enzymology"
 (in preparation)
 }
-
+\author{
+Lukasz Jan Kielpinski
+}
