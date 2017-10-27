@@ -37,6 +37,7 @@
 #' dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 #' plotRNA(dummy_swinsor, RNAid="DummyRNA")
 #'
+#' @importFrom graphics plot points
 #' @export plotRNA
 plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
                     type, ylab, xlab, ...){
@@ -126,6 +127,7 @@ plotRNA <- function(norm_GR, RNAid, norm_method, stat_method, stat_cutoff, main,
 #'                         EUC=round(runif(100)*100))
 #' plotReads(dummy_euc_GR, RNAid="DummyRNA")
 #'
+#' @importFrom graphics plot segments
 #' @export plotReads
 plotReads <- function(euc_GR, RNAid, cutoff=1, order_by=1, ylab, xlab, main,
                       ylim, xlim, ...){

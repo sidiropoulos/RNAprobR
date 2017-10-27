@@ -80,7 +80,7 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
                      .no_dc, .RNA_dc, .all_dc)
     #Corrects the sequencing depth. dc_fun is a different function depending on
     #the depth_correction mode
-    comp_merg_dc <- dc_fun(comp_merg)
+    comp_merg_dc <- dc_fun(comp_merg, depth_correction)
 
     #Splits the data frame into a list of data frames, one for each RNA
     compmerg_dc_by_RNA <- split(comp_merg_dc, f=comp_merg_dc$RNAid, drop=TRUE)
@@ -132,6 +132,7 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
 #Comparison done in windows of the same size as smoothing
 
 #T_ctrl - terminations control, T_tr - terminations treated
+#' @importFrom stats pnorm
 .compare_prop_slograt <- function(T_ctrl, T_tr, window_size){
 
     window_side <- window_size/2-0.5
@@ -214,12 +215,12 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
 #Depth correction:
 
 #No depth correction:
-.no_dc <- function(Comp_df){
+.no_dc <- function(Comp_df, depth_correction){
     Comp_df
 }
 
 #Global depth correction (to depth of a sample with lower coverage)
-.all_dc <- function(Comp_df){
+.all_dc <- function(Comp_df, depth_correction="all"){
 
     control_sum <- sum(Comp_df$TC.control, na.rm=TRUE)
     treated_sum <- sum(Comp_df$TC.treated, na.rm=TRUE)
@@ -249,7 +250,7 @@ slograt <- function(control_GR, treated_GR, window_size=5, nt_offset=1,
 
 #RNA based depth correction, it runs the all_dc function for each RNA
 #separately:
-.RNA_dc <- function(Comp_df){
+.RNA_dc <- function(Comp_df, depth_correction){
     compmerg_by_RNA <- split(Comp_df, f=Comp_df$RNAid, drop=TRUE)
 
     do.call(rbind, lapply(compmerg_by_RNA, FUN=.all_dc))

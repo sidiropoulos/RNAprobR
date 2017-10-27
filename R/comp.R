@@ -29,6 +29,8 @@
 #' comp(dummy_euc_GR)
 #'
 #' @import GenomicRanges Rsamtools
+#' @importFrom S4Vectors endoapply
+#' @importFrom BiocGenerics as.vector
 #' @export comp
 comp <- function(euc_GR, cutoff=1, fasta_file){
 

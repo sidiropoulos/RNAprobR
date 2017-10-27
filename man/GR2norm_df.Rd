@@ -22,6 +22,7 @@ Function to make data frame out of GRanges output of normalizing functions
 transcripts in the file.
 }
 \examples{
+
 dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
                                 IRanges(start=round(runif(100)*100),
                                 width=round(runif(100)*100+1)), strand="+",
@@ -29,12 +30,12 @@ dummy_euc_GR_treated <- GRanges(seqnames="DummyRNA",
 dummy_comp_GR_treated <- comp(dummy_euc_GR_treated)
 dummy_swinsor <- swinsor(dummy_comp_GR_treated)
 GR2norm_df(dummy_swinsor)
-}
-\author{
-Lukasz Jan Kielpinski, Nikos Sidiropoulos
+
 }
 \seealso{
 \code{\link{norm_df2GR}}, \code{\link{dtcr}},
 \code{\link{swinsor}}, \code{\link{slograt}}, \code{\link{compdata}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}

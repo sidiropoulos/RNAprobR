@@ -17,15 +17,16 @@ GRanges compatible with objects created by normalizing functions
 Function to convert norm_df data frame (product of GR2norm_df()) to GRanges.
 }
 \examples{
+
 dummy_norm_df <- data.frame(RNAid="dummyRNA", Pos=1:100,
                             my_data1=runif(1:100))
 norm_df2GR(dummy_norm_df)
-}
-\author{
-Lukasz Jan Kielpinski
+
 }
 \seealso{
 \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
 \code{\link{compdata}}, \code{\link{GR2norm_df}}, \code{\link{norm2bedgraph}}
 }
-
+\author{
+Lukasz Jan Kielpinski
+}

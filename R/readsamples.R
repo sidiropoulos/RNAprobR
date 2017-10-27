@@ -36,6 +36,8 @@
 #' readsamples(samples = "dummy_unique_barcode", euc = "counts")
 #'
 #' @import GenomicRanges
+#' @importFrom IRanges IRanges
+#' @importFrom utils read.table
 #' @export readsamples
 readsamples <- function(samples, euc="counts", m="", k2n_files=""){
 

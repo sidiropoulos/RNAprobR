@@ -56,13 +56,13 @@ write(strwrap("chr1\\t134212702\\t134229870\\tDummyRNA\\t0\\t+
               \\t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
               file="dummy.bed")
 norm2bedgraph(norm_GR = dummy_norm, bed_file = "dummy.bed")
-}
-\author{
-Lukasz Jan Kielpinski, Nikos Sidiropoulos
+
 }
 \seealso{
 \code{\link{bedgraph2norm}}, \code{\link{norm_df2GR}},
 \code{\link{dtcr}}, \code{\link{slograt}}, \code{\link{swinsor}},
 \code{\link{compdata}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}

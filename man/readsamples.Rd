@@ -34,11 +34,10 @@ path to a precomputed k2n file is required (generate using k2n_calc()
 function)(default: "counts")
 }
 \examples{
+
 write("DummyRNA\\t1\\t2\\t3",file="dummy_unique_barcode")
 readsamples(samples = "dummy_unique_barcode", euc = "counts")
-}
-\author{
-Lukasz Jan Kielpinski, Nikos Sidiropoulos
+
 }
 \references{
 Fu, G.K., Hu, J., Wang, P.H., and Fodor, S.P. (2011). Counting
@@ -51,4 +50,6 @@ accessibility. Nucleic Acids Res.
 \seealso{
 \code{\link{comp}}, \code{\link{plotReads}}, \code{\link{k2n_calc}}
 }
-
+\author{
+Lukasz Jan Kielpinski, Nikos Sidiropoulos
+}
