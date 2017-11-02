@@ -40,9 +40,9 @@
 #' dummy_norm <- dtcr(control_GR=dummy_comp_GR_control,
 #'                    treated_GR=dummy_comp_GR_treated)
 #'
-#' write(strwrap("chr1\t134212702\t134229870\tDummyRNA\t0\t+
-#'               \t134212806\t134228958\t0\t8\t347,121,24,152,66,120,133,1973,
-#'               \t0,8827,10080,11571,12005,13832,14433,15195,", width = 300),
+#' write(paste(c("chr1", 134212702, 134229870, "DummyRNA", 0, "+", 134212806,
+#'             134228958, 0, 8, "347,121,24,152,66,120,133,1973,",
+#'             "0,8827,10080,11571,12005,13832,14433,15195,"), collapse = "\t"),
 #'       file="dummy.bed")
 #' norm2bedgraph(norm_GR = dummy_norm, bed_file = "dummy.bed")
 #'
